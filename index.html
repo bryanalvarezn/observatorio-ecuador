@@ -1,0 +1,3298 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>
+Observatorio Ecuatoriano de Accidentes en Actividades al Aire Libre
+</title>
+
+<!-- =========================================================
+     LEAFLET
+========================================================= -->
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+>
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin="">
+</script>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<style>
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+:root {
+
+    --fondo: #07111f;
+    --fondo-2: #0d1b2a;
+    --panel: #102235;
+    --panel-2: #142a40;
+    --borde: #29445e;
+
+    --azul: #38bdf8;
+    --azul-2: #0ea5e9;
+
+    --rojo: #ef4444;
+    --amarillo: #f59e0b;
+    --verde: #10b981;
+
+    --texto: #f1f5f9;
+    --texto-secundario: #94a3b8;
+}
+
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    margin: 0;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #102d46 0,
+            transparent 35%
+        ),
+        var(--fondo);
+
+    color: var(--texto);
+
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+
+    border-bottom: 1px solid var(--borde);
+
+    background: rgba(7,17,31,.95);
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    backdrop-filter: blur(12px);
+}
+
+.header-inner {
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding: 18px 28px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+.marca {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.marca-icono {
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 14px;
+
+    background: #12314b;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 25px;
+}
+
+.marca h1 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    letter-spacing: .8px;
+}
+
+.marca small {
+
+    color: var(--texto-secundario);
+}
+
+nav {
+
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+}
+
+nav a {
+
+    color: var(--texto-secundario);
+
+    text-decoration: none;
+
+    padding: 8px 12px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+}
+
+nav a:hover {
+
+    color: white;
+
+    background: #142a40;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding: 48px 28px 30px;
+}
+
+.hero h2 {
+
+    max-width: 850px;
+
+    margin: 0 0 10px;
+
+    font-size: clamp(28px, 4vw, 48px);
+
+    line-height: 1.05;
+}
+
+.hero h2 span {
+
+    color: var(--azul);
+}
+
+.lema {
+
+    margin-top: 22px;
+
+    color: var(--azul);
+
+    font-family: Georgia, serif;
+
+    font-size: 25px;
+
+    letter-spacing: 2px;
+}
+
+.lema-sub {
+
+    color: var(--texto-secundario);
+
+    font-style: italic;
+}
+
+
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+.contenedor {
+
+    max-width: 1500px;
+
+    margin: auto;
+
+    padding: 0 28px 50px;
+}
+
+
+/* =========================================================
+   ESTADISTICAS
+========================================================= */
+
+.estadisticas {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 18px;
+}
+
+.stat {
+
+    background: var(--panel);
+
+    border: 1px solid var(--borde);
+
+    border-radius: 14px;
+
+    padding: 17px;
+}
+
+.stat-numero {
+
+    font-size: 27px;
+
+    font-weight: 800;
+
+    color: var(--azul);
+}
+
+.stat-label {
+
+    color: var(--texto-secundario);
+
+    font-size: 12px;
+
+    margin-top: 4px;
+}
+
+
+/* =========================================================
+   MAPA + FILTROS
+========================================================= */
+
+.observatorio-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        350px;
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+.panel {
+
+    background: var(--panel);
+
+    border: 1px solid var(--borde);
+
+    border-radius: 18px;
+
+    overflow: hidden;
+}
+
+.panel-titulo {
+
+    padding: 16px 18px;
+
+    border-bottom: 1px solid var(--borde);
+
+    font-weight: 800;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+#map {
+
+    height: 680px;
+
+    width: 100%;
+
+    background: #0b1624;
+}
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.filtros {
+
+    padding: 18px;
+
+    position: sticky;
+
+    top: 85px;
+}
+
+.filtros h3 {
+
+    margin-top: 0;
+
+    color: var(--azul);
+
+    font-size: 17px;
+}
+
+label {
+
+    display: block;
+
+    color: var(--texto-secundario);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    margin-bottom: 6px;
+}
+
+select,
+input {
+
+    width: 100%;
+
+    padding: 11px;
+
+    margin-bottom: 13px;
+
+    border-radius: 9px;
+
+    border: 1px solid var(--borde);
+
+    background: #081522;
+
+    color: white;
+
+    font-family: inherit;
+}
+
+select:focus,
+input:focus {
+
+    outline: none;
+
+    border-color: var(--azul);
+}
+
+.btn {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 11px;
+
+    cursor: pointer;
+
+    font-weight: 800;
+
+    margin-top: 4px;
+}
+
+.btn-aplicar {
+
+    background: var(--azul-2);
+
+    color: white;
+}
+
+.btn-limpiar {
+
+    background: #263b50;
+
+    color: white;
+
+    margin-top: 8px;
+}
+
+
+/* =========================================================
+   LEYENDA
+========================================================= */
+
+.leyenda {
+
+    display: flex;
+
+    gap: 18px;
+
+    padding: 12px 18px;
+
+    border-top: 1px solid var(--borde);
+
+    font-size: 12px;
+
+    color: var(--texto-secundario);
+}
+
+.punto {
+
+    width: 11px;
+
+    height: 11px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+
+    margin-right: 5px;
+}
+
+.punto-accidente {
+
+    background: var(--rojo);
+}
+
+.punto-incidente {
+
+    background: var(--amarillo);
+}
+
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.seccion {
+
+    margin-top: 50px;
+}
+
+.seccion h2 {
+
+    font-size: 26px;
+
+    margin-bottom: 8px;
+}
+
+.seccion-intro {
+
+    color: var(--texto-secundario);
+
+    max-width: 850px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   LECTURAS
+========================================================= */
+
+.lecturas {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 16px;
+
+    margin-top: 22px;
+}
+
+.lectura {
+
+    background: var(--panel);
+
+    border: 1px solid var(--borde);
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    min-height: 180px;
+}
+
+.lectura-icono {
+
+    font-size: 30px;
+
+    margin-bottom: 10px;
+}
+
+.lectura h3 {
+
+    margin: 0 0 8px;
+
+    color: white;
+
+    font-size: 17px;
+}
+
+.lectura p {
+
+    color: var(--texto-secundario);
+
+    line-height: 1.5;
+
+    font-size: 13px;
+}
+
+.lectura-boton {
+
+    display: inline-block;
+
+    margin-top: 8px;
+
+    padding: 7px 10px;
+
+    background: #17344d;
+
+    color: var(--azul);
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   PRINCIPIOS
+========================================================= */
+
+.principios {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-top: 22px;
+}
+
+.principio {
+
+    background: var(--panel);
+
+    border: 1px solid var(--borde);
+
+    border-radius: 15px;
+
+    padding: 20px;
+}
+
+.principio strong {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--azul);
+}
+
+.principio span {
+
+    color: var(--texto-secundario);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+
+    margin-top: 70px;
+
+    border-top: 1px solid var(--borde);
+
+    padding: 30px 20px;
+
+    text-align: center;
+
+    color: var(--texto-secundario);
+}
+
+.footer-lema {
+
+    color: var(--azul);
+
+    font-family: Georgia, serif;
+
+    font-size: 18px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   POPUP
+========================================================= */
+
+.popup-titulo {
+
+    font-size: 16px;
+
+    font-weight: 800;
+
+    color: #0f172a;
+
+    margin-bottom: 8px;
+}
+
+.popup-dato {
+
+    margin: 7px 0;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}
+
+.popup-dato strong {
+
+    color: #334155;
+}
+
+.popup-tipo {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 6px;
+
+    color: white;
+
+    font-weight: 800;
+
+    font-size: 11px;
+
+    margin-bottom: 8px;
+}
+
+.popup-accidente {
+
+    background: #dc2626;
+}
+
+.popup-incidente {
+
+    background: #d97706;
+}
+
+
+/* =========================================================
+   BLOQUES DE INFORMACION CON ICONOS
+========================================================= */
+
+.popup-seccion {
+
+    margin-top: 10px;
+
+    padding-top: 9px;
+
+    border-top: 1px solid #cbd5e1;
+}
+
+.popup-item {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    margin: 8px 0;
+}
+
+.popup-icono {
+
+    width: 27px;
+    min-width: 27px;
+    height: 27px;
+
+    border-radius: 8px;
+
+    background: #e2e8f0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 16px;
+}
+
+.popup-contenido {
+
+    flex: 1;
+}
+
+.popup-etiqueta {
+
+    display: block;
+
+    font-size: 10px;
+
+    color: #64748b;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3px;
+}
+
+.popup-valor {
+
+    display: block;
+
+    font-size: 12px;
+
+    color: #0f172a;
+
+    font-weight: 600;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   BOTONES DE REGISTRO
+========================================================= */
+
+.acciones {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.btn-registro {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: 800;
+
+    color: white;
+
+    background: var(--rojo);
+}
+
+.btn-donar {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    text-align: center;
+
+    font-weight: 800;
+
+    background: var(--amarillo);
+
+    color: #111827;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px) {
+
+    .observatorio-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .filtros {
+
+        position: static;
+
+    }
+
+    #map {
+
+        height: 550px;
+
+    }
+
+    .estadisticas {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .principios {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+    .lecturas {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+}
+
+@media(max-width:650px) {
+
+    .header-inner {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+    .hero {
+
+        padding-top: 30px;
+
+        padding-left: 14px;
+
+        padding-right: 14px;
+    }
+
+    .contenedor {
+
+        padding: 0 14px 40px;
+
+    }
+
+    .estadisticas {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .principios {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .lecturas {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    #map {
+
+        height: 450px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+<div class="header-inner">
+
+    <div class="marca">
+
+        <div class="marca-icono">
+            🏔️
+        </div>
+
+        <div>
+
+            <h1>
+                OBSERVATORIO ECUATORIANO
+            </h1>
+
+            <small>
+                Accidentes en actividades al aire libre
+            </small>
+
+        </div>
+
+    </div>
+
+
+    <nav>
+
+        <a href="#observatorio">
+            Observatorio
+        </a>
+
+        <a href="#lectura">
+            📚 Lectura
+        </a>
+
+        <a href="#metodologia">
+            Metodología
+        </a>
+
+        <a href="#principios">
+            Principios
+        </a>
+
+    </nav>
+
+</div>
+
+</header>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero">
+
+    <h2>
+
+        Observar para comprender.
+        <span>
+            Comprender para prevenir.
+        </span>
+
+    </h2>
+
+    <div class="lema">
+
+        EX NIHILO NIHIL
+
+    </div>
+
+    <div class="lema-sub">
+
+        El conocimiento se construye sobre conocimiento.
+
+    </div>
+
+</section>
+
+
+<div class="contenedor">
+
+
+<!-- =========================================================
+     ESTADISTICAS
+========================================================= -->
+
+<div class="estadisticas">
+
+    <div class="stat">
+
+        <div
+            class="stat-numero"
+            id="totalEventos">
+
+            —
+
+        </div>
+
+        <div class="stat-label">
+
+            Registros históricos
+
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            class="stat-numero"
+            id="totalAccidentes">
+
+            —
+
+        </div>
+
+        <div class="stat-label">
+
+            Accidentes
+
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            class="stat-numero"
+            id="totalIncidentes">
+
+            —
+
+        </div>
+
+        <div class="stat-label">
+
+            Incidentes
+
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div
+            class="stat-numero"
+            id="totalPersonas">
+
+            —
+
+        </div>
+
+        <div class="stat-label">
+
+            Personas registradas
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     OBSERVATORIO
+========================================================= -->
+
+<section
+    id="observatorio"
+    class="observatorio-grid">
+
+
+    <!-- =====================================================
+         MAPA
+    ====================================================== -->
+
+    <div class="panel">
+
+        <div class="panel-titulo">
+
+            <span>
+
+                🗺️ Distribución espacial de siniestros
+
+            </span>
+
+            <span
+                id="estadoMapa"
+                style="font-size:11px;color:#94a3b8;">
+
+                Cargando...
+
+            </span>
+
+        </div>
+
+
+        <div id="map"></div>
+
+
+        <div class="leyenda">
+
+            <span>
+
+                <span class="punto punto-accidente"></span>
+
+                Accidente
+
+            </span>
+
+
+            <span>
+
+                <span class="punto punto-incidente"></span>
+
+                Incidente
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTROS
+    ====================================================== -->
+
+    <aside class="panel filtros">
+
+        <h3>
+
+            🔎 Filtros de observación
+
+        </h3>
+
+
+        <label>
+
+            Año
+
+        </label>
+
+        <select id="filtroAnio">
+
+            <option value="">
+
+                Todos los años
+
+            </option>
+
+        </select>
+
+
+        <label>
+
+            Clasificación
+
+        </label>
+
+        <select id="filtroTipo">
+
+            <option value="">
+
+                Todos
+
+            </option>
+
+            <option value="A">
+
+                Accidentes
+
+            </option>
+
+            <option value="I">
+
+                Incidentes
+
+            </option>
+
+        </select>
+
+
+        <label>
+
+            Lugar / volcán
+
+        </label>
+
+        <select id="filtroVolcan">
+
+            <option value="">
+
+                Todos los lugares
+
+            </option>
+
+        </select>
+
+
+        <label>
+
+            Accidente geográfico
+
+        </label>
+
+        <select id="filtroGeografico">
+
+            <option value="">
+
+                Todos
+
+            </option>
+
+        </select>
+
+
+        <label>
+
+            Consecuencia
+
+        </label>
+
+        <select id="filtroConsecuencia">
+
+            <option value="">
+
+                Todas
+
+            </option>
+
+        </select>
+
+
+        <label>
+
+            Causa primaria
+
+        </label>
+
+        <select id="filtroCausa">
+
+            <option value="">
+
+                Todas
+
+            </option>
+
+        </select>
+
+
+        <button
+            class="btn btn-aplicar"
+            onclick="aplicarFiltros()">
+
+            Aplicar filtros
+
+        </button>
+
+
+        <button
+            class="btn btn-limpiar"
+            onclick="limpiarFiltros()">
+
+            Limpiar filtros
+
+        </button>
+
+
+        <div
+            style="
+                margin-top:18px;
+                padding-top:15px;
+                border-top:1px solid #29445e;
+                color:#94a3b8;
+                font-size:12px;
+                line-height:1.5;
+            ">
+
+            <strong style="color:white;">
+
+                Sobre estos datos
+
+            </strong>
+
+            <br><br>
+
+            Esta primera base corresponde a registros
+            históricos depurados y estructurados para
+            su representación cartográfica.
+
+            <br><br>
+
+            El siniestro constituye el evento macro.
+            Accidentes e incidentes representan
+            clasificaciones dentro del siniestro.
+
+            <br><br>
+
+            Cada registro de persona permite
+            desglosar accidentados e integrantes
+            ilesos.
+
+        </div>
+
+
+        <div class="acciones">
+
+            <button
+                class="btn-registro"
+                onclick="alert('Módulo de registro de incidentes en construcción.')">
+
+                ⚠️ Registrar incidente
+
+            </button>
+
+        </div>
+
+
+        <div class="acciones">
+
+            <a
+                class="btn-donar"
+                href="#donaciones">
+
+                ☕ Donaciones
+
+            </a>
+
+        </div>
+
+    </aside>
+
+</section>
+
+
+<!-- =========================================================
+     LECTURA
+========================================================= -->
+
+<section
+    id="lectura"
+    class="seccion">
+
+    <h2>
+
+        📚 Lectura
+
+    </h2>
+
+    <p class="seccion-intro">
+
+        Biblioteca documental del Observatorio.
+
+        Un espacio destinado a reunir libros,
+        artículos científicos, informes técnicos,
+        normas y documentos relacionados con los
+        accidentes, riesgos, seguridad y actividades
+        al aire libre.
+
+        <br><br>
+
+        <strong style="color:#38bdf8;">
+
+            El conocimiento se construye sobre conocimiento.
+
+        </strong>
+
+    </p>
+
+
+    <div class="lecturas">
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                📖
+
+            </div>
+
+            <h3>
+
+                Libros
+
+            </h3>
+
+            <p>
+
+                Literatura especializada en accidentología,
+                montaña, medicina, turismo, gestión del riesgo,
+                metodología y filosofía de la ciencia.
+
+            </p>
+
+            <a
+                href="#"
+                class="lectura-boton">
+
+                Biblioteca en construcción
+
+            </a>
+
+        </article>
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                📄
+
+            </div>
+
+            <h3>
+
+                Artículos científicos
+
+            </h3>
+
+            <p>
+
+                Investigaciones sobre accidentes,
+                epidemiología, lesiones, factores de riesgo,
+                exposición y seguridad en actividades
+                al aire libre.
+
+            </p>
+
+            <a
+                href="#"
+                class="lectura-boton">
+
+                Próximamente
+
+            </a>
+
+        </article>
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                📑
+
+            </div>
+
+            <h3>
+
+                Normas y documentos técnicos
+
+            </h3>
+
+            <p>
+
+                Normas, protocolos, clasificaciones,
+                documentos institucionales y referencias
+                técnicas utilizadas por el Observatorio.
+
+            </p>
+
+            <a
+                href="#"
+                class="lectura-boton">
+
+                Próximamente
+
+            </a>
+
+        </article>
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                🧠
+
+            </div>
+
+            <h3>
+
+                Fundamentos
+
+            </h3>
+
+            <p>
+
+                Material relacionado con epistemología,
+                causalidad, sistemismo, metodología científica
+                y construcción del conocimiento.
+
+            </p>
+
+            <a
+                href="#"
+                class="lectura-boton">
+
+                Próximamente
+
+            </a>
+
+        </article>
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                🏔️
+
+            </div>
+
+            <h3>
+
+                Seguridad en montaña
+
+            </h3>
+
+            <p>
+
+                Material especializado en montañismo,
+                senderismo, escalada, rescate y prevención
+                de accidentes.
+
+            </p>
+
+            <a
+                href="#"
+                class="lectura-boton">
+
+                Próximamente
+
+            </a>
+
+        </article>
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                🌎
+
+            </div>
+
+            <h3>
+
+                Ecuador
+
+            </h3>
+
+            <p>
+
+                Documentación relacionada con el territorio
+                ecuatoriano, volcanes, áreas naturales,
+                turismo y actividades al aire libre.
+
+            </p>
+
+            <a
+                href="#"
+                class="lectura-boton">
+
+                Próximamente
+
+            </a>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     METODOLOGIA
+========================================================= -->
+
+<section
+    id="metodologia"
+    class="seccion">
+
+    <h2>
+
+        🔬 Metodología
+
+    </h2>
+
+    <p class="seccion-intro">
+
+        La base histórica constituye el punto de partida
+        del Observatorio.
+
+        Sus registros fueron obtenidos de fuentes existentes
+        y posteriormente depurados y estructurados para
+        permitir su análisis.
+
+        <br><br>
+
+        El siniestro se considera la unidad macro del evento.
+        Dentro de él pueden existir uno o varios accidentados,
+        así como integrantes ilesos.
+
+        <br><br>
+
+        Esta estructura permite estudiar posteriormente
+        las relaciones entre evento primario, factores
+        ambientales, factores humanos y consecuencias.
+
+        <br><br>
+
+        En una etapa posterior se implementará una ficha
+        estandarizada para nuevos registros provenientes
+        de instituciones de respuesta y rescate y de
+        reportes voluntarios de usuarios.
+
+    </p>
+
+</section>
+
+
+<!-- =========================================================
+     PRINCIPIOS
+========================================================= -->
+
+<section
+    id="principios"
+    class="seccion">
+
+    <h2>
+
+        🧭 Principios del proyecto
+
+    </h2>
+
+    <p class="seccion-intro">
+
+        El Observatorio busca desarrollar una infraestructura
+        de conocimiento abierta, acumulativa, transparente
+        y reproducible.
+
+    </p>
+
+
+    <div class="principios">
+
+
+        <div class="principio">
+
+            <strong>
+
+                EX NIHILO NIHIL
+
+            </strong>
+
+            <span>
+
+                El conocimiento no aparece de la nada.
+                Se construye sobre observaciones,
+                experiencias y conocimientos anteriores.
+
+            </span>
+
+        </div>
+
+
+        <div class="principio">
+
+            <strong>
+
+                SOFTWARE LIBRE
+
+            </strong>
+
+            <span>
+
+                Preferencia por herramientas abiertas
+                y tecnologías que favorezcan la autonomía,
+                colaboración y reproducibilidad.
+
+            </span>
+
+        </div>
+
+
+        <div class="principio">
+
+            <strong>
+
+                CONOCIMIENTO ABIERTO
+
+            </strong>
+
+            <span>
+
+                Promoción del acceso y circulación del
+                conocimiento cuando las condiciones legales,
+                éticas y de privacidad lo permitan.
+
+            </span>
+
+        </div>
+
+
+        <div class="principio">
+
+            <strong>
+
+                DATOS RESPONSABLES
+
+            </strong>
+
+            <span>
+
+                Trazabilidad de las fuentes y tratamiento
+                responsable de información institucional
+                y datos potencialmente sensibles.
+
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     DONACIONES
+========================================================= -->
+
+<section
+    id="donaciones"
+    class="seccion">
+
+    <h2>
+
+        ☕ Apoya el Observatorio
+
+    </h2>
+
+    <p class="seccion-intro">
+
+        Este proyecto busca construir una infraestructura
+        independiente para recopilar, organizar, analizar
+        y compartir conocimiento sobre accidentes en
+        actividades al aire libre.
+
+        <br><br>
+
+        Las contribuciones ayudan a mantener la infraestructura,
+        alojamiento, desarrollo de software, investigación,
+        documentación y disponibilidad pública del proyecto.
+
+    </p>
+
+
+    <div class="lecturas">
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                ☕
+                
+            </div>
+
+            <h3>
+
+                Apoyar el proyecto
+
+            </h3>
+
+            <p>
+
+                Si deseas contribuir económicamente al
+                desarrollo y mantenimiento del Observatorio,
+                puedes hacerlo mediante la plataforma
+                de donaciones.
+
+            </p>
+
+            <a
+                href="https://buymeacoffee.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lectura-boton">
+
+                ☕ Donar
+
+            </a>
+
+        </article>
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                💻
+
+            </div>
+
+            <h3>
+
+                Software libre
+
+            </h3>
+
+            <p>
+
+                El proyecto busca favorecer tecnologías
+                abiertas y herramientas que permitan
+                estudiar, reproducir y mejorar el sistema.
+
+            </p>
+
+        </article>
+
+
+        <article class="lectura">
+
+            <div class="lectura-icono">
+
+                📚
+
+            </div>
+
+            <h3>
+
+                Conocimiento abierto
+
+            </h3>
+
+            <p>
+
+                La finalidad última es que el conocimiento
+                acumulado pueda servir para comprender
+                mejor los accidentes y contribuir a su
+                prevención.
+
+            </p>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="footer-lema">
+
+        EX NIHILO NIHIL
+
+    </div>
+
+    <div>
+
+        El conocimiento se construye sobre conocimiento.
+
+    </div>
+
+    <br>
+
+    <div>
+
+        Observatorio Ecuatoriano de Accidentes en
+        Actividades al Aire Libre
+
+    </div>
+
+    <br>
+
+    <div>
+
+        Fundador y desarrollador:
+
+        <strong style="color:white;">
+
+            Bryan Alvarez
+
+        </strong>
+
+    </div>
+
+    <br>
+
+    <div>
+
+        Ecuador · 2026 · V1
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://zjacblnkmybfxdlpltlm.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_jIY4M_d1MpgiZhryHU7yQQ_bW4YiIQo";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let mapa;
+
+let todosLosRegistros = [];
+
+let marcadores = [];
+
+
+/* =========================================================
+   NORMALIZAR TEXTO
+========================================================= */
+
+function normalizarTexto(valor) {
+
+    return String(valor ?? "")
+        .trim()
+        .toUpperCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+}
+
+
+/* =========================================================
+   ICONOS — EVENTO PRIMARIO
+========================================================= */
+
+function iconoCausaPrimaria(valor) {
+
+    const texto =
+        normalizarTexto(valor);
+
+    const iconos = {
+
+        "CAIDA": "⬇️",
+
+        "EXTRAVIO": "🧭",
+
+        "PERDIDA DE RUTA": "🧭",
+
+        "DESORIENTACION": "🧭",
+
+        "FATIGA": "🥵",
+
+        "LIPOTIMIA": "😵",
+
+        "DESHIDRATACION": "💧",
+
+        "HIPOTERMIA": "🥶",
+
+        "ACCIDENTE": "⚠️",
+
+        "GOLPE": "💥",
+
+        "RESBALON": "🧊",
+
+        "COLISION": "💥",
+
+        "ALUD": "🏔️",
+
+        "AVALANCHA": "🏔️",
+
+        "PICADURA": "🦂",
+
+        "MORDEDURA": "🐕",
+
+        "AHOGAMIENTO": "🌊"
+
+    };
+
+    return iconos[texto] || "⚠️";
+}
+
+
+/* =========================================================
+   ICONOS — FACTOR AMBIENTAL
+========================================================= */
+
+function iconoAmbiental(valor) {
+
+    const texto =
+        normalizarTexto(valor);
+
+    const iconos = {
+
+        "CLIMA": "🌦️",
+
+        "LLUVIA": "🌧️",
+
+        "TORMENTA": "⛈️",
+
+        "NIEBLA": "🌫️",
+
+        "VIENTO": "💨",
+
+        "NIEVE": "❄️",
+
+        "HIELO": "🧊",
+
+        "FRIO": "🥶",
+
+        "CALOR": "☀️",
+
+        "ALTITUD": "🏔️",
+
+        "TERRENO": "⛰️",
+
+        "PENDIENTE": "📐",
+
+        "ROCA": "🪨",
+
+        "BARRO": "🟤",
+
+        "AGUA": "💧",
+
+        "VISIBILIDAD": "👁️"
+
+    };
+
+    return iconos[texto] || "🌎";
+}
+
+
+/* =========================================================
+   ICONOS — FACTOR HUMANO
+========================================================= */
+
+function iconoHumano(valor) {
+
+    const texto =
+        normalizarTexto(valor);
+
+    const iconos = {
+
+        "PLANIFICACION": "🗺️",
+
+        "MALA PLANIFICACION": "🗺️",
+
+        "EQUIPAMIENTO": "🎒",
+
+        "FALTA DE EQUIPO": "🎒",
+
+        "INEXPERIENCIA": "🧑‍🎓",
+
+        "DESCONOCIMIENTO": "❓",
+
+        "NEGLIGENCIA": "⚠️",
+
+        "IMPRUDENCIA": "⚠️",
+
+        "FATIGA": "🥵",
+
+        "DESORIENTACION": "🧭",
+
+        "CONSUMO DE ALCOHOL": "🍺",
+
+        "VELOCIDAD": "💨",
+
+        "COMPORTAMIENTO": "👤"
+
+    };
+
+    return iconos[texto] || "👤";
+}
+
+
+/* =========================================================
+   ICONOS — CONSECUENCIA
+========================================================= */
+
+function iconoConsecuencia(valor) {
+
+    const texto =
+        normalizarTexto(valor);
+
+    const iconos = {
+
+        "MUERTE": "⚫",
+
+        "FALLECIMIENTO": "⚫",
+
+        "FRACTURA": "🦴",
+
+        "FRACTURA EXTREMIDAD SUPERIOR": "🦴",
+
+        "FRACTURA EXTREMIDAD INFERIOR": "🦴",
+
+        "POLITRAUMATISMO": "🩹",
+
+        "TRAUMATISMO": "🩹",
+
+        "ESGUINCE": "🦶",
+
+        "ESGUINSE": "🦶",
+
+        "HERIDA": "🩸",
+
+        "HEMORRAGIA": "🩸",
+
+        "HIPOTERMIA": "🥶",
+
+        "LIPOTIMIA": "😵",
+
+        "DESHIDRATACION": "💧",
+
+        "AGOTAMIENTO": "🥵",
+
+        "LESION": "🩹",
+
+        "ILESO": "🟢",
+
+        "SIN LESIONES": "🟢"
+
+    };
+
+    return iconos[texto] || "🩹";
+}
+
+
+/* =========================================================
+   ICONOS — PARTE DEL CUERPO
+========================================================= */
+
+function iconoParteCuerpo(valor) {
+
+    const texto =
+        normalizarTexto(valor);
+
+    const iconos = {
+
+        "CABEZA": "🧠",
+
+        "CRANEO": "🧠",
+
+        "CUELLO": "🦴",
+
+        "TORAX": "🫁",
+
+        "ABDOMEN": "🫃",
+
+        "EXTREMIDAD SUPERIOR": "💪",
+
+        "EXTREMIDAD INFERIOR": "🦵",
+
+        "BRAZO": "💪",
+
+        "MANO": "✋",
+
+        "PIERNA": "🦵",
+
+        "RODILLA": "🦵",
+
+        "TOBILLO": "🦶",
+
+        "PIE": "🦶",
+
+        "COLUMNA": "🦴",
+
+        "MULTIPLE": "🧍"
+
+    };
+
+    return iconos[texto] || "🩻";
+}
+
+
+/* =========================================================
+   CREAR ITEM DEL POPUP
+========================================================= */
+
+function crearItemPopup(
+    icono,
+    etiqueta,
+    valor
+) {
+
+    const texto =
+        String(valor ?? "").trim();
+
+    if (
+        !texto ||
+        normalizarTexto(texto) === "NA"
+    ) {
+
+        return "";
+
+    }
+
+    return `
+
+        <div class="popup-item">
+
+            <div class="popup-icono">
+
+                ${icono}
+
+            </div>
+
+            <div class="popup-contenido">
+
+                <span class="popup-etiqueta">
+
+                    ${etiqueta}
+
+                </span>
+
+                <span class="popup-valor">
+
+                    ${texto}
+
+                </span>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   INICIAR MAPA
+========================================================= */
+
+function iniciarMapa() {
+
+    mapa =
+        L.map("map")
+        .setView(
+            [-1.5, -78.4],
+            7
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+
+            maxZoom: 19,
+
+            attribution:
+                "© OpenStreetMap contributors"
+
+        }
+
+    ).addTo(mapa);
+
+}
+
+
+/* =========================================================
+   CARGAR DATOS
+========================================================= */
+
+async function cargarDatos() {
+
+    document.getElementById(
+        "estadoMapa"
+    ).textContent =
+        "Consultando datos...";
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("historical_events")
+            .select("*")
+            .order(
+                "fecha",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "estadoMapa"
+        ).textContent =
+            "Error de conexión";
+
+        alert(
+            "No se pudieron cargar los datos históricos. " +
+            "Revisa la conexión con Supabase."
+        );
+
+        return;
+
+    }
+
+
+    todosLosRegistros =
+        data || [];
+
+
+    llenarFiltros(
+        todosLosRegistros
+    );
+
+
+    actualizarEstadisticas(
+        todosLosRegistros
+    );
+
+
+    mostrarRegistrosEnMapa(
+        todosLosRegistros
+    );
+
+
+    document.getElementById(
+        "estadoMapa"
+    ).textContent =
+        todosLosRegistros.length +
+        " registros cargados";
+
+}
+
+
+/* =========================================================
+   ESTADISTICAS
+========================================================= */
+
+function actualizarEstadisticas(
+    registros
+) {
+
+    document.getElementById(
+        "totalEventos"
+    ).textContent =
+        registros.length;
+
+
+    const accidentes =
+        registros.filter(
+            r =>
+                normalizarTexto(
+                    r.tipo_siniestro
+                ) === "A"
+        ).length;
+
+
+    const incidentes =
+        registros.filter(
+            r =>
+                normalizarTexto(
+                    r.tipo_siniestro
+                ) === "I"
+        ).length;
+
+
+    const personas =
+        registros.reduce(
+            (
+                total,
+                r
+            ) => {
+
+                const n =
+                    Number(
+                        r.accidentados
+                    );
+
+                return total +
+                    (
+                        Number.isFinite(n)
+                            ? n
+                            : 0
+                    );
+
+            },
+            0
+        );
+
+
+    document.getElementById(
+        "totalAccidentes"
+    ).textContent =
+        accidentes;
+
+
+    document.getElementById(
+        "totalIncidentes"
+    ).textContent =
+        incidentes;
+
+
+    document.getElementById(
+        "totalPersonas"
+    ).textContent =
+        personas;
+
+}
+
+
+/* =========================================================
+   LLENAR FILTROS
+========================================================= */
+
+function llenarFiltros(
+    registros
+) {
+
+    const anios =
+        [
+            ...new Set(
+
+                registros
+
+                    .map(
+                        r => {
+
+                            if (!r.fecha)
+                                return null;
+
+                            return new Date(
+                                r.fecha
+                            ).getFullYear();
+
+                        }
+                    )
+
+                    .filter(Boolean)
+
+            )
+        ]
+        .sort();
+
+
+    const volcanes =
+        obtenerValores(
+            registros,
+            "nombre_volcan"
+        );
+
+
+    const geograficos =
+        obtenerValores(
+            registros,
+            "accidente_geografico"
+        );
+
+
+    const consecuencias =
+        obtenerValores(
+            registros,
+            "consecuencia"
+        );
+
+
+    const causas =
+        obtenerValores(
+            registros,
+            "causa_primaria"
+        );
+
+
+    llenarSelect(
+        "filtroAnio",
+        anios
+    );
+
+
+    llenarSelect(
+        "filtroVolcan",
+        volcanes
+    );
+
+
+    llenarSelect(
+        "filtroGeografico",
+        geograficos
+    );
+
+
+    llenarSelect(
+        "filtroConsecuencia",
+        consecuencias
+    );
+
+
+    llenarSelect(
+        "filtroCausa",
+        causas
+    );
+
+}
+
+
+/* =========================================================
+   OBTENER VALORES UNICOS
+========================================================= */
+
+function obtenerValores(
+    registros,
+    campo
+) {
+
+    return [
+        ...new Set(
+
+            registros
+
+                .map(
+                    r =>
+                        String(
+                            r[campo] ?? ""
+                        ).trim()
+                )
+
+                .filter(
+                    valor =>
+                        valor &&
+                        normalizarTexto(valor)
+                        !== "NA"
+                )
+
+        )
+    ].sort();
+
+}
+
+
+/* =========================================================
+   CREAR OPTIONS
+========================================================= */
+
+function llenarSelect(
+    id,
+    valores
+) {
+
+    const select =
+        document.getElementById(id);
+
+
+    valores.forEach(
+        valor => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                valor;
+
+
+            option.textContent =
+                valor;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   MOSTRAR REGISTROS
+========================================================= */
+
+function mostrarRegistrosEnMapa(
+    registros
+) {
+
+    marcadores.forEach(
+        marcador =>
+            mapa.removeLayer(
+                marcador
+            )
+    );
+
+
+    marcadores = [];
+
+
+    const coordenadas = [];
+
+
+    registros.forEach(
+        registro => {
+
+            const lat =
+                Number(
+                    registro.latitude
+                );
+
+
+            const lng =
+                Number(
+                    registro.longitude
+                );
+
+
+            if (
+                !Number.isFinite(lat) ||
+                !Number.isFinite(lng)
+            ) {
+
+                return;
+
+            }
+
+
+            coordenadas.push(
+                [
+                    lat,
+                    lng
+                ]
+            );
+
+
+            const tipo =
+                normalizarTexto(
+                    registro.tipo_siniestro
+                );
+
+
+            const color =
+                tipo === "A"
+                    ? "#ef4444"
+                    : "#f59e0b";
+
+
+            const marcador =
+                L.circleMarker(
+                    [
+                        lat,
+                        lng
+                    ],
+                    {
+
+                        radius: 8,
+
+                        fillColor:
+                            color,
+
+                        color:
+                            "#ffffff",
+
+                        weight:
+                            1.5,
+
+                        opacity:
+                            1,
+
+                        fillOpacity:
+                            .85
+
+                    }
+                );
+
+
+            marcador.bindPopup(
+                crearPopup(
+                    registro
+                )
+            );
+
+
+            marcador.addTo(
+                mapa
+            );
+
+
+            marcadores.push(
+                marcador
+            );
+
+        }
+    );
+
+
+    if (
+        coordenadas.length > 0
+    ) {
+
+        mapa.fitBounds(
+            coordenadas,
+            {
+                padding:
+                    [25,25]
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   POPUP PRINCIPAL
+========================================================= */
+
+function crearPopup(r) {
+
+    const tipo =
+        normalizarTexto(
+            r.tipo_siniestro
+        );
+
+
+    const tipoTexto =
+        tipo === "A"
+            ? "ACCIDENTE"
+            : tipo === "I"
+                ? "INCIDENTE"
+                : tipo;
+
+
+    const claseTipo =
+        tipo === "A"
+            ? "popup-accidente"
+            : "popup-incidente";
+
+
+    const fecha =
+        r.fecha
+            ? new Date(
+                r.fecha
+              ).toLocaleDateString(
+                "es-EC"
+              )
+            : "NA";
+
+
+    const eventoPrimario =
+        crearItemPopup(
+            iconoCausaPrimaria(
+                r.causa_primaria
+            ),
+            "Evento primario",
+            r.causa_primaria
+        );
+
+
+    const factorAmbiental =
+        crearItemPopup(
+            iconoAmbiental(
+                r.causa_ambiental
+            ),
+            "Factor ambiental",
+            r.causa_ambiental
+        );
+
+
+    const factorHumano =
+        crearItemPopup(
+            iconoHumano(
+                r.causa_humana
+            ),
+            "Factor humano",
+            r.causa_humana
+        );
+
+
+    const consecuencia =
+        crearItemPopup(
+            iconoConsecuencia(
+                r.consecuencia
+            ),
+            "Consecuencia",
+            r.consecuencia
+        );
+
+
+    const parteCuerpo =
+        crearItemPopup(
+            iconoParteCuerpo(
+                r.parte_cuerpo_afectada
+            ),
+            "Parte corporal afectada",
+            r.parte_cuerpo_afectada
+        );
+
+
+    return `
+
+        <div style="min-width:280px;">
+
+            <div class="popup-titulo">
+
+                🏔️ Siniestro
+                ${r.codigobase || "NA"}
+
+            </div>
+
+
+            <div
+                class="popup-tipo ${claseTipo}">
+
+                ${tipoTexto}
+
+            </div>
+
+
+            <div class="popup-dato">
+
+                <strong>Fecha:</strong>
+                ${fecha}
+
+            </div>
+
+
+            <div class="popup-dato">
+
+                <strong>Ficha:</strong>
+                ${r.numero_ficha || "NA"}
+
+            </div>
+
+
+            <div class="popup-dato">
+
+                <strong>Lugar:</strong>
+                ${r.nombre_volcan || "NA"}
+
+            </div>
+
+
+            <div class="popup-dato">
+
+                <strong>Accidente geográfico:</strong>
+                ${r.accidente_geografico || "NA"}
+
+            </div>
+
+
+            <div class="popup-dato">
+
+                <strong>Altitud:</strong>
+                ${r.altitud || "NA"} m
+
+            </div>
+
+
+            <div class="popup-seccion">
+
+                ${eventoPrimario}
+
+                ${factorAmbiental}
+
+                ${factorHumano}
+
+            </div>
+
+
+            <div class="popup-seccion">
+
+                ${consecuencia}
+
+                ${parteCuerpo}
+
+            </div>
+
+
+            <div class="popup-seccion">
+
+                <div class="popup-dato">
+
+                    <strong>
+                        👥 Grupo:
+                    </strong>
+
+                    ${r.grupo ?? "NA"}
+
+                </div>
+
+
+                <div class="popup-dato">
+
+                    <strong>
+                        👤 Accidentado:
+                    </strong>
+
+                    ${r.accidentados ?? "NA"}
+
+                </div>
+
+
+                <div class="popup-dato">
+
+                    <strong>
+                        ⚧ Sexo:
+                    </strong>
+
+                    ${r.sexo || "NA"}
+
+                </div>
+
+
+                <div class="popup-dato">
+
+                    <strong>
+                        🎂 Edad:
+                    </strong>
+
+                    ${r.edad ?? "NA"}
+
+                </div>
+
+
+                <div class="popup-dato">
+
+                    <strong>
+                        🌎 País de origen:
+                    </strong>
+
+                    ${r.pais_origen || "NA"}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+function aplicarFiltros() {
+
+    const anio =
+        document.getElementById(
+            "filtroAnio"
+        ).value;
+
+
+    const tipo =
+        document.getElementById(
+            "filtroTipo"
+        ).value;
+
+
+    const volcan =
+        document.getElementById(
+            "filtroVolcan"
+        ).value;
+
+
+    const geografico =
+        document.getElementById(
+            "filtroGeografico"
+        ).value;
+
+
+    const consecuencia =
+        document.getElementById(
+            "filtroConsecuencia"
+        ).value;
+
+
+    const causa =
+        document.getElementById(
+            "filtroCausa"
+        ).value;
+
+
+    const filtrados =
+        todosLosRegistros.filter(
+            r => {
+
+                let cumple = true;
+
+
+                if (anio) {
+
+                    const fecha =
+                        new Date(
+                            r.fecha
+                        );
+
+
+                    cumple =
+                        fecha
+                            .getFullYear()
+                            .toString()
+                        ===
+                        anio;
+
+                }
+
+
+                if (
+                    cumple &&
+                    tipo
+                ) {
+
+                    cumple =
+                        normalizarTexto(
+                            r.tipo_siniestro
+                        )
+                        ===
+                        tipo;
+
+                }
+
+
+                if (
+                    cumple &&
+                    volcan
+                ) {
+
+                    cumple =
+                        String(
+                            r.nombre_volcan
+                            ?? ""
+                        ).trim()
+                        ===
+                        volcan;
+
+                }
+
+
+                if (
+                    cumple &&
+                    geografico
+                ) {
+
+                    cumple =
+                        String(
+                            r.accidente_geografico
+                            ?? ""
+                        ).trim()
+                        ===
+                        geografico;
+
+                }
+
+
+                if (
+                    cumple &&
+                    consecuencia
+                ) {
+
+                    cumple =
+                        String(
+                            r.consecuencia
+                            ?? ""
+                        ).trim()
+                        ===
+                        consecuencia;
+
+                }
+
+
+                if (
+                    cumple &&
+                    causa
+                ) {
+
+                    cumple =
+                        String(
+                            r.causa_primaria
+                            ?? ""
+                        ).trim()
+                        ===
+                        causa;
+
+                }
+
+
+                return cumple;
+
+            }
+        );
+
+
+    mostrarRegistrosEnMapa(
+        filtrados
+    );
+
+
+    actualizarEstadisticas(
+        filtrados
+    );
+
+
+    document.getElementById(
+        "estadoMapa"
+    ).textContent =
+        filtrados.length +
+        " registros encontrados";
+
+}
+
+
+/* =========================================================
+   LIMPIAR FILTROS
+========================================================= */
+
+function limpiarFiltros() {
+
+    document.getElementById(
+        "filtroAnio"
+    ).value = "";
+
+
+    document.getElementById(
+        "filtroTipo"
+    ).value = "";
+
+
+    document.getElementById(
+        "filtroVolcan"
+    ).value = "";
+
+
+    document.getElementById(
+        "filtroGeografico"
+    ).value = "";
+
+
+    document.getElementById(
+        "filtroConsecuencia"
+    ).value = "";
+
+
+    document.getElementById(
+        "filtroCausa"
+    ).value = "";
+
+
+    mostrarRegistrosEnMapa(
+        todosLosRegistros
+    );
+
+
+    actualizarEstadisticas(
+        todosLosRegistros
+    );
+
+
+    document.getElementById(
+        "estadoMapa"
+    ).textContent =
+        todosLosRegistros.length +
+        " registros cargados";
+
+}
+
+
+/* =========================================================
+   INICIO
+========================================================= */
+
+window.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        iniciarMapa();
+
+        await cargarDatos();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
