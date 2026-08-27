@@ -398,7 +398,6 @@ select {
 
 <header>
 
-```
 <div class="header-inner">
 
     <div class="marca">
@@ -435,7 +434,6 @@ select {
     </nav>
 
 </div>
-```
 
 </header>
 
@@ -453,66 +451,64 @@ select {
 
 <div class="estadisticas">
 
-```
-<div class="stat">
+    <div class="stat">
 
-    <div
-        id="totalSiniestros"
-        class="stat-numero">
-        —
+        <div
+            id="totalSiniestros"
+            class="stat-numero">
+            —
+        </div>
+
+        <div class="stat-label">
+            Siniestros
+        </div>
+
     </div>
 
-    <div class="stat-label">
-        Siniestros
+
+    <div class="stat">
+
+        <div
+            id="totalAccidentes"
+            class="stat-numero">
+            —
+        </div>
+
+        <div class="stat-label">
+            Accidentes
+        </div>
+
     </div>
 
-</div>
 
+    <div class="stat">
 
-<div class="stat">
+        <div
+            id="totalIncidentes"
+            class="stat-numero">
+            —
+        </div>
 
-    <div
-        id="totalAccidentes"
-        class="stat-numero">
-        —
+        <div class="stat-label">
+            Incidentes
+        </div>
+
     </div>
 
-    <div class="stat-label">
-        Accidentes
+
+    <div class="stat">
+
+        <div
+            id="totalPersonas"
+            class="stat-numero">
+            —
+        </div>
+
+        <div class="stat-label">
+            Personas registradas
+        </div>
+
     </div>
-
-</div>
-
-
-<div class="stat">
-
-    <div
-        id="totalIncidentes"
-        class="stat-numero">
-        —
-    </div>
-
-    <div class="stat-label">
-        Incidentes
-    </div>
-
-</div>
-
-
-<div class="stat">
-
-    <div
-        id="totalPersonas"
-        class="stat-numero">
-        —
-    </div>
-
-    <div class="stat-label">
-        Personas registradas
-    </div>
-
-</div>
-```
 
 </div>
 
@@ -524,39 +520,37 @@ select {
 
 <div class="panel panel-mapa">
 
-```
-<div class="panel-titulo">
+    <div class="panel-titulo">
 
-    <span>
-        Distribución espacial de siniestros
-    </span>
+        <span>
+            Distribución espacial de siniestros
+        </span>
 
-    <span
-        id="estadoMapa"
-        style="color:#94a3b8;font-size:10px;">
-        Cargando...
-    </span>
+        <span
+            id="estadoMapa"
+            style="color:#94a3b8;font-size:10px;">
+            Cargando...
+        </span>
 
-</div>
-
-
-<div id="map"></div>
+    </div>
 
 
-<div class="leyenda">
+    <div id="map"></div>
 
-    <span>
-        <span class="punto punto-accidente"></span>
-        Accidente
-    </span>
 
-    <span>
-        <span class="punto punto-incidente"></span>
-        Incidente
-    </span>
+    <div class="leyenda">
 
-</div>
-```
+        <span>
+            <span class="punto punto-accidente"></span>
+            Accidente
+        </span>
+
+        <span>
+            <span class="punto punto-incidente"></span>
+            Incidente
+        </span>
+
+    </div>
 
 </div>
 
@@ -566,137 +560,135 @@ select {
 
 <aside class="panel filtros">
 
-```
-<h3>
-    Filtros de observación
-</h3>
+    <h3>
+        Filtros de observación
+    </h3>
 
 
-<label>Año</label>
+    <label>Año</label>
 
-<select id="filtroAnio">
+    <select id="filtroAnio">
 
-    <option value="">
-        Todos los años
-    </option>
+        <option value="">
+            Todos los años
+        </option>
 
-</select>
-
-
-<label>Tipo de siniestro</label>
-
-<select id="filtroTipo">
-
-    <option value="">
-        Todos
-    </option>
-
-    <option value="A">
-        Accidentes
-    </option>
-
-    <option value="I">
-        Incidentes
-    </option>
-
-</select>
+    </select>
 
 
-<label>Clasificación de montaña</label>
+    <label>Tipo de siniestro</label>
 
-<select id="filtroABM">
+    <select id="filtroTipo">
 
-    <option value="">
-        Todas
-    </option>
+        <option value="">
+            Todos
+        </option>
 
-</select>
+        <option value="A">
+            Accidentes
+        </option>
 
+        <option value="I">
+            Incidentes
+        </option>
 
-<label>Montaña / volcán</label>
-
-<select id="filtroVolcan">
-
-    <option value="">
-        Todos
-    </option>
-
-</select>
+    </select>
 
 
-<label>Accidente geográfico</label>
+    <label>Clasificación de montaña</label>
 
-<select id="filtroGeografico">
+    <select id="filtroABM">
 
-    <option value="">
-        Todos
-    </option>
+        <option value="">
+            Todas
+        </option>
 
-</select>
-
-
-<label>Consecuencia</label>
-
-<select id="filtroConsecuencia">
-
-    <option value="">
-        Todas
-    </option>
-
-</select>
+    </select>
 
 
-<label>Causa primaria</label>
+    <label>Montaña / volcán</label>
 
-<select id="filtroCausa">
+    <select id="filtroVolcan">
 
-    <option value="">
-        Todas
-    </option>
+        <option value="">
+            Todos
+        </option>
 
-</select>
-
-
-<button
-    class="btn btn-aplicar"
-    onclick="aplicarFiltros()">
-    Aplicar filtros
-</button>
+    </select>
 
 
-<button
-    class="btn btn-limpiar"
-    onclick="limpiarFiltros()">
-    Limpiar filtros
-</button>
+    <label>Accidente geográfico</label>
+
+    <select id="filtroGeografico">
+
+        <option value="">
+            Todos
+        </option>
+
+    </select>
 
 
-<div class="info-filtros">
+    <label>Consecuencia</label>
 
-    <strong>Unidad de observación</strong>
+    <select id="filtroConsecuencia">
 
-    <br><br>
+        <option value="">
+            Todas
+        </option>
 
-    Un <strong>siniestro</strong> es un evento
-    identificado mediante un único
-    código_observatorio.
+    </select>
 
-    <br><br>
 
-    Una o varias personas pueden estar
-    asociadas al mismo siniestro.
+    <label>Causa primaria</label>
 
-    <br><br>
+    <select id="filtroCausa">
 
-    Por ejemplo:
+        <option value="">
+            Todas
+        </option>
 
-    <br>
+    </select>
 
-    1 siniestro + 10 personas =
-    <strong>1 siniestro y 10 personas registradas.</strong>
 
-</div>
-```
+    <button
+        class="btn btn-aplicar"
+        onclick="aplicarFiltros()">
+        Aplicar filtros
+    </button>
+
+
+    <button
+        class="btn btn-limpiar"
+        onclick="limpiarFiltros()">
+        Limpiar filtros
+    </button>
+
+
+    <div class="info-filtros">
+
+        <strong>Unidad de observación</strong>
+
+        <br><br>
+
+        Un <strong>siniestro</strong> es un evento
+        identificado mediante un único
+        código_observatorio.
+
+        <br><br>
+
+        Una o varias personas pueden estar
+        asociadas al mismo siniestro.
+
+        <br><br>
+
+        Por ejemplo:
+
+        <br>
+
+        1 siniestro + 10 personas =
+        <strong>1 siniestro y 10 personas registradas.</strong>
+
+    </div>
 
 </aside>
 
@@ -712,28 +704,26 @@ select {
     id="metodologia"
     class="seccion">
 
-```
-<h2>
-    Metodología
-</h2>
+    <h2>
+        Metodología
+    </h2>
 
-<p>
+    <p>
 
-    El Observatorio utiliza el siniestro
-    como unidad principal de observación.
+        El Observatorio utiliza el siniestro
+        como unidad principal de observación.
 
-    Cada evento posee un código único
-    con estructura:
+        Cada evento posee un código único
+        con estructura:
 
-    <strong>
-        OEAM-AÑO-NÚMERO SECUENCIAL
-    </strong>.
+        <strong>
+            OEAM-AÑO-NÚMERO SECUENCIAL
+        </strong>.
 
-    Un mismo siniestro puede involucrar
-    a una o varias personas.
+        Un mismo siniestro puede involucrar
+        a una o varias personas.
 
-</p>
-```
+    </p>
 
 </section>
 
@@ -745,23 +735,21 @@ select {
     id="principios"
     class="seccion">
 
-```
-<h2>
-    Principios
-</h2>
+    <h2>
+        Principios
+    </h2>
 
-<p>
+    <p>
 
-    El Observatorio busca construir
-    conocimiento sistemático sobre los
-    accidentes y siniestros ocurridos
-    durante actividades de montaña
-    en Ecuador, mediante datos
-    organizados, verificables y
-    responsables.
+        El Observatorio busca construir
+        conocimiento sistemático sobre los
+        accidentes y siniestros ocurridos
+        durante actividades de montaña
+        en Ecuador, mediante datos
+        organizados, verificables y
+        responsables.
 
-</p>
-```
+    </p>
 
 </section>
 
@@ -773,21 +761,19 @@ select {
     id="apoyar"
     class="seccion">
 
-```
-<h2>
-    Apoyar
-</h2>
+    <h2>
+        Apoyar
+    </h2>
 
-<p>
+    <p>
 
-    El proyecto busca desarrollar una
-    infraestructura independiente para
-    recopilar, organizar y analizar
-    información sobre accidentes
-    ocurridos en montaña en Ecuador.
+        El proyecto busca desarrollar una
+        infraestructura independiente para
+        recopilar, organizar y analizar
+        información sobre accidentes
+        ocurridos en montaña en Ecuador.
 
-</p>
-```
+    </p>
 
 </section>
 
@@ -800,21 +786,11 @@ select {
    SUPABASE
 ===================================================== */
 
-/*
- * IMPORTANTE:
- *
- * Conserva aquí EXACTAMENTE el SUPABASE_URL
- * y la clave pública de tu HTML anterior
- * que ya utilizabas.
- *
- * NO coloques aquí service_role.
- */
-
 const SUPABASE_URL =
-    "PEGA_AQUI_TU_SUPABASE_URL";
+    "https://zjacblnkmybfxdlpltlm.supabase.co";
 
 const SUPABASE_KEY =
-    "PEGA_AQUI_TU_CLAVE_PUBLICA";
+    "sb_publishable_jIY4M_d1MpgiZhryHU7yQQ_bW4YiIQo";
 
 
 const supabaseClient =
@@ -895,7 +871,7 @@ function agruparSiniestros(registros) {
 
 
         /*
-         * Cada fila de historical_events
+         * Cada fila de historical_events_public
          * representa una persona.
          */
 
@@ -1014,13 +990,6 @@ async function cargarDatos() {
         resultado.error;
 
 
-    /*
-     * MOSTRAR EL ERROR REAL
-     *
-     * Esto nos permitirá saber exactamente
-     * qué está fallando si vuelve a ocurrir.
-     */
-
     if (error) {
 
         console.error(
@@ -1055,21 +1024,9 @@ async function cargarDatos() {
         data || [];
 
 
-    /*
-     * PERSONAS
-     *
-     * Número de filas recibidas.
-     */
-
     const personas =
         todosLosRegistros.length;
 
-
-    /*
-     * SINIESTROS
-     *
-     * Agrupamos por codigo_observatorio.
-     */
 
     todosLosSiniestros =
         agruparSiniestros(
@@ -1140,13 +1097,6 @@ function actualizarEstadisticas(
                 ) === "I"
         ).length;
 
-
-    /*
-     * PERSONAS:
-     *
-     * Sumamos las personas de cada
-     * siniestro.
-     */
 
     const totalPersonas =
         siniestros.reduce(
