@@ -144,6 +144,7 @@ a {
     letter-spacing: .2px;
     line-height: 1.35;
     color: var(--texto);
+    text-transform: uppercase;
 
 }
 
@@ -310,8 +311,8 @@ a {
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 18px;
+    gap: 10px;
+    margin-bottom: 12px;
 
 }
 
@@ -319,7 +320,7 @@ a {
 
     background: var(--bg-panel);
     border: 1px solid var(--borde);
-    border-radius: 10px;
+    border-radius: 9px;
     padding: 14px 16px 13px;
     position: relative;
     overflow: hidden;
@@ -355,6 +356,50 @@ a {
     font-size: 10.5px;
     letter-spacing: .3px;
     text-transform: uppercase;
+
+}
+
+/* Version compacta usada en la vista Observatorio, para
+   dejar el mayor espacio posible al mapa y los filtros */
+
+.estadisticas-compactas {
+
+    gap: 8px;
+    margin-bottom: 10px;
+
+}
+
+.estadisticas-compactas .stat {
+
+    padding: 7px 12px 6px;
+    border-radius: 8px;
+
+}
+
+.estadisticas-compactas .stat::before {
+
+    height: 1px;
+
+}
+
+.estadisticas-compactas .stat-numero {
+
+    font-size: 17px;
+    letter-spacing: -.3px;
+
+}
+
+.estadisticas-compactas .stat-label {
+
+    margin-top: 1px;
+    font-size: 9px;
+
+}
+
+.vista-observatorio {
+
+    padding-top: 16px;
+    padding-bottom: 16px;
 
 }
 
@@ -398,7 +443,7 @@ a {
 #map {
 
     width: 100%;
-    height: calc(100vh - 260px);
+    height: calc(100vh - 165px);
     min-height: 480px;
     background: #08080a;
 
@@ -901,14 +946,9 @@ select:focus {
              VISTA: OBSERVATORIO
         ================================================== -->
 
-        <section class="vista activa" data-vista="observatorio">
+        <section class="vista activa vista-observatorio" data-vista="observatorio">
 
-            <div class="vista-header">
-                <h2>Observatorio</h2>
-                <span class="estado" id="estadoMapa">Cargando...</span>
-            </div>
-
-            <div class="estadisticas">
+            <div class="estadisticas estadisticas-compactas">
 
                 <div class="stat">
                     <div class="stat-numero" id="totalSiniestros">—</div>
@@ -938,6 +978,7 @@ select:focus {
 
                     <div class="panel-titulo">
                         <span>Distribución espacial de siniestros</span>
+                        <span class="estado" id="estadoMapa">Cargando...</span>
                     </div>
 
                     <div id="map"></div>
