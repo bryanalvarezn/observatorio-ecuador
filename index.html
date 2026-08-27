@@ -304,15 +304,15 @@ a {
 
 
 /* =========================================================
-   TARJETAS DE ESTADISTICAS
+   TARJETAS DE ESTADISTICAS (panel de instrumentos)
 ========================================================= */
 
 .estadisticas {
 
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
-    margin-bottom: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
 
 }
 
@@ -320,8 +320,8 @@ a {
 
     background: var(--bg-panel);
     border: 1px solid var(--borde);
-    border-radius: 8px;
-    padding: 6px 10px 5px;
+    border-radius: 9px;
+    padding: 14px 16px 13px;
     position: relative;
     overflow: hidden;
 
@@ -334,7 +334,7 @@ a {
     top: 0;
     left: 0;
     right: 0;
-    height: 1px;
+    height: 2px;
     background: var(--acento-dim);
 
 }
@@ -342,29 +342,66 @@ a {
 .stat-numero {
 
     font-family: var(--fuente-mono);
-    font-size: 16px;
+    font-size: 26px;
     font-weight: 600;
     color: var(--texto);
-    letter-spacing: -.3px;
+    letter-spacing: -.5px;
 
 }
 
 .stat-label {
 
-    margin-top: 1px;
+    margin-top: 3px;
     color: var(--texto-3);
-    font-size: 9px;
+    font-size: 10.5px;
     letter-spacing: .3px;
     text-transform: uppercase;
 
 }
 
+/* Version compacta usada en la vista Observatorio, para
+   dejar el mayor espacio posible al mapa y los filtros */
+
+.estadisticas-compactas {
+
+    grid-template-columns: repeat(4, minmax(0, 150px));
+    justify-content: start;
+    gap: 8px;
+    margin-bottom: 10px;
+
+}
+
+.estadisticas-compactas .stat {
+
+    padding: 7px 12px 6px;
+    border-radius: 8px;
+
+}
+
+.estadisticas-compactas .stat::before {
+
+    height: 1px;
+
+}
+
+.estadisticas-compactas .stat-numero {
+
+    font-size: 17px;
+    letter-spacing: -.3px;
+
+}
+
+.estadisticas-compactas .stat-label {
+
+    margin-top: 1px;
+    font-size: 9px;
+
+}
+
 .vista-observatorio {
 
-    padding: 12px 20px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    padding-top: 16px;
+    padding-bottom: 16px;
 
 }
 
@@ -376,10 +413,38 @@ a {
 .grid-mapa {
 
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 280px;
-    gap: 12px;
-    align-items: stretch;
-    flex: 1;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    grid-template-rows: auto 1fr;
+    gap: 12px 14px;
+    align-items: start;
+    height: calc(100vh - 30px);
+
+}
+
+.grid-mapa .estadisticas {
+
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+
+}
+
+.grid-mapa .panel-mapa {
+
+    grid-column: 1;
+    grid-row: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.grid-mapa .filtros {
+
+    grid-column: 2;
+    grid-row: 1 / 3;
+    height: 100%;
+    overflow-y: auto;
 
 }
 
@@ -387,10 +452,8 @@ a {
 
     background: var(--bg-panel);
     border: 1px solid var(--borde);
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 
 }
 
@@ -407,11 +470,10 @@ a {
 
     display: flex;
     gap: 16px;
-    padding: 8px 14px;
+    padding: 10px 16px;
     border-top: 1px solid var(--borde);
     color: var(--texto-3);
     font-size: 10.5px;
-    background: var(--bg-panel);
 
 }
 
@@ -425,8 +487,8 @@ a {
 
 }
 
-.punto-accidente { background: var(--rojo); }
-.punto-incidente { background: var(--ambar); }
+.punto-accidente { background: #e5484d; }
+.punto-incidente { background: #f97316; }
 
 
 /* =========================================================
@@ -434,14 +496,14 @@ a {
 ========================================================= */
 
 .filtros {
-    padding: 14px;
+    padding: 16px;
 }
 
 .filtros h3 {
 
-    margin: 0 0 10px;
+    margin: 0 0 14px;
     font-family: var(--fuente-display);
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--texto);
 
@@ -450,9 +512,9 @@ a {
 label {
 
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
     color: var(--texto-3);
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 600;
     letter-spacing: .2px;
 
@@ -461,16 +523,16 @@ label {
 select {
 
     width: 100%;
-    margin-bottom: 8px;
-    padding: 6px 8px;
+    margin-bottom: 11px;
+    padding: 8px 9px;
 
     background: #08080a;
     border: 1px solid var(--borde);
-    border-radius: 6px;
+    border-radius: 7px;
 
     color: var(--texto);
     font-family: var(--fuente-texto);
-    font-size: 11px;
+    font-size: 11.5px;
 
 }
 
@@ -482,15 +544,15 @@ select:focus {
 .btn {
 
     width: 100%;
-    padding: 8px;
-    margin-top: 4px;
+    padding: 9px;
+    margin-top: 2px;
 
     border: none;
-    border-radius: 7px;
+    border-radius: 8px;
 
     font-family: var(--fuente-texto);
     font-weight: 600;
-    font-size: 11px;
+    font-size: 11.5px;
 
     cursor: pointer;
 
@@ -507,7 +569,7 @@ select:focus {
 
 .btn-limpiar {
 
-    margin-top: 6px;
+    margin-top: 8px;
     background: var(--bg-panel-2);
     color: var(--texto-2);
     border: 1px solid var(--borde);
@@ -520,7 +582,7 @@ select:focus {
 
 
 /* =========================================================
-   TEXTO DE SECCIONES
+   TEXTO DE SECCIONES (metodologia, principios, apoyar)
 ========================================================= */
 
 .texto-vista {
@@ -701,8 +763,8 @@ select:focus {
 
 }
 
-.popup-accidente { background: #e5484d; }
-.popup-incidente { background: #d68a34; }
+.popup-accidente { background: #dc2626; }
+.popup-incidente { background: #b45309; }
 
 .popup-dato {
 
@@ -723,17 +785,28 @@ select:focus {
 
 @media(max-width: 980px) {
 
-    .vista-observatorio {
+    .grid-mapa {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
         height: auto;
     }
 
-    .grid-mapa {
-        grid-template-columns: 1fr;
+    .grid-mapa .estadisticas,
+    .grid-mapa .panel-mapa,
+    .grid-mapa .filtros {
+        grid-column: 1;
+        grid-row: auto;
+        height: auto;
+    }
+
+    .grid-mapa .panel-mapa {
+        display: block;
     }
 
     #map {
         height: 55vh;
         min-height: 400px;
+        flex: none;
     }
 
     .estadisticas {
@@ -892,7 +965,7 @@ select:focus {
 
         <section class="vista activa vista-observatorio" data-vista="observatorio">
 
-            <div class="estadisticas">
+            <div class="estadisticas estadisticas-compactas">
 
                 <div class="stat">
                     <div class="stat-numero" id="totalSiniestros">—</div>
@@ -918,7 +991,7 @@ select:focus {
 
             <div class="grid-mapa">
 
-                <div class="panel">
+                <div class="panel panel-mapa">
 
                     <div id="map"></div>
 
@@ -1008,7 +1081,7 @@ select:focus {
                     </div>
 
                     <div>
-                        <div class="valor">4.000 – 4.799 m</div>
+                        <div class="valor">4.000 – 4.800 m</div>
                         <div class="etiqueta">Media montaña</div>
                     </div>
 
@@ -1215,16 +1288,12 @@ function agruparSiniestros(registros) {
 
     registros.forEach(registro => {
 
-        const codigo = String(registro.codigo_observatorio_contador ?? "").trim();
+        const codigo = String(registro.codigo_siniestro ?? "").trim();
 
         if (!codigo) return;
 
         if (!grupos.has(codigo)) {
-            grupos.set(codigo, { 
-                ...registro, 
-                codigo_siniestro: codigo,
-                personas: 0 
-            });
+            grupos.set(codigo, { ...registro, personas: 0 });
         }
 
         const siniestro = grupos.get(codigo);
@@ -1269,18 +1338,27 @@ function iniciarMapa() {
 
 
 /* =========================================================
-   CARGAR DATOS
+   CARGAR DATOS DESDE LA VISTA PUBLICA
 ========================================================= */
 
 async function cargarDatos() {
 
-    const { data, error } = await supabaseClient
-        .from("historical_events_public")
-        .select("*");
+    const { data, error } =
+        await supabaseClient
+            .from("historical_events_public")
+            .select("*");
 
     if (error) {
-        console.error("Error al obtener datos:", error);
+
+        console.error("ERROR SUPABASE:", error);
+
+        alert(
+            "Error de Supabase:\n\n" + error.message +
+            "\n\nRevisa la consola del navegador (F12)."
+        );
+
         return;
+
     }
 
     todosLosRegistros = data || [];
@@ -1387,7 +1465,7 @@ function mostrarSiniestrosEnMapa(siniestros) {
         coordenadas.push([lat, lng]);
 
         const tipo = normalizarTexto(siniestro.tipo_siniestro);
-        const color = tipo === "A" ? "#e5484d" : "#d68a34";
+        const color = tipo === "A" ? "#e5484d" : "#f97316";
 
         const marcador = L.circleMarker([lat, lng], {
             radius: 8,
