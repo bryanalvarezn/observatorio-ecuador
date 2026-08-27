@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 
@@ -7,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
-Observatorio ecuatoriano de accidentes en montaña
+Observatorio Ecuatoriano de Accidentes en Montaña
 </title>
 
 <!-- =========================================================
@@ -43,8 +44,10 @@ Observatorio ecuatoriano de accidentes en montaña
 
     --fondo: #07111f;
     --fondo-2: #0d1b2a;
+
     --panel: #102235;
     --panel-2: #142a40;
+
     --borde: #29445e;
 
     --azul: #38bdf8;
@@ -102,7 +105,7 @@ header {
 
     border-bottom: 1px solid var(--borde);
 
-    background: rgba(7,17,31,.95);
+    background: rgba(7,17,31,.96);
 
     position: sticky;
 
@@ -115,11 +118,11 @@ header {
 
 .header-inner {
 
-    max-width: 1500px;
+    max-width: 1600px;
 
     margin: auto;
 
-    padding: 18px 28px;
+    padding: 15px 28px;
 
     display: flex;
 
@@ -136,15 +139,15 @@ header {
 
     align-items: center;
 
-    gap: 14px;
+    gap: 13px;
 }
 
 .marca-icono {
 
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
 
-    border-radius: 14px;
+    border-radius: 13px;
 
     background: #12314b;
 
@@ -154,14 +157,14 @@ header {
 
     justify-content: center;
 
-    font-size: 25px;
+    font-size: 24px;
 }
 
 .marca h1 {
 
     margin: 0;
 
-    font-size: 18px;
+    font-size: 17px;
 
     letter-spacing: .8px;
 }
@@ -169,13 +172,15 @@ header {
 .marca small {
 
     color: var(--texto-secundario);
+
+    font-size: 12px;
 }
 
 nav {
 
     display: flex;
 
-    gap: 8px;
+    gap: 7px;
 
     flex-wrap: wrap;
 }
@@ -188,7 +193,7 @@ nav a {
 
     padding: 8px 12px;
 
-    border-radius: 9px;
+    border-radius: 8px;
 
     font-size: 13px;
 }
@@ -197,7 +202,7 @@ nav a:hover {
 
     color: white;
 
-    background: #142a40;
+    background: var(--panel-2);
 }
 
 
@@ -207,22 +212,22 @@ nav a:hover {
 
 .hero {
 
-    max-width: 1500px;
+    max-width: 1600px;
 
     margin: auto;
 
-    padding: 48px 28px 30px;
+    padding: 30px 28px 22px;
 }
 
 .hero h2 {
 
-    max-width: 850px;
+    max-width: 950px;
 
-    margin: 0 0 10px;
+    margin: 0;
 
-    font-size: clamp(28px, 4vw, 48px);
+    font-size: clamp(28px, 3.5vw, 46px);
 
-    line-height: 1.05;
+    line-height: 1.08;
 }
 
 .hero h2 span {
@@ -232,13 +237,13 @@ nav a:hover {
 
 .lema {
 
-    margin-top: 22px;
+    margin-top: 13px;
 
     color: var(--azul);
 
     font-family: Georgia, serif;
 
-    font-size: 25px;
+    font-size: 19px;
 
     letter-spacing: 2px;
 }
@@ -248,6 +253,8 @@ nav a:hover {
     color: var(--texto-secundario);
 
     font-style: italic;
+
+    font-size: 13px;
 }
 
 
@@ -257,11 +264,11 @@ nav a:hover {
 
 .contenedor {
 
-    max-width: 1500px;
+    max-width: 1600px;
 
     margin: auto;
 
-    padding: 0 28px 50px;
+    padding: 0 28px 35px;
 }
 
 
@@ -276,9 +283,9 @@ nav a:hover {
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap: 14px;
+    gap: 12px;
 
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 .stat {
@@ -287,14 +294,14 @@ nav a:hover {
 
     border: 1px solid var(--borde);
 
-    border-radius: 14px;
+    border-radius: 12px;
 
-    padding: 17px;
+    padding: 13px 16px;
 }
 
 .stat-numero {
 
-    font-size: 27px;
+    font-size: 25px;
 
     font-weight: 800;
 
@@ -305,9 +312,13 @@ nav a:hover {
 
     color: var(--texto-secundario);
 
-    font-size: 12px;
+    font-size: 11px;
 
-    margin-top: 4px;
+    margin-top: 3px;
+
+    text-transform: uppercase;
+
+    letter-spacing: .4px;
 }
 
 
@@ -321,11 +332,11 @@ nav a:hover {
 
     grid-template-columns:
         minmax(0, 1fr)
-        350px;
+        320px;
 
-    gap: 18px;
+    gap: 14px;
 
-    align-items: start;
+    align-items: stretch;
 }
 
 .panel {
@@ -334,14 +345,28 @@ nav a:hover {
 
     border: 1px solid var(--borde);
 
-    border-radius: 18px;
+    border-radius: 15px;
 
     overflow: hidden;
 }
 
+
+/* =========================================================
+   PANEL MAPA
+========================================================= */
+
+.panel-mapa {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+}
+
 .panel-titulo {
 
-    padding: 16px 18px;
+    padding: 12px 16px;
 
     border-bottom: 1px solid var(--borde);
 
@@ -352,112 +377,25 @@ nav a:hover {
     justify-content: space-between;
 
     align-items: center;
+
+    font-size: 13px;
 }
+
+
+/*
+   El mapa utiliza prácticamente toda la altura
+   disponible de la ventana.
+*/
 
 #map {
 
-    height: 680px;
+    height: calc(100vh - 270px);
+
+    min-height: 520px;
 
     width: 100%;
 
     background: #0b1624;
-}
-
-
-/* =========================================================
-   FILTROS
-========================================================= */
-
-.filtros {
-
-    padding: 18px;
-
-    position: sticky;
-
-    top: 85px;
-}
-
-.filtros h3 {
-
-    margin-top: 0;
-
-    color: var(--azul);
-
-    font-size: 17px;
-}
-
-label {
-
-    display: block;
-
-    color: var(--texto-secundario);
-
-    font-size: 12px;
-
-    font-weight: 700;
-
-    margin-bottom: 6px;
-}
-
-select,
-input {
-
-    width: 100%;
-
-    padding: 11px;
-
-    margin-bottom: 13px;
-
-    border-radius: 9px;
-
-    border: 1px solid var(--borde);
-
-    background: #081522;
-
-    color: white;
-
-    font-family: inherit;
-}
-
-select:focus,
-input:focus {
-
-    outline: none;
-
-    border-color: var(--azul);
-}
-
-.btn {
-
-    width: 100%;
-
-    border: none;
-
-    border-radius: 10px;
-
-    padding: 11px;
-
-    cursor: pointer;
-
-    font-weight: 800;
-
-    margin-top: 4px;
-}
-
-.btn-aplicar {
-
-    background: var(--azul-2);
-
-    color: white;
-}
-
-.btn-limpiar {
-
-    background: #263b50;
-
-    color: white;
-
-    margin-top: 8px;
 }
 
 
@@ -471,20 +409,20 @@ input:focus {
 
     gap: 18px;
 
-    padding: 12px 18px;
+    padding: 9px 16px;
 
     border-top: 1px solid var(--borde);
 
-    font-size: 12px;
+    font-size: 11px;
 
     color: var(--texto-secundario);
 }
 
 .punto {
 
-    width: 11px;
+    width: 10px;
 
-    height: 11px;
+    height: 10px;
 
     display: inline-block;
 
@@ -505,17 +443,203 @@ input:focus {
 
 
 /* =========================================================
-   SECCIONES
+   FILTROS
+========================================================= */
+
+.filtros {
+
+    padding: 16px;
+
+    position: sticky;
+
+    top: 78px;
+
+    height: fit-content;
+}
+
+.filtros h3 {
+
+    margin-top: 0;
+
+    color: var(--azul);
+
+    font-size: 16px;
+
+    margin-bottom: 18px;
+}
+
+label {
+
+    display: block;
+
+    color: var(--texto-secundario);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+select,
+input {
+
+    width: 100%;
+
+    padding: 9px;
+
+    margin-bottom: 11px;
+
+    border-radius: 8px;
+
+    border: 1px solid var(--borde);
+
+    background: #081522;
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 12px;
+}
+
+select:focus,
+input:focus {
+
+    outline: none;
+
+    border-color: var(--azul);
+}
+
+.btn {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 10px;
+
+    cursor: pointer;
+
+    font-weight: 800;
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+.btn-aplicar {
+
+    background: var(--azul-2);
+
+    color: white;
+}
+
+.btn-limpiar {
+
+    background: #263b50;
+
+    color: white;
+
+    margin-top: 7px;
+}
+
+
+/* =========================================================
+   INFORMACION DEL FILTRO
+========================================================= */
+
+.info-filtros {
+
+    margin-top: 16px;
+
+    padding-top: 13px;
+
+    border-top: 1px solid var(--borde);
+
+    color: var(--texto-secundario);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+.info-filtros strong {
+
+    color: white;
+}
+
+
+/* =========================================================
+   BOTONES
+========================================================= */
+
+.acciones {
+
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 13px;
+}
+
+.btn-registro {
+
+    flex: 1;
+
+    padding: 10px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-weight: 800;
+
+    font-size: 11px;
+
+    color: white;
+
+    background: var(--rojo);
+}
+
+.btn-donar {
+
+    flex: 1;
+
+    padding: 10px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    text-align: center;
+
+    font-weight: 800;
+
+    font-size: 11px;
+
+    background: var(--amarillo);
+
+    color: #111827;
+}
+
+
+/* =========================================================
+   SECCIONES INFORMATIVAS
 ========================================================= */
 
 .seccion {
 
-    margin-top: 50px;
+    margin-top: 45px;
 }
 
 .seccion h2 {
 
-    font-size: 26px;
+    font-size: 25px;
 
     margin-bottom: 8px;
 }
@@ -524,83 +648,11 @@ input:focus {
 
     color: var(--texto-secundario);
 
-    max-width: 850px;
+    max-width: 900px;
 
     line-height: 1.6;
-}
-
-
-/* =========================================================
-   LECTURAS
-========================================================= */
-
-.lecturas {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 16px;
-
-    margin-top: 22px;
-}
-
-.lectura {
-
-    background: var(--panel);
-
-    border: 1px solid var(--borde);
-
-    border-radius: 15px;
-
-    padding: 20px;
-
-    min-height: 180px;
-}
-
-.lectura-icono {
-
-    font-size: 30px;
-
-    margin-bottom: 10px;
-}
-
-.lectura h3 {
-
-    margin: 0 0 8px;
-
-    color: white;
-
-    font-size: 17px;
-}
-
-.lectura p {
-
-    color: var(--texto-secundario);
-
-    line-height: 1.5;
 
     font-size: 13px;
-}
-
-.lectura-boton {
-
-    display: inline-block;
-
-    margin-top: 8px;
-
-    padding: 7px 10px;
-
-    background: #17344d;
-
-    color: var(--azul);
-
-    border-radius: 8px;
-
-    font-size: 12px;
-
-    text-decoration: none;
 }
 
 
@@ -615,9 +667,9 @@ input:focus {
     grid-template-columns:
         repeat(4, 1fr);
 
-    gap: 15px;
+    gap: 14px;
 
-    margin-top: 22px;
+    margin-top: 20px;
 }
 
 .principio {
@@ -626,25 +678,27 @@ input:focus {
 
     border: 1px solid var(--borde);
 
-    border-radius: 15px;
+    border-radius: 13px;
 
-    padding: 20px;
+    padding: 17px;
 }
 
 .principio strong {
 
     display: block;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
     color: var(--azul);
+
+    font-size: 13px;
 }
 
 .principio span {
 
     color: var(--texto-secundario);
 
-    font-size: 13px;
+    font-size: 12px;
 
     line-height: 1.5;
 }
@@ -656,15 +710,17 @@ input:focus {
 
 footer {
 
-    margin-top: 70px;
+    margin-top: 55px;
 
     border-top: 1px solid var(--borde);
 
-    padding: 30px 20px;
+    padding: 25px 20px;
 
     text-align: center;
 
     color: var(--texto-secundario);
+
+    font-size: 12px;
 }
 
 .footer-lema {
@@ -673,11 +729,11 @@ footer {
 
     font-family: Georgia, serif;
 
-    font-size: 18px;
+    font-size: 17px;
 
     letter-spacing: 2px;
 
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 
@@ -698,7 +754,7 @@ footer {
 
 .popup-dato {
 
-    margin: 7px 0;
+    margin: 6px 0;
 
     font-size: 12px;
 
@@ -739,7 +795,7 @@ footer {
 
 
 /* =========================================================
-   BLOQUES DE INFORMACION CON ICONOS
+   BLOQUES POPUP
 ========================================================= */
 
 .popup-seccion {
@@ -765,7 +821,9 @@ footer {
 .popup-icono {
 
     width: 27px;
+
     min-width: 27px;
+
     height: 27px;
 
     border-radius: 8px;
@@ -816,58 +874,6 @@ footer {
 
 
 /* =========================================================
-   BOTONES DE REGISTRO
-========================================================= */
-
-.acciones {
-
-    display: flex;
-
-    gap: 10px;
-
-    margin-top: 15px;
-}
-
-.btn-registro {
-
-    flex: 1;
-
-    padding: 12px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    cursor: pointer;
-
-    font-weight: 800;
-
-    color: white;
-
-    background: var(--rojo);
-}
-
-.btn-donar {
-
-    flex: 1;
-
-    padding: 12px;
-
-    border-radius: 10px;
-
-    text-decoration: none;
-
-    text-align: center;
-
-    font-weight: 800;
-
-    background: var(--amarillo);
-
-    color: #111827;
-}
-
-
-/* =========================================================
    RESPONSIVE
 ========================================================= */
 
@@ -887,7 +893,9 @@ footer {
 
     #map {
 
-        height: 550px;
+        height: 65vh;
+
+        min-height: 450px;
 
     }
 
@@ -902,13 +910,6 @@ footer {
 
         grid-template-columns:
             repeat(2, 1fr);
-
-    }
-
-    .lecturas {
-
-        grid-template-columns:
-            1fr 1fr;
 
     }
 
@@ -926,7 +927,7 @@ footer {
 
     .hero {
 
-        padding-top: 30px;
+        padding-top: 25px;
 
         padding-left: 14px;
 
@@ -935,7 +936,7 @@ footer {
 
     .contenedor {
 
-        padding: 0 14px 40px;
+        padding: 0 14px 30px;
 
     }
 
@@ -952,15 +953,11 @@ footer {
 
     }
 
-    .lecturas {
-
-        grid-template-columns: 1fr;
-
-    }
-
     #map {
 
-        height: 450px;
+        height: 55vh;
+
+        min-height: 400px;
 
     }
 
@@ -995,7 +992,7 @@ footer {
             </h1>
 
             <small>
-                Accidentes en actividades al aire libre
+                Accidentes en montaña
             </small>
 
         </div>
@@ -1009,16 +1006,16 @@ footer {
             Observatorio
         </a>
 
-        <a href="#lectura">
-            📚 Lectura
-        </a>
-
         <a href="#metodologia">
             Metodología
         </a>
 
         <a href="#principios">
             Principios
+        </a>
+
+        <a href="#donaciones">
+            Apoyar
         </a>
 
     </nav>
@@ -1036,9 +1033,9 @@ footer {
 
     <h2>
 
-        Observar para comprender.
+        Observatorio Ecuatoriano
         <span>
-            Comprender para prevenir.
+            de Accidentes en Montaña
         </span>
 
     </h2>
@@ -1071,7 +1068,7 @@ footer {
 
         <div
             class="stat-numero"
-            id="totalEventos">
+            id="totalSiniestros">
 
             —
 
@@ -1079,7 +1076,7 @@ footer {
 
         <div class="stat-label">
 
-            Registros históricos
+            Siniestros
 
         </div>
 
@@ -1158,7 +1155,7 @@ footer {
          MAPA
     ====================================================== -->
 
-    <div class="panel">
+    <div class="panel panel-mapa">
 
         <div class="panel-titulo">
 
@@ -1170,7 +1167,10 @@ footer {
 
             <span
                 id="estadoMapa"
-                style="font-size:11px;color:#94a3b8;">
+                style="
+                    font-size:10px;
+                    color:#94a3b8;
+                ">
 
                 Cargando...
 
@@ -1220,114 +1220,99 @@ footer {
 
 
         <label>
-
             Año
-
         </label>
 
         <select id="filtroAnio">
 
             <option value="">
-
                 Todos los años
-
             </option>
 
         </select>
 
 
         <label>
-
             Clasificación
-
         </label>
 
         <select id="filtroTipo">
 
             <option value="">
-
                 Todos
-
             </option>
 
             <option value="A">
-
                 Accidentes
-
             </option>
 
             <option value="I">
-
                 Incidentes
-
             </option>
 
         </select>
 
 
         <label>
+            Montaña
+        </label>
 
+        <select id="filtroABM">
+
+            <option value="">
+                Todas
+            </option>
+
+        </select>
+
+
+        <label>
             Lugar / volcán
-
         </label>
 
         <select id="filtroVolcan">
 
             <option value="">
-
                 Todos los lugares
-
             </option>
 
         </select>
 
 
         <label>
-
             Accidente geográfico
-
         </label>
 
         <select id="filtroGeografico">
 
             <option value="">
-
                 Todos
-
             </option>
 
         </select>
 
 
         <label>
-
             Consecuencia
-
         </label>
 
         <select id="filtroConsecuencia">
 
             <option value="">
-
                 Todas
-
             </option>
 
         </select>
 
 
         <label>
-
             Causa primaria
-
         </label>
 
         <select id="filtroCausa">
 
             <option value="">
-
                 Todas
-
             </option>
 
         </select>
@@ -1351,39 +1336,27 @@ footer {
         </button>
 
 
-        <div
-            style="
-                margin-top:18px;
-                padding-top:15px;
-                border-top:1px solid #29445e;
-                color:#94a3b8;
-                font-size:12px;
-                line-height:1.5;
-            ">
+        <div class="info-filtros">
 
-            <strong style="color:white;">
-
+            <strong>
                 Sobre estos datos
-
             </strong>
 
             <br><br>
 
-            Esta primera base corresponde a registros
-            históricos depurados y estructurados para
-            su representación cartográfica.
+            El siniestro constituye la unidad
+            principal de observación.
 
             <br><br>
 
-            El siniestro constituye el evento macro.
-            Accidentes e incidentes representan
-            clasificaciones dentro del siniestro.
+            Un mismo siniestro puede involucrar
+            a una o varias personas.
 
             <br><br>
 
-            Cada registro de persona permite
-            desglosar accidentados e integrantes
-            ilesos.
+            Las estadísticas de siniestros,
+            accidentes e incidentes cuentan
+            cada evento una sola vez.
 
         </div>
 
@@ -1392,9 +1365,13 @@ footer {
 
             <button
                 class="btn-registro"
-                onclick="alert('Módulo de registro de incidentes en construcción.')">
+                onclick="
+                    alert(
+                        'Módulo de registro de incidentes en construcción.'
+                    )
+                ">
 
-                ⚠️ Registrar incidente
+                ⚠️ Registrar siniestro
 
             </button>
 
@@ -1407,254 +1384,13 @@ footer {
                 class="btn-donar"
                 href="#donaciones">
 
-                ☕ Donaciones
+                ☕ Apoyar
 
             </a>
 
         </div>
 
     </aside>
-
-</section>
-
-
-<!-- =========================================================
-     LECTURA
-========================================================= -->
-
-<section
-    id="lectura"
-    class="seccion">
-
-    <h2>
-
-        📚 Lectura
-
-    </h2>
-
-    <p class="seccion-intro">
-
-        Biblioteca documental del Observatorio.
-
-        Un espacio destinado a reunir libros,
-        artículos científicos, informes técnicos,
-        normas y documentos relacionados con los
-        accidentes, riesgos, seguridad y actividades
-        al aire libre.
-
-        <br><br>
-
-        <strong style="color:#38bdf8;">
-
-            El conocimiento se construye sobre conocimiento.
-
-        </strong>
-
-    </p>
-
-
-    <div class="lecturas">
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                📖
-
-            </div>
-
-            <h3>
-
-                Libros
-
-            </h3>
-
-            <p>
-
-                Literatura especializada en accidentología,
-                montaña, medicina, turismo, gestión del riesgo,
-                metodología y filosofía de la ciencia.
-
-            </p>
-
-            <a
-                href="#"
-                class="lectura-boton">
-
-                Biblioteca en construcción
-
-            </a>
-
-        </article>
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                📄
-
-            </div>
-
-            <h3>
-
-                Artículos científicos
-
-            </h3>
-
-            <p>
-
-                Investigaciones sobre accidentes,
-                epidemiología, lesiones, factores de riesgo,
-                exposición y seguridad en actividades
-                al aire libre.
-
-            </p>
-
-            <a
-                href="#"
-                class="lectura-boton">
-
-                Próximamente
-
-            </a>
-
-        </article>
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                📑
-
-            </div>
-
-            <h3>
-
-                Normas y documentos técnicos
-
-            </h3>
-
-            <p>
-
-                Normas, protocolos, clasificaciones,
-                documentos institucionales y referencias
-                técnicas utilizadas por el Observatorio.
-
-            </p>
-
-            <a
-                href="#"
-                class="lectura-boton">
-
-                Próximamente
-
-            </a>
-
-        </article>
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                🧠
-
-            </div>
-
-            <h3>
-
-                Fundamentos
-
-            </h3>
-
-            <p>
-
-                Material relacionado con epistemología,
-                causalidad, sistemismo, metodología científica
-                y construcción del conocimiento.
-
-            </p>
-
-            <a
-                href="#"
-                class="lectura-boton">
-
-                Próximamente
-
-            </a>
-
-        </article>
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                🏔️
-
-            </div>
-
-            <h3>
-
-                Seguridad en montaña
-
-            </h3>
-
-            <p>
-
-                Material especializado en montañismo,
-                senderismo, escalada, rescate y prevención
-                de accidentes.
-
-            </p>
-
-            <a
-                href="#"
-                class="lectura-boton">
-
-                Próximamente
-
-            </a>
-
-        </article>
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                🌎
-
-            </div>
-
-            <h3>
-
-                Ecuador
-
-            </h3>
-
-            <p>
-
-                Documentación relacionada con el territorio
-                ecuatoriano, volcanes, áreas naturales,
-                turismo y actividades al aire libre.
-
-            </p>
-
-            <a
-                href="#"
-                class="lectura-boton">
-
-                Próximamente
-
-            </a>
-
-        </article>
-
-    </div>
 
 </section>
 
@@ -1675,31 +1411,32 @@ footer {
 
     <p class="seccion-intro">
 
-        La base histórica constituye el punto de partida
-        del Observatorio.
-
-        Sus registros fueron obtenidos de fuentes existentes
-        y posteriormente depurados y estructurados para
-        permitir su análisis.
+        El siniestro constituye la unidad macro
+        del evento observado por el Observatorio.
 
         <br><br>
 
-        El siniestro se considera la unidad macro del evento.
-        Dentro de él pueden existir uno o varios accidentados,
-        así como integrantes ilesos.
+        Un mismo siniestro puede involucrar
+        a una o varias personas. Por esta razón,
+        las estadísticas principales contabilizan
+        eventos únicos y no filas individuales
+        de personas.
 
         <br><br>
 
-        Esta estructura permite estudiar posteriormente
-        las relaciones entre evento primario, factores
-        ambientales, factores humanos y consecuencias.
+        La base histórica ha sido estructurada
+        para permitir posteriormente el análisis
+        de relaciones entre evento primario,
+        factores ambientales, factores humanos,
+        características territoriales y consecuencias.
 
         <br><br>
 
-        En una etapa posterior se implementará una ficha
-        estandarizada para nuevos registros provenientes
-        de instituciones de respuesta y rescate y de
-        reportes voluntarios de usuarios.
+        La clasificación de montaña utiliza la
+        altitud y distingue entre Baja Montaña,
+        Media Montaña y Alta Montaña de acuerdo
+        con la clasificación establecida para
+        el proyecto.
 
     </p>
 
@@ -1722,9 +1459,9 @@ footer {
 
     <p class="seccion-intro">
 
-        El Observatorio busca desarrollar una infraestructura
-        de conocimiento abierta, acumulativa, transparente
-        y reproducible.
+        El Observatorio busca desarrollar una
+        infraestructura de conocimiento abierta,
+        acumulativa, transparente y reproducible.
 
     </p>
 
@@ -1735,9 +1472,7 @@ footer {
         <div class="principio">
 
             <strong>
-
                 EX NIHILO NIHIL
-
             </strong>
 
             <span>
@@ -1754,15 +1489,13 @@ footer {
         <div class="principio">
 
             <strong>
-
                 SOFTWARE LIBRE
-
             </strong>
 
             <span>
 
                 Preferencia por herramientas abiertas
-                y tecnologías que favorezcan la autonomía,
+                y tecnologías que favorezcan autonomía,
                 colaboración y reproducibilidad.
 
             </span>
@@ -1773,16 +1506,14 @@ footer {
         <div class="principio">
 
             <strong>
-
                 CONOCIMIENTO ABIERTO
-
             </strong>
 
             <span>
 
-                Promoción del acceso y circulación del
-                conocimiento cuando las condiciones legales,
-                éticas y de privacidad lo permitan.
+                Promoción del acceso y circulación
+                del conocimiento cuando las condiciones
+                legales, éticas y de privacidad lo permitan.
 
             </span>
 
@@ -1792,16 +1523,14 @@ footer {
         <div class="principio">
 
             <strong>
-
                 DATOS RESPONSABLES
-
             </strong>
 
             <span>
 
-                Trazabilidad de las fuentes y tratamiento
-                responsable de información institucional
-                y datos potencialmente sensibles.
+                Tratamiento responsable de información
+                institucional y de datos potencialmente
+                sensibles.
 
             </span>
 
@@ -1830,107 +1559,10 @@ footer {
 
         Este proyecto busca construir una infraestructura
         independiente para recopilar, organizar, analizar
-        y compartir conocimiento sobre accidentes en
-        actividades al aire libre.
-
-        <br><br>
-
-        Las contribuciones ayudan a mantener la infraestructura,
-        alojamiento, desarrollo de software, investigación,
-        documentación y disponibilidad pública del proyecto.
+        y compartir conocimiento sobre accidentes
+        en montaña.
 
     </p>
-
-
-    <div class="lecturas">
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                ☕
-
-            </div>
-
-            <h3>
-
-                Apoyar el proyecto
-
-            </h3>
-
-            <p>
-
-                Si deseas contribuir económicamente al
-                desarrollo y mantenimiento del Observatorio,
-                puedes hacerlo mediante la plataforma
-                de donaciones.
-
-            </p>
-
-            <a
-                href="https://buymeacoffee.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="lectura-boton">
-
-                ☕ Donar
-
-            </a>
-
-        </article>
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                💻
-
-            </div>
-
-            <h3>
-
-                Software libre
-
-            </h3>
-
-            <p>
-
-                El proyecto busca favorecer tecnologías
-                abiertas y herramientas que permitan
-                estudiar, reproducir y mejorar el sistema.
-
-            </p>
-
-        </article>
-
-
-        <article class="lectura">
-
-            <div class="lectura-icono">
-
-                📚
-
-            </div>
-
-            <h3>
-
-                Conocimiento abierto
-
-            </h3>
-
-            <p>
-
-                La finalidad última es que el conocimiento
-                acumulado pueda servir para comprender
-                mejor los accidentes y contribuir a su
-                prevención.
-
-            </p>
-
-        </article>
-
-    </div>
 
 </section>
 
@@ -1960,8 +1592,7 @@ footer {
 
     <div>
 
-        Observatorio Ecuatoriano de Accidentes en
-        Actividades al Aire Libre
+        Observatorio Ecuatoriano de Accidentes en Montaña
 
     </div>
 
@@ -1969,21 +1600,7 @@ footer {
 
     <div>
 
-        Fundador y desarrollador:
-
-        <strong style="color:white;">
-
-            Bryan Alvarez
-
-        </strong>
-
-    </div>
-
-    <br>
-
-    <div>
-
-        Ecuador · 2026 · V1
+        Ecuador · 2026 · V2
 
     </div>
 
@@ -2022,6 +1639,8 @@ let mapa;
 
 let todosLosRegistros = [];
 
+let todosLosSiniestros = [];
+
 let marcadores = [];
 
 
@@ -2041,7 +1660,139 @@ function normalizarTexto(valor) {
 
 
 /* =========================================================
-   ICONOS — EVENTO PRIMARIO
+   OBTENER IDENTIFICADOR DEL SINIESTRO
+========================================================= */
+
+function obtenerCodigoSiniestro(registro) {
+
+    return String(
+        registro.codigo_observatorio ?? ""
+    ).trim();
+
+}
+
+
+/* =========================================================
+   AGRUPAR PERSONAS POR SINIESTRO
+========================================================= */
+
+function agruparSiniestros(registros) {
+
+    const mapaSiniestros = new Map();
+
+
+    registros.forEach(registro => {
+
+        const codigo =
+            obtenerCodigoSiniestro(
+                registro
+            );
+
+
+        if (!codigo) {
+            return;
+        }
+
+
+        if (!mapaSiniestros.has(codigo)) {
+
+            mapaSiniestros.set(
+                codigo,
+                {
+                    ...registro,
+
+                    personas: 0,
+
+                    registrosPersonas: []
+
+                }
+            );
+
+        }
+
+
+        const siniestro =
+            mapaSiniestros.get(
+                codigo
+            );
+
+
+        siniestro.registrosPersonas.push(
+            registro
+        );
+
+
+        /*
+           Cada fila representa una persona
+           asociada al siniestro.
+        */
+
+        siniestro.personas++;
+
+
+        /*
+           Si el primer registro no contiene
+           alguno de los datos principales,
+           buscamos otro registro del mismo
+           siniestro que sí lo tenga.
+        */
+
+        const campos = [
+
+            "tipo_siniestro",
+            "fecha",
+            "latitude",
+            "longitude",
+            "altitud",
+            "nombre_volcan",
+            "abm_montana",
+            "accidente_geografico",
+            "causa_ambiental",
+            "causa_humana",
+            "causa_primaria",
+            "consecuencia"
+
+        ];
+
+
+        campos.forEach(campo => {
+
+            const actual =
+                String(
+                    siniestro[campo] ?? ""
+                ).trim();
+
+
+            const nuevo =
+                String(
+                    registro[campo] ?? ""
+                ).trim();
+
+
+            if (
+                !actual &&
+                nuevo
+            ) {
+
+                siniestro[campo] =
+                    registro[campo];
+
+            }
+
+        });
+
+    });
+
+
+    return [
+        ...mapaSiniestros.values()
+    ];
+
+}
+
+
+/* =========================================================
+   ICONOS
 ========================================================= */
 
 function iconoCausaPrimaria(valor) {
@@ -2088,12 +1839,9 @@ function iconoCausaPrimaria(valor) {
     };
 
     return iconos[texto] || "⚠️";
+
 }
 
-
-/* =========================================================
-   ICONOS — FACTOR AMBIENTAL
-========================================================= */
 
 function iconoAmbiental(valor) {
 
@@ -2137,12 +1885,9 @@ function iconoAmbiental(valor) {
     };
 
     return iconos[texto] || "🌎";
+
 }
 
-
-/* =========================================================
-   ICONOS — FACTOR HUMANO
-========================================================= */
 
 function iconoHumano(valor) {
 
@@ -2180,12 +1925,9 @@ function iconoHumano(valor) {
     };
 
     return iconos[texto] || "👤";
+
 }
 
-
-/* =========================================================
-   ICONOS — CONSECUENCIA
-========================================================= */
 
 function iconoConsecuencia(valor) {
 
@@ -2199,10 +1941,6 @@ function iconoConsecuencia(valor) {
         "FALLECIMIENTO": "⚫",
 
         "FRACTURA": "🦴",
-
-        "FRACTURA EXTREMIDAD SUPERIOR": "🦴",
-
-        "FRACTURA EXTREMIDAD INFERIOR": "🦴",
 
         "POLITRAUMATISMO": "🩹",
 
@@ -2233,12 +1971,9 @@ function iconoConsecuencia(valor) {
     };
 
     return iconos[texto] || "🩹";
+
 }
 
-
-/* =========================================================
-   ICONOS — PARTE DEL CUERPO
-========================================================= */
 
 function iconoParteCuerpo(valor) {
 
@@ -2280,11 +2015,12 @@ function iconoParteCuerpo(valor) {
     };
 
     return iconos[texto] || "🩻";
+
 }
 
 
 /* =========================================================
-   CREAR ITEM DEL POPUP
+   CREAR ITEM POPUP
 ========================================================= */
 
 function crearItemPopup(
@@ -2294,7 +2030,10 @@ function crearItemPopup(
 ) {
 
     const texto =
-        String(valor ?? "").trim();
+        String(
+            valor ?? ""
+        ).trim();
+
 
     if (
         !texto ||
@@ -2305,28 +2044,23 @@ function crearItemPopup(
 
     }
 
+
     return `
 
         <div class="popup-item">
 
             <div class="popup-icono">
-
                 ${icono}
-
             </div>
 
             <div class="popup-contenido">
 
                 <span class="popup-etiqueta">
-
                     ${etiqueta}
-
                 </span>
 
                 <span class="popup-valor">
-
                     ${texto}
-
                 </span>
 
             </div>
@@ -2385,7 +2119,7 @@ async function cargarDatos() {
         error
     } =
         await supabaseClient
-            .from("historical_events")
+            .from("historical_events_public")
             .select("*")
             .order(
                 "fecha",
@@ -2404,10 +2138,11 @@ async function cargarDatos() {
         ).textContent =
             "Error de conexión";
 
+
         alert(
-            "No se pudieron cargar los datos históricos. " +
-            "Revisa la conexión con Supabase."
+            "No se pudieron cargar los datos públicos."
         );
+
 
         return;
 
@@ -2418,26 +2153,32 @@ async function cargarDatos() {
         data || [];
 
 
+    todosLosSiniestros =
+        agruparSiniestros(
+            todosLosRegistros
+        );
+
+
     llenarFiltros(
-        todosLosRegistros
+        todosLosSiniestros
     );
 
 
     actualizarEstadisticas(
-        todosLosRegistros
+        todosLosSiniestros
     );
 
 
-    mostrarRegistrosEnMapa(
-        todosLosRegistros
+    mostrarSiniestrosEnMapa(
+        todosLosSiniestros
     );
 
 
     document.getElementById(
         "estadoMapa"
     ).textContent =
-        todosLosRegistros.length +
-        " registros cargados";
+        todosLosSiniestros.length +
+        " siniestros";
 
 }
 
@@ -2447,17 +2188,17 @@ async function cargarDatos() {
 ========================================================= */
 
 function actualizarEstadisticas(
-    registros
+    siniestros
 ) {
 
     document.getElementById(
-        "totalEventos"
+        "totalSiniestros"
     ).textContent =
-        registros.length;
+        siniestros.length;
 
 
     const accidentes =
-        registros.filter(
+        siniestros.filter(
             r =>
                 normalizarTexto(
                     r.tipo_siniestro
@@ -2466,7 +2207,7 @@ function actualizarEstadisticas(
 
 
     const incidentes =
-        registros.filter(
+        siniestros.filter(
             r =>
                 normalizarTexto(
                     r.tipo_siniestro
@@ -2474,24 +2215,23 @@ function actualizarEstadisticas(
         ).length;
 
 
+    /*
+       Aquí contamos personas/registros individuales,
+       NO la suma del campo accidentados.
+
+       Esto evita contar varias veces a las mismas
+       personas cuando el evento tiene varias filas.
+    */
+
     const personas =
-        registros.reduce(
+        siniestros.reduce(
             (
                 total,
-                r
+                siniestro
             ) => {
 
-                const n =
-                    Number(
-                        r.accidentados
-                    );
-
                 return total +
-                    (
-                        Number.isFinite(n)
-                            ? n
-                            : 0
-                    );
+                    siniestro.personas;
 
             },
             0
@@ -2523,14 +2263,14 @@ function actualizarEstadisticas(
 ========================================================= */
 
 function llenarFiltros(
-    registros
+    siniestros
 ) {
 
     const anios =
         [
             ...new Set(
 
-                registros
+                siniestros
 
                     .map(
                         r => {
@@ -2552,30 +2292,37 @@ function llenarFiltros(
         .sort();
 
 
+    const abm =
+        obtenerValores(
+            siniestros,
+            "abm_montana"
+        );
+
+
     const volcanes =
         obtenerValores(
-            registros,
+            siniestros,
             "nombre_volcan"
         );
 
 
     const geograficos =
         obtenerValores(
-            registros,
+            siniestros,
             "accidente_geografico"
         );
 
 
     const consecuencias =
         obtenerValores(
-            registros,
+            siniestros,
             "consecuencia"
         );
 
 
     const causas =
         obtenerValores(
-            registros,
+            siniestros,
             "causa_primaria"
         );
 
@@ -2583,6 +2330,12 @@ function llenarFiltros(
     llenarSelect(
         "filtroAnio",
         anios
+    );
+
+
+    llenarSelect(
+        "filtroABM",
+        abm
     );
 
 
@@ -2613,7 +2366,7 @@ function llenarFiltros(
 
 
 /* =========================================================
-   OBTENER VALORES UNICOS
+   VALORES UNICOS
 ========================================================= */
 
 function obtenerValores(
@@ -2687,11 +2440,11 @@ function llenarSelect(
 
 
 /* =========================================================
-   MOSTRAR REGISTROS
+   MOSTRAR SINIESTROS EN MAPA
 ========================================================= */
 
-function mostrarRegistrosEnMapa(
-    registros
+function mostrarSiniestrosEnMapa(
+    siniestros
 ) {
 
     marcadores.forEach(
@@ -2708,18 +2461,18 @@ function mostrarRegistrosEnMapa(
     const coordenadas = [];
 
 
-    registros.forEach(
-        registro => {
+    siniestros.forEach(
+        siniestro => {
 
             const lat =
                 Number(
-                    registro.latitude
+                    siniestro.latitude
                 );
 
 
             const lng =
                 Number(
-                    registro.longitude
+                    siniestro.longitude
                 );
 
 
@@ -2743,7 +2496,7 @@ function mostrarRegistrosEnMapa(
 
             const tipo =
                 normalizarTexto(
-                    registro.tipo_siniestro
+                    siniestro.tipo_siniestro
                 );
 
 
@@ -2784,7 +2537,7 @@ function mostrarRegistrosEnMapa(
 
             marcador.bindPopup(
                 crearPopup(
-                    registro
+                    siniestro
                 )
             );
 
@@ -2802,6 +2555,14 @@ function mostrarRegistrosEnMapa(
     );
 
 
+    /*
+       Ajuste automático del mapa.
+
+       Si existen eventos, Leaflet calcula
+       automáticamente el encuadre necesario
+       para mostrarlos.
+    */
+
     if (
         coordenadas.length > 0
     ) {
@@ -2809,8 +2570,13 @@ function mostrarRegistrosEnMapa(
         mapa.fitBounds(
             coordenadas,
             {
+
                 padding:
-                    [25,25]
+                    [35,35],
+
+                maxZoom:
+                    12
+
             }
         );
 
@@ -2820,10 +2586,12 @@ function mostrarRegistrosEnMapa(
 
 
 /* =========================================================
-   POPUP PRINCIPAL
+   POPUP
 ========================================================= */
 
-function crearPopup(r) {
+function crearPopup(
+    r
+) {
 
     const tipo =
         normalizarTexto(
@@ -2907,12 +2675,12 @@ function crearPopup(r) {
 
     return `
 
-        <div style="min-width:280px;">
+        <div style="min-width:290px;">
 
             <div class="popup-titulo">
 
                 🏔️ Siniestro
-                ${r.codigobase || "NA"}
+                ${r.codigo_observatorio || "NA"}
 
             </div>
 
@@ -2925,7 +2693,14 @@ function crearPopup(r) {
             </div>
 
 
-           
+            <div class="popup-dato">
+
+                <strong>Fecha:</strong>
+                ${fecha}
+
+            </div>
+
+
             <div class="popup-dato">
 
                 <strong>Lugar:</strong>
@@ -2950,6 +2725,22 @@ function crearPopup(r) {
             </div>
 
 
+            <div class="popup-dato">
+
+                <strong>Montaña:</strong>
+                ${r.abm_montana || "NA"}
+
+            </div>
+
+
+            <div class="popup-dato">
+
+                <strong>Personas involucradas:</strong>
+                ${r.personas}
+
+            </div>
+
+
             <div class="popup-seccion">
 
                 ${eventoPrimario}
@@ -2966,65 +2757,6 @@ function crearPopup(r) {
                 ${consecuencia}
 
                 ${parteCuerpo}
-
-            </div>
-
-
-            <div class="popup-seccion">
-
-                <div class="popup-dato">
-
-                    <strong>
-                        👥 Grupo:
-                    </strong>
-
-                    ${r.grupo ?? "NA"}
-
-                </div>
-
-
-                <div class="popup-dato">
-
-                    <strong>
-                        👤 Accidentado:
-                    </strong>
-
-                    ${r.accidentados ?? "NA"}
-
-                </div>
-
-
-                <div class="popup-dato">
-
-                    <strong>
-                        ⚧ Sexo:
-                    </strong>
-
-                    ${r.sexo || "NA"}
-
-                </div>
-
-
-                <div class="popup-dato">
-
-                    <strong>
-                        🎂 Edad:
-                    </strong>
-
-                    ${r.edad ?? "NA"}
-
-                </div>
-
-
-                <div class="popup-dato">
-
-                    <strong>
-                        🌎 País de origen:
-                    </strong>
-
-                    ${r.pais_origen || "NA"}
-
-                </div>
 
             </div>
 
@@ -3053,6 +2785,12 @@ function aplicarFiltros() {
         ).value;
 
 
+    const abm =
+        document.getElementById(
+            "filtroABM"
+        ).value;
+
+
     const volcan =
         document.getElementById(
             "filtroVolcan"
@@ -3078,7 +2816,7 @@ function aplicarFiltros() {
 
 
     const filtrados =
-        todosLosRegistros.filter(
+        todosLosSiniestros.filter(
             r => {
 
                 let cumple = true;
@@ -3113,6 +2851,22 @@ function aplicarFiltros() {
                         )
                         ===
                         tipo;
+
+                }
+
+
+                if (
+                    cumple &&
+                    abm
+                ) {
+
+                    cumple =
+                        String(
+                            r.abm_montana
+                            ?? ""
+                        ).trim()
+                        ===
+                        abm;
 
                 }
 
@@ -3187,7 +2941,7 @@ function aplicarFiltros() {
         );
 
 
-    mostrarRegistrosEnMapa(
+    mostrarSiniestrosEnMapa(
         filtrados
     );
 
@@ -3201,7 +2955,7 @@ function aplicarFiltros() {
         "estadoMapa"
     ).textContent =
         filtrados.length +
-        " registros encontrados";
+        " siniestros encontrados";
 
 }
 
@@ -3219,6 +2973,11 @@ function limpiarFiltros() {
 
     document.getElementById(
         "filtroTipo"
+    ).value = "";
+
+
+    document.getElementById(
+        "filtroABM"
     ).value = "";
 
 
@@ -3242,21 +3001,21 @@ function limpiarFiltros() {
     ).value = "";
 
 
-    mostrarRegistrosEnMapa(
-        todosLosRegistros
+    mostrarSiniestrosEnMapa(
+        todosLosSiniestros
     );
 
 
     actualizarEstadisticas(
-        todosLosRegistros
+        todosLosSiniestros
     );
 
 
     document.getElementById(
         "estadoMapa"
     ).textContent =
-        todosLosRegistros.length +
-        " registros cargados";
+        todosLosSiniestros.length +
+        " siniestros";
 
 }
 
@@ -3281,3 +3040,4 @@ window.addEventListener(
 </body>
 
 </html>
+```
