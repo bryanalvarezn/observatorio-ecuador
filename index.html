@@ -1292,7 +1292,7 @@ function agruparSiniestros(registros) {
 
     registros.forEach(registro => {
 
-        const codigo = String(registro.codigo_observatorio ?? "").trim();
+        const codigo = String(registro.codigo_siniestro ?? "").trim();
 
         if (!codigo) return;
 
@@ -1523,7 +1523,7 @@ function crearPopup(r) {
         <div style="min-width:270px">
 
             <div class="popup-titulo">
-                Siniestro <span class="popup-codigo">${r.codigo_observatorio || ""}</span>
+                Siniestro <span class="popup-codigo">${r.codigo_siniestro || ""}</span>
             </div>
 
             <div class="popup-tipo ${clase}">${tipoTexto}</div>
