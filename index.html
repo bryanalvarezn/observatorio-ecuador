@@ -364,8 +364,7 @@ a {
 
 .estadisticas-compactas {
 
-    grid-template-columns: repeat(4, minmax(0, 150px));
-    justify-content: start;
+    grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     margin-bottom: 10px;
 
@@ -397,6 +396,14 @@ a {
     font-size: 9px;
 
 }
+
+/* Colores semanticos para accidentes / incidentes */
+
+.stat-accidente::before { background: #e5484d; }
+.stat-accidente .stat-numero { color: #e5484d; }
+
+.stat-incidente::before { background: #f97316; }
+.stat-incidente .stat-numero { color: #f97316; }
 
 .vista-observatorio {
 
@@ -471,7 +478,7 @@ a {
     display: flex;
     gap: 16px;
     padding: 10px 16px;
-    border-top: 1px solid var(--borde);
+    border-bottom: 1px solid var(--borde);
     color: var(--texto-3);
     font-size: 10.5px;
 
@@ -972,12 +979,12 @@ select:focus {
                     <div class="stat-label">Siniestros</div>
                 </div>
 
-                <div class="stat">
+                <div class="stat stat-accidente">
                     <div class="stat-numero" id="totalAccidentes">—</div>
                     <div class="stat-label">Accidentes</div>
                 </div>
 
-                <div class="stat">
+                <div class="stat stat-incidente">
                     <div class="stat-numero" id="totalIncidentes">—</div>
                     <div class="stat-label">Incidentes</div>
                 </div>
@@ -993,12 +1000,12 @@ select:focus {
 
                 <div class="panel panel-mapa">
 
-                    <div id="map"></div>
-
                     <div class="leyenda">
                         <span><span class="punto punto-accidente"></span>Accidente</span>
                         <span><span class="punto punto-incidente"></span>Incidente</span>
                     </div>
+
+                    <div id="map"></div>
 
                 </div>
 
@@ -1293,12 +1300,18 @@ function agruparSiniestros(registros) {
         if (!codigo) return;
 
         if (!grupos.has(codigo)) {
-            grupos.set(codigo, { ...registro, personas: 0 });
+            grupos.set(codigo, { ...registro, personas: 0, afectados: 0 });
         }
 
         const siniestro = grupos.get(codigo);
 
         siniestro.personas++;
+
+        const accidentadoValor = Number(registro.accidentados);
+
+        if (Number.isFinite(accidentadoValor)) {
+            siniestro.afectados += accidentadoValor;
+        }
 
         const campos = [
             "fecha", "latitude", "longitude", "altitud",
@@ -1378,13 +1391,13 @@ async function cargarDatos() {
 
 function actualizarEstadisticas(siniestros) {
 
-    const totalAccidentes = siniestros.filter(
-        s => normalizarTexto(s.tipo_siniestro) === "A"
-    ).length;
+    const totalAccidentes = siniestros
+        .filter(s => normalizarTexto(s.tipo_siniestro) === "A")
+        .reduce((total, s) => total + (s.afectados || 0), 0);
 
-    const totalIncidentes = siniestros.filter(
-        s => normalizarTexto(s.tipo_siniestro) === "I"
-    ).length;
+    const totalIncidentes = siniestros
+        .filter(s => normalizarTexto(s.tipo_siniestro) === "I")
+        .reduce((total, s) => total + (s.afectados || 0), 0);
 
     const totalPersonas = siniestros.reduce(
         (total, s) => total + s.personas, 0
