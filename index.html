@@ -304,7 +304,7 @@ a {
 
 
 /* =========================================================
-   TARJETAS DE ESTADISTICAS (compactas para subir el filtro)
+   TARJETAS DE ESTADISTICAS
 ========================================================= */
 
 .estadisticas {
@@ -520,7 +520,7 @@ select:focus {
 
 
 /* =========================================================
-   TEXTO DE SECCIONES (metodologia, principios, apoyar)
+   TEXTO DE SECCIONES
 ========================================================= */
 
 .texto-vista {
@@ -1265,32 +1265,85 @@ function iniciarMapa() {
 
 
 /* =========================================================
-   CARGAR DATOS DESDE LA VISTA PUBLICA
+   CARGAR DATOS CON EVALUACIÓN Y DIAGNÓSTICO
 ========================================================= */
 
 async function cargarDatos() {
 
-    const { data, error } =
-        await supabaseClient
-            .from("historical_events_public")
-            .select("*");
+    console.log("=== INICIANDO DIAGNÓSTICO DE DATOS ===");
 
+    const respuesta = await supabaseClient
+        .from("historical_events_public")
+        .select("*");
+
+    const { data, error } = respuesta;
+
+    // EVALUACIÓN 1: Error de API o Red
     if (error) {
 
-        console.error("ERROR SUPABASE:", error);
+        console.error("❌ FALLO DE SUPABASE:", error);
 
         alert(
-            "Error de Supabase:\n\n" + error.message +
-            "\n\nRevisa la consola del navegador (F12)."
+            "DIAGNÓSTICO - Error de Supabase:\n\n" +
+            "Código: " + error.code + "\n" +
+            "Mensaje: " + error.message + "\n" +
+            "Detalle: " + error.details
         );
 
         return;
 
     }
 
-    todosLosRegistros = data || [];
+    // EVALUACIÓN 2: Arreglo vacío (Respuesta vacía de la vista/tabla)
+    if (!data || data.length === 0) {
 
+        console.warn("⚠️ LA CONSULTA VOLVIÓ VACÍA: data = []");
+
+        alert(
+            "DIAGNÓSTICO - Sin datos:\n\n" +
+            "La consulta a 'historical_events_public' respondió correctamente, pero devolvió 0 filas.\n\n" +
+            "Causa común: Políticas de RLS activas en la tabla base o permisos sobre la vista."
+        );
+
+        return;
+
+    }
+
+    // EVALUACIÓN 3: Estructura y nombres de las columnas devueltas
+    console.log(`✅ Registros recibidos desde Supabase: ${data.length}`);
+    console.log("Muestra del primer objeto devuelto:", data[0]);
+
+    const primerRegistro = data[0];
+
+    const columnasEsperadas = [
+        "codigo_siniestro", 
+        "tipo_siniestro", 
+        "latitude", 
+        "longitude"
+    ];
+
+    const columnasFaltantes = columnasEsperadas.filter(
+        col => !(col in primerRegistro)
+    );
+
+    if (columnasFaltantes.length > 0) {
+
+        console.error("❌ DISCREPANCIA EN NOMBRES DE COLUMNAS:", columnasFaltantes);
+
+        alert(
+            "DIAGNÓSTICO - Descalce de Columnas:\n\n" +
+            "Se recibieron datos, pero las siguientes columnas esperadas por el código JS no existen:\n" +
+            columnasFaltantes.join(", ") + "\n\n" +
+            "Abre la Consola (F12) para ver las columnas reales que devuelve la base de datos."
+        );
+
+    }
+
+    // Procesa y renderiza
+    todosLosRegistros = data;
     todosLosSiniestros = agruparSiniestros(todosLosRegistros);
+
+    console.log(`✅ Siniestros agrupados correctamente: ${todosLosSiniestros.length}`);
 
     llenarFiltros(todosLosSiniestros);
     actualizarEstadisticas(todosLosSiniestros);
