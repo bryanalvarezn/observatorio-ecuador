@@ -1,389 +1,825 @@
 <!DOCTYPE html>
-
 <html lang="es">
-
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Observatorio Ecuatoriano de Accidentes en Montaña</title>
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
+/* =========================================================
+   TOKENS
+========================================================= */
+
 :root {
-    --fondo: #07111f;
-    --panel: #102235;
-    --panel2: #142a40;
-    --borde: #29445e;
-    --azul: #38bdf8;
-    --rojo: #ef4444;
-    --amarillo: #f59e0b;
-    --texto: #f1f5f9;
-    --secundario: #94a3b8;
+
+    --bg: #0a0a0c;
+    --bg-panel: #131316;
+    --bg-panel-2: #1b1b1f;
+    --bg-hover: #202024;
+
+    --borde: #29292f;
+    --borde-fuerte: #38383f;
+
+    --texto: #eaeaec;
+    --texto-2: #a3a3ab;
+    --texto-3: #6b6b73;
+
+    --acento: #4d9fff;
+    --acento-dim: #1f3a5c;
+    --acento-suave: rgba(77,159,255,.1);
+
+    --rojo: #e5484d;
+    --ambar: #d68a34;
+    --verde: #3fb87f;
+
+    --fuente-display: 'Space Grotesk', sans-serif;
+    --fuente-texto: 'Inter', sans-serif;
+    --fuente-mono: 'JetBrains Mono', monospace;
+
+    --sidebar-w: 248px;
+
 }
 
 * {
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
-    background: var(--fondo);
+    height: 100%;
+    background: var(--bg);
     color: var(--texto);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: var(--fuente-texto);
 }
 
-
-/* =====================================================
-   CABECERA
-===================================================== */
-
-header {
-    background: #07111f;
-    border-bottom: 1px solid var(--borde);
-}
-
-.header-inner {
-    max-width: 1700px;
-    margin: auto;
-    padding: 15px 28px 12px;
-}
-
-
-/* =====================================================
-   TITULO PRINCIPAL
-===================================================== */
-
-.marca h1 {
-    margin: 0;
-    color: #f1f5f9;
-    font-size: clamp(18px, 2vw, 27px);
-    font-weight: 800;
-    letter-spacing: .4px;
-    white-space: nowrap;
-}
-
-
-/* =====================================================
-   SUBTITULO
-===================================================== */
-
-.lema {
-    margin-top: 5px;
-    color: #38bdf8;
-    font-family: Georgia, serif;
-    font-size: 16px;
-    letter-spacing: 3px;
-}
-
-
-/* =====================================================
-   MENU
-===================================================== */
-
-nav {
-    display: flex;
-    gap: 5px;
-    margin-top: 12px;
-}
-
-nav a {
-    color: #94a3b8;
-    text-decoration: none;
-    padding: 7px 11px;
-    border-radius: 7px;
-    font-size: 12px;
-}
-
-nav a:hover {
+::selection {
+    background: var(--acento-dim);
     color: white;
-    background: #142a40;
+}
+
+a {
+    color: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 2px;
 }
 
 
-/* =====================================================
-   CONTENEDOR PRINCIPAL
-===================================================== */
+/* =========================================================
+   APP SHELL
+========================================================= */
 
-.contenedor {
-    max-width: 1700px;
-    margin: auto;
-    padding: 0 28px 35px;
-}
-
-
-/* =====================================================
-   ESTADISTICAS
-===================================================== */
-
-.estadisticas {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin: 14px 0;
-}
-
-.stat {
-    background: var(--panel);
-    border: 1px solid var(--borde);
-    border-radius: 10px;
-    padding: 12px 15px;
-}
-
-.stat-numero {
-    color: var(--azul);
-    font-size: 25px;
-    font-weight: 800;
-}
-
-.stat-label {
-    margin-top: 2px;
-    color: var(--secundario);
-    font-size: 10px;
-    text-transform: uppercase;
-}
-
-
-/* =====================================================
-   MAPA
-===================================================== */
-
-.observatorio-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 300px;
-    gap: 12px;
-}
-
-.panel {
-    background: var(--panel);
-    border: 1px solid var(--borde);
-    border-radius: 12px;
+.app {
+    display: flex;
+    height: 100vh;
     overflow: hidden;
 }
 
-.panel-mapa {
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+
+    background: var(--bg-panel);
+    border-right: 1px solid var(--borde);
+
+    display: flex;
+    flex-direction: column;
+
+    height: 100vh;
+    overflow-y: auto;
+
+}
+
+.sidebar-marca {
+
+    padding: 22px 20px 18px;
+    border-bottom: 1px solid var(--borde);
+
+}
+
+.sidebar-marca .icono {
+
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+
+    background: var(--acento-suave);
+    border: 1px solid var(--acento-dim);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+
+    margin-bottom: 12px;
+
+}
+
+.sidebar-marca h1 {
+
+    margin: 0;
+    font-family: var(--fuente-display);
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: .2px;
+    line-height: 1.35;
+    color: var(--texto);
+
+}
+
+.sidebar-marca small {
+
+    display: block;
+    margin-top: 6px;
+    color: var(--texto-3);
+    font-size: 10.5px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+
+}
+
+.nav-grupo {
+
+    padding: 18px 12px 4px;
+
+}
+
+.nav-grupo-titulo {
+
+    padding: 0 10px;
+    margin-bottom: 6px;
+
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    color: var(--texto-3);
+
+}
+
+.nav-item {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 9px 10px;
+    margin-bottom: 2px;
+
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+
+    color: var(--texto-2);
+    font-family: var(--fuente-texto);
+    font-size: 12.8px;
+    font-weight: 500;
+    text-align: left;
+
+    cursor: pointer;
+
+    position: relative;
+
+}
+
+.nav-item:hover {
+
+    background: var(--bg-hover);
+    color: var(--texto);
+
+}
+
+.nav-item.activo {
+
+    background: var(--acento-suave);
+    color: var(--texto);
+
+}
+
+.nav-item.activo::before {
+
+    content: "";
+    position: absolute;
+    left: -12px;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--acento);
+
+}
+
+.nav-icono {
+    font-size: 14px;
+    width: 18px;
+    text-align: center;
+}
+
+.sidebar-footer {
+
+    margin-top: auto;
+    padding: 16px 20px;
+    border-top: 1px solid var(--borde);
+
+    color: var(--texto-3);
+    font-size: 10.5px;
+    line-height: 1.6;
+
+}
+
+
+/* =========================================================
+   CONTENIDO
+========================================================= */
+
+.contenido {
+
+    flex: 1;
     min-width: 0;
+    height: 100vh;
+    overflow-y: auto;
+
+}
+
+.vista {
+    display: none;
+    padding: 26px 32px 50px;
+}
+
+.vista.activa {
+    display: block;
+}
+
+.vista-header {
+
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin-bottom: 20px;
+
+}
+
+.vista-header h2 {
+
+    margin: 0;
+    font-family: var(--fuente-display);
+    font-size: 21px;
+    font-weight: 600;
+    letter-spacing: .2px;
+
+}
+
+.vista-header .estado {
+
+    font-family: var(--fuente-mono);
+    font-size: 11px;
+    color: var(--texto-3);
+
+}
+
+
+/* =========================================================
+   TARJETAS DE ESTADISTICAS (panel de instrumentos)
+========================================================= */
+
+.estadisticas {
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+
+}
+
+.stat {
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 14px 16px 13px;
+    position: relative;
+    overflow: hidden;
+
+}
+
+.stat::before {
+
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--acento-dim);
+
+}
+
+.stat-numero {
+
+    font-family: var(--fuente-mono);
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--texto);
+    letter-spacing: -.5px;
+
+}
+
+.stat-label {
+
+    margin-top: 3px;
+    color: var(--texto-3);
+    font-size: 10.5px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+
+}
+
+
+/* =========================================================
+   GRID MAPA + FILTROS
+========================================================= */
+
+.grid-mapa {
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 14px;
+    align-items: start;
+
+}
+
+.panel {
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    overflow: hidden;
+
 }
 
 .panel-titulo {
-    padding: 10px 14px;
+
+    padding: 12px 16px;
     border-bottom: 1px solid var(--borde);
+
     display: flex;
     justify-content: space-between;
+    align-items: center;
+
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 600;
+
 }
 
 #map {
+
     width: 100%;
-    height: calc(100vh - 230px);
-    min-height: 520px;
+    height: calc(100vh - 260px);
+    min-height: 480px;
+    background: #08080a;
+
 }
 
-
-/* =====================================================
-   LEYENDA
-===================================================== */
-
 .leyenda {
+
     display: flex;
-    gap: 18px;
-    padding: 8px 14px;
+    gap: 16px;
+    padding: 10px 16px;
     border-top: 1px solid var(--borde);
-    color: var(--secundario);
-    font-size: 10px;
+    color: var(--texto-3);
+    font-size: 10.5px;
+
 }
 
 .punto {
+
     display: inline-block;
-    width: 9px;
-    height: 9px;
-    margin-right: 4px;
+    width: 8px;
+    height: 8px;
+    margin-right: 5px;
     border-radius: 50%;
+
 }
 
-.punto-accidente {
-    background: var(--rojo);
-}
-
-.punto-incidente {
-    background: var(--amarillo);
-}
+.punto-accidente { background: var(--rojo); }
+.punto-incidente { background: var(--ambar); }
 
 
-/* =====================================================
+/* =========================================================
    FILTROS
-===================================================== */
+========================================================= */
 
 .filtros {
-    padding: 15px;
+    padding: 16px;
 }
 
 .filtros h3 {
-    margin: 0 0 15px;
-    color: var(--azul);
-    font-size: 15px;
+
+    margin: 0 0 14px;
+    font-family: var(--fuente-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto);
+
 }
 
 label {
+
     display: block;
-    margin-bottom: 4px;
-    color: var(--secundario);
-    font-size: 10px;
-    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--texto-3);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .2px;
+
 }
 
 select {
+
     width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
+    margin-bottom: 11px;
+    padding: 8px 9px;
+
+    background: #08080a;
     border: 1px solid var(--borde);
     border-radius: 7px;
-    background: #081522;
-    color: white;
-    font-size: 11px;
+
+    color: var(--texto);
+    font-family: var(--fuente-texto);
+    font-size: 11.5px;
+
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--acento);
 }
 
 .btn {
+
     width: 100%;
     padding: 9px;
-    border: 0;
-    border-radius: 7px;
+    margin-top: 2px;
+
+    border: none;
+    border-radius: 8px;
+
+    font-family: var(--fuente-texto);
+    font-weight: 600;
+    font-size: 11.5px;
+
     cursor: pointer;
-    font-weight: bold;
-    font-size: 11px;
+
 }
 
 .btn-aplicar {
-    background: #0ea5e9;
-    color: white;
+    background: var(--acento);
+    color: #06131f;
+}
+
+.btn-aplicar:hover {
+    background: #6bafff;
 }
 
 .btn-limpiar {
-    margin-top: 6px;
-    background: #263b50;
-    color: white;
+
+    margin-top: 8px;
+    background: var(--bg-panel-2);
+    color: var(--texto-2);
+    border: 1px solid var(--borde);
+
+}
+
+.btn-limpiar:hover {
+    background: var(--bg-hover);
 }
 
 .info-filtros {
-    margin-top: 15px;
-    padding-top: 12px;
+
+    margin-top: 16px;
+    padding-top: 13px;
     border-top: 1px solid var(--borde);
-    color: var(--secundario);
-    font-size: 10px;
-    line-height: 1.5;
-}
 
-
-/* =====================================================
-   SECCIONES INFERIORES
-===================================================== */
-
-.seccion {
-    margin-top: 45px;
-}
-
-.seccion h2 {
-    margin-bottom: 8px;
-    font-size: 24px;
-}
-
-.seccion p {
-    max-width: 900px;
-    color: var(--secundario);
-    font-size: 13px;
+    color: var(--texto-3);
+    font-size: 10.5px;
     line-height: 1.6;
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media(max-width:1000px) {
-
-    .observatorio-grid {
-        grid-template-columns: 1fr;
-    }
-
-    #map {
-        height: 65vh;
-        min-height: 450px;
-    }
-
-    .estadisticas {
-        grid-template-columns: repeat(2, 1fr);
-    }
 
 }
 
-@media(max-width:700px) {
+.info-filtros strong {
+    color: var(--texto-2);
+}
 
-    .header-inner {
-        padding: 13px 15px;
-    }
 
-    .contenedor {
-        padding: 0 15px 30px;
-    }
+/* =========================================================
+   TEXTO DE SECCIONES (metodologia, principios, apoyar)
+========================================================= */
 
-    .marca h1 {
-        white-space: normal;
-        font-size: 17px;
-    }
+.texto-vista {
 
-    .estadisticas {
-        grid-template-columns: 1fr 1fr;
-    }
+    max-width: 760px;
+    color: var(--texto-2);
+    font-size: 13.5px;
+    line-height: 1.75;
+
+}
+
+.texto-vista strong {
+    color: var(--texto);
+}
+
+.bloque-metodologia {
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+
+}
+
+.bloque-metodologia h4 {
+
+    margin: 0 0 8px;
+    font-family: var(--fuente-display);
+    font-size: 13.5px;
+    color: var(--texto);
+
+}
+
+.codigo-formato {
+
+    display: inline-block;
+    margin-top: 4px;
+    padding: 3px 8px;
+    background: var(--acento-suave);
+    border: 1px solid var(--acento-dim);
+    border-radius: 6px;
+    font-family: var(--fuente-mono);
+    font-size: 12px;
+    color: var(--acento);
+
+}
+
+.rango-abm {
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+
+}
+
+.rango-abm div {
+
+    background: #08080a;
+    border: 1px solid var(--borde);
+    border-radius: 9px;
+    padding: 12px 14px;
+
+}
+
+.rango-abm .valor {
+
+    font-family: var(--fuente-mono);
+    font-size: 13px;
+    color: var(--acento);
+    margin-bottom: 4px;
+
+}
+
+.rango-abm .etiqueta {
+
+    font-size: 11px;
+    color: var(--texto-3);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+
+}
+
+.principios-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+
+}
+
+.principio-card {
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 18px;
+
+}
+
+.principio-card strong {
+
+    display: block;
+    margin-bottom: 7px;
+    font-family: var(--fuente-display);
+    font-size: 13px;
+    color: var(--acento);
+    letter-spacing: .3px;
+
+}
+
+.principio-card span {
+
+    color: var(--texto-2);
+    font-size: 12.5px;
+    line-height: 1.6;
+
+}
+
+.apoyar-card {
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 22px;
+    margin-top: 16px;
+    max-width: 420px;
+
+}
+
+.apoyar-card a {
+
+    display: inline-block;
+    margin-top: 12px;
+    padding: 9px 16px;
+    background: var(--ambar);
+    color: #241703;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12.5px;
+    text-decoration: none;
 
 }
 
 
-/* =====================================================
-   POPUP
-===================================================== */
+/* =========================================================
+   POPUP DEL MAPA
+========================================================= */
 
 .popup-titulo {
+
     margin-bottom: 8px;
     color: #0f172a;
-    font-size: 15px;
-    font-weight: 800;
+    font-family: var(--fuente-display);
+    font-size: 14.5px;
+    font-weight: 700;
+
+}
+
+.popup-codigo {
+
+    font-family: var(--fuente-mono);
+    color: #1d4ed8;
+
 }
 
 .popup-tipo {
+
     display: inline-block;
     margin-bottom: 8px;
     padding: 4px 8px;
     border-radius: 5px;
     color: white;
     font-size: 10px;
-    font-weight: bold;
+    font-weight: 700;
+
 }
 
-.popup-accidente {
-    background: #dc2626;
-}
-
-.popup-incidente {
-    background: #d97706;
-}
+.popup-accidente { background: #dc2626; }
+.popup-incidente { background: #b45309; }
 
 .popup-dato {
+
     margin: 6px 0;
     color: #334155;
-    font-size: 11px;
+    font-size: 11.5px;
+
+}
+
+.popup-dato strong {
+    color: #0f172a;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 980px) {
+
+    .grid-mapa {
+        grid-template-columns: 1fr;
+    }
+
+    #map {
+        height: 55vh;
+        min-height: 400px;
+    }
+
+    .estadisticas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .principios-grid,
+    .rango-abm {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media(max-width: 760px) {
+
+    .app {
+        flex-direction: column;
+        height: auto;
+        overflow: visible;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: visible;
+        align-items: center;
+    }
+
+    .sidebar-marca {
+        border-bottom: none;
+        border-right: 1px solid var(--borde);
+        white-space: nowrap;
+        padding: 14px 16px;
+    }
+
+    .nav-grupo {
+        display: flex;
+        padding: 10px 8px;
+        white-space: nowrap;
+    }
+
+    .nav-grupo-titulo {
+        display: none;
+    }
+
+    .nav-item {
+        width: auto;
+    }
+
+    .nav-item.activo::before {
+        left: 8px;
+        right: 8px;
+        top: auto;
+        bottom: -2px;
+        height: 2px;
+        width: auto;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .contenido {
+        height: auto;
+        overflow-y: visible;
+    }
+
+    .vista {
+        padding: 20px 16px 40px;
+    }
+
 }
 
 </style>
@@ -392,399 +828,382 @@ select {
 
 <body>
 
-<!-- =====================================================
-     CABECERA
-===================================================== -->
+<div class="app">
 
-<header>
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-<div class="header-inner">
+    <aside class="sidebar">
 
-    <div class="marca">
+        <div class="sidebar-marca">
 
-        <h1>
-            OBSERVATORIO ECUATORIANO DE ACCIDENTES EN MONTAÑA
-        </h1>
+            <div class="icono">🏔️</div>
 
-        <div class="lema">
-            EX NIHILO NIHIL
+            <h1>Observatorio Ecuatoriano<br>de Accidentes en Montaña</h1>
+
+            <small>Datos &amp; monitoreo</small>
+
         </div>
 
-    </div>
+        <nav class="nav-grupo">
+
+            <div class="nav-grupo-titulo">Panorama</div>
+
+            <button class="nav-item activo" data-vista="observatorio">
+                <span class="nav-icono">🗺️</span> Observatorio
+            </button>
+
+        </nav>
+
+        <nav class="nav-grupo">
+
+            <div class="nav-grupo-titulo">Información</div>
+
+            <button class="nav-item" data-vista="metodologia">
+                <span class="nav-icono">🔬</span> Metodología
+            </button>
+
+            <button class="nav-item" data-vista="principios">
+                <span class="nav-icono">🧭</span> Principios
+            </button>
+
+        </nav>
+
+        <nav class="nav-grupo">
+
+            <div class="nav-grupo-titulo">Apoyar</div>
+
+            <button class="nav-item" data-vista="apoyar">
+                <span class="nav-icono">☕</span> Donaciones
+            </button>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            Ecuador · 2026 · V1<br>
+            Fundador: Bryan Alvarez
+
+        </div>
+
+    </aside>
 
 
-    <nav>
+    <!-- =====================================================
+         CONTENIDO
+    ====================================================== -->
 
-        <a href="#observatorio">
-            Observatorio
-        </a>
+    <main class="contenido">
 
-        <a href="#metodologia">
-            Metodología
-        </a>
 
-        <a href="#principios">
-            Principios
-        </a>
+        <!-- =================================================
+             VISTA: OBSERVATORIO
+        ================================================== -->
 
-        <a href="#apoyar">
-            Apoyar
-        </a>
+        <section class="vista activa" data-vista="observatorio">
 
-    </nav>
+            <div class="vista-header">
+                <h2>Observatorio</h2>
+                <span class="estado" id="estadoMapa">Cargando...</span>
+            </div>
+
+            <div class="estadisticas">
+
+                <div class="stat">
+                    <div class="stat-numero" id="totalSiniestros">—</div>
+                    <div class="stat-label">Siniestros</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-numero" id="totalAccidentes">—</div>
+                    <div class="stat-label">Accidentes</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-numero" id="totalIncidentes">—</div>
+                    <div class="stat-label">Incidentes</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-numero" id="totalPersonas">—</div>
+                    <div class="stat-label">Personas registradas</div>
+                </div>
+
+            </div>
+
+            <div class="grid-mapa">
+
+                <div class="panel">
+
+                    <div class="panel-titulo">
+                        <span>Distribución espacial de siniestros</span>
+                    </div>
+
+                    <div id="map"></div>
+
+                    <div class="leyenda">
+                        <span><span class="punto punto-accidente"></span>Accidente</span>
+                        <span><span class="punto punto-incidente"></span>Incidente</span>
+                    </div>
+
+                </div>
+
+                <aside class="panel filtros">
+
+                    <h3>Filtros de observación</h3>
+
+                    <label>Año</label>
+                    <select id="filtroAnio"><option value="">Todos los años</option></select>
+
+                    <label>Tipo de siniestro</label>
+                    <select id="filtroTipo">
+                        <option value="">Todos</option>
+                        <option value="A">Accidentes</option>
+                        <option value="I">Incidentes</option>
+                    </select>
+
+                    <label>Clasificación de montaña</label>
+                    <select id="filtroABM"><option value="">Todas</option></select>
+
+                    <label>Montaña / volcán</label>
+                    <select id="filtroVolcan"><option value="">Todos</option></select>
+
+                    <label>Accidente geográfico</label>
+                    <select id="filtroGeografico"><option value="">Todos</option></select>
+
+                    <label>Consecuencia</label>
+                    <select id="filtroConsecuencia"><option value="">Todas</option></select>
+
+                    <label>Causa primaria</label>
+                    <select id="filtroCausa"><option value="">Todas</option></select>
+
+                    <button class="btn btn-aplicar" onclick="aplicarFiltros()">Aplicar filtros</button>
+                    <button class="btn btn-limpiar" onclick="limpiarFiltros()">Limpiar filtros</button>
+
+                    <div class="info-filtros">
+
+                        <strong>Unidad de observación</strong><br><br>
+
+                        Un <strong>siniestro</strong> es un evento identificado
+                        mediante un único código de observatorio.<br><br>
+
+                        Una o varias personas pueden estar asociadas al mismo
+                        siniestro.
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VISTA: METODOLOGIA
+        ================================================== -->
+
+        <section class="vista" data-vista="metodologia">
+
+            <div class="vista-header">
+                <h2>Metodología</h2>
+            </div>
+
+            <div class="bloque-metodologia">
+
+                <h4>Unidad de análisis</h4>
+
+                <p class="texto-vista" style="margin:0;">
+                    El Observatorio utiliza el <strong>siniestro</strong> como
+                    unidad principal de observación. Cada evento posee un
+                    código único con formato
+                    <span class="codigo-formato">H-NNNNNN</span>.
+                    Un mismo siniestro puede involucrar a una o varias
+                    personas.
+                </p>
+
+            </div>
+
+            <div class="bloque-metodologia">
+
+                <h4>Clasificación por altitud (ABM)</h4>
+
+                <p class="texto-vista" style="margin:0;">
+                    La altitud del evento se obtiene automáticamente a partir
+                    de sus coordenadas y se clasifica según la referencia
+                    metodológica del proyecto.
+                </p>
+
+                <div class="rango-abm">
+
+                    <div>
+                        <div class="valor">0 – 3.999 m</div>
+                        <div class="etiqueta">Baja montaña</div>
+                    </div>
+
+                    <div>
+                        <div class="valor">4.000 – 4.800 m</div>
+                        <div class="etiqueta">Media montaña</div>
+                    </div>
+
+                    <div>
+                        <div class="valor">&gt; 4.800 m</div>
+                        <div class="etiqueta">Alta montaña</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="bloque-metodologia">
+
+                <h4>Procedencia de los datos</h4>
+
+                <p class="texto-vista" style="margin:0;">
+                    La base histórica fue obtenida de fuentes existentes y
+                    posteriormente depurada y estructurada para su análisis.
+                    En una etapa posterior se incorporará una ficha
+                    estandarizada para nuevos registros provenientes de
+                    instituciones de respuesta y de reportes voluntarios.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VISTA: PRINCIPIOS
+        ================================================== -->
+
+        <section class="vista" data-vista="principios">
+
+            <div class="vista-header">
+                <h2>Principios</h2>
+            </div>
+
+            <p class="texto-vista">
+                El Observatorio busca construir conocimiento sistemático
+                sobre los accidentes e incidentes ocurridos durante
+                actividades al aire libre en Ecuador, mediante datos
+                organizados, verificables y responsables.
+            </p>
+
+            <div class="principios-grid">
+
+                <div class="principio-card">
+                    <strong>Software libre</strong>
+                    <span>Preferencia por herramientas abiertas que favorezcan
+                    la autonomía, colaboración y reproducibilidad.</span>
+                </div>
+
+                <div class="principio-card">
+                    <strong>Conocimiento abierto</strong>
+                    <span>Promoción del acceso y circulación del conocimiento
+                    cuando las condiciones legales, éticas y de privacidad
+                    lo permitan.</span>
+                </div>
+
+                <div class="principio-card">
+                    <strong>Datos responsables</strong>
+                    <span>Trazabilidad de las fuentes y tratamiento
+                    responsable de información institucional y datos
+                    potencialmente sensibles.</span>
+                </div>
+
+                <div class="principio-card">
+                    <strong>Minimización de datos</strong>
+                    <span>La interfaz pública solo expone lo necesario para
+                    el análisis, sin identificar innecesariamente a las
+                    personas involucradas.</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VISTA: APOYAR
+        ================================================== -->
+
+        <section class="vista" data-vista="apoyar">
+
+            <div class="vista-header">
+                <h2>Apoyar el Observatorio</h2>
+            </div>
+
+            <p class="texto-vista">
+                Este proyecto busca construir una infraestructura
+                independiente para recopilar, organizar, analizar y
+                compartir conocimiento sobre accidentes en actividades al
+                aire libre en Ecuador.
+            </p>
+
+            <div class="apoyar-card">
+
+                <strong style="font-family:var(--fuente-display);font-size:14px;">
+                    Contribuir al proyecto
+                </strong>
+
+                <p style="color:var(--texto-2);font-size:12.5px;line-height:1.6;margin:8px 0 0;">
+                    Las contribuciones ayudan a mantener la infraestructura,
+                    el desarrollo y la disponibilidad pública del proyecto.
+                </p>
+
+                <a href="https://buymeacoffee.com" target="_blank" rel="noopener noreferrer">
+                    ☕ Donar
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
 
-</header>
-
-<!-- =====================================================
-     CONTENIDO
-===================================================== -->
-
-<div class="contenedor">
-
-<section id="observatorio">
-
-<!-- =====================================================
-     ESTADISTICAS
-===================================================== -->
-
-<div class="estadisticas">
-
-    <div class="stat">
-
-        <div
-            id="totalSiniestros"
-            class="stat-numero">
-            —
-        </div>
-
-        <div class="stat-label">
-            Siniestros
-        </div>
-
-    </div>
-
-
-    <div class="stat">
-
-        <div
-            id="totalAccidentes"
-            class="stat-numero">
-            —
-        </div>
-
-        <div class="stat-label">
-            Accidentes
-        </div>
-
-    </div>
-
-
-    <div class="stat">
-
-        <div
-            id="totalIncidentes"
-            class="stat-numero">
-            —
-        </div>
-
-        <div class="stat-label">
-            Incidentes
-        </div>
-
-    </div>
-
-
-    <div class="stat">
-
-        <div
-            id="totalPersonas"
-            class="stat-numero">
-            —
-        </div>
-
-        <div class="stat-label">
-            Personas registradas
-        </div>
-
-    </div>
-
-</div>
-
-<!-- =====================================================
-     MAPA + FILTROS
-===================================================== -->
-
-<div class="observatorio-grid">
-
-<div class="panel panel-mapa">
-
-    <div class="panel-titulo">
-
-        <span>
-            Distribución espacial de siniestros
-        </span>
-
-        <span
-            id="estadoMapa"
-            style="color:#94a3b8;font-size:10px;">
-            Cargando...
-        </span>
-
-    </div>
-
-
-    <div id="map"></div>
-
-
-    <div class="leyenda">
-
-        <span>
-            <span class="punto punto-accidente"></span>
-            Accidente
-        </span>
-
-        <span>
-            <span class="punto punto-incidente"></span>
-            Incidente
-        </span>
-
-    </div>
-
-</div>
-
-<!-- =====================================================
-     FILTROS
-===================================================== -->
-
-<aside class="panel filtros">
-
-    <h3>
-        Filtros de observación
-    </h3>
-
-
-    <label>Año</label>
-
-    <select id="filtroAnio">
-
-        <option value="">
-            Todos los años
-        </option>
-
-    </select>
-
-
-    <label>Tipo de siniestro</label>
-
-    <select id="filtroTipo">
-
-        <option value="">
-            Todos
-        </option>
-
-        <option value="A">
-            Accidentes
-        </option>
-
-        <option value="I">
-            Incidentes
-        </option>
-
-    </select>
-
-
-    <label>Clasificación de montaña</label>
-
-    <select id="filtroABM">
-
-        <option value="">
-            Todas
-        </option>
-
-    </select>
-
-
-    <label>Montaña / volcán</label>
-
-    <select id="filtroVolcan">
-
-        <option value="">
-            Todos
-        </option>
-
-    </select>
-
-
-    <label>Accidente geográfico</label>
-
-    <select id="filtroGeografico">
-
-        <option value="">
-            Todos
-        </option>
-
-    </select>
-
-
-    <label>Consecuencia</label>
-
-    <select id="filtroConsecuencia">
-
-        <option value="">
-            Todas
-        </option>
-
-    </select>
-
-
-    <label>Causa primaria</label>
-
-    <select id="filtroCausa">
-
-        <option value="">
-            Todas
-        </option>
-
-    </select>
-
-
-    <button
-        class="btn btn-aplicar"
-        onclick="aplicarFiltros()">
-        Aplicar filtros
-    </button>
-
-
-    <button
-        class="btn btn-limpiar"
-        onclick="limpiarFiltros()">
-        Limpiar filtros
-    </button>
-
-
-    <div class="info-filtros">
-
-        <strong>Unidad de observación</strong>
-
-        <br><br>
-
-        Un <strong>siniestro</strong> es un evento
-        identificado mediante un único
-        código_observatorio.
-
-        <br><br>
-
-        Una o varias personas pueden estar
-        asociadas al mismo siniestro.
-
-        <br><br>
-
-        Por ejemplo:
-
-        <br>
-
-        1 siniestro + 10 personas =
-        <strong>1 siniestro y 10 personas registradas.</strong>
-
-    </div>
-
-</aside>
-
-</div>
-
-</section>
-
-<!-- =====================================================
-     METODOLOGIA
-===================================================== -->
-
-<section
-    id="metodologia"
-    class="seccion">
-
-    <h2>
-        Metodología
-    </h2>
-
-    <p>
-
-        El Observatorio utiliza el siniestro
-        como unidad principal de observación.
-
-        Cada evento posee un código único
-        con estructura:
-
-        <strong>
-            OEAM-AÑO-NÚMERO SECUENCIAL
-        </strong>.
-
-        Un mismo siniestro puede involucrar
-        a una o varias personas.
-
-    </p>
-
-</section>
-
-<!-- =====================================================
-     PRINCIPIOS
-===================================================== -->
-
-<section
-    id="principios"
-    class="seccion">
-
-    <h2>
-        Principios
-    </h2>
-
-    <p>
-
-        El Observatorio busca construir
-        conocimiento sistemático sobre los
-        accidentes y siniestros ocurridos
-        durante actividades de montaña
-        en Ecuador, mediante datos
-        organizados, verificables y
-        responsables.
-
-    </p>
-
-</section>
-
-<!-- =====================================================
-     APOYAR
-===================================================== -->
-
-<section
-    id="apoyar"
-    class="seccion">
-
-    <h2>
-        Apoyar
-    </h2>
-
-    <p>
-
-        El proyecto busca desarrollar una
-        infraestructura independiente para
-        recopilar, organizar y analizar
-        información sobre accidentes
-        ocurridos en montaña en Ecuador.
-
-    </p>
-
-</section>
-
-</div>
 
 <script>
 
 
-/* =====================================================
+/* =========================================================
+   NAVEGACION ENTRE VISTAS
+========================================================= */
+
+document.querySelectorAll(".nav-item").forEach(boton => {
+
+    boton.addEventListener("click", () => {
+
+        const destino = boton.dataset.vista;
+
+        document.querySelectorAll(".nav-item")
+            .forEach(b => b.classList.remove("activo"));
+
+        document.querySelectorAll(".vista")
+            .forEach(v => v.classList.remove("activa"));
+
+        boton.classList.add("activo");
+
+        document
+            .querySelector('.vista[data-vista="' + destino + '"]')
+            .classList.add("activa");
+
+        if (destino === "observatorio" && mapa) {
+
+            setTimeout(() => mapa.invalidateSize(), 50);
+
+        }
+
+    });
+
+});
+
+
+/* =========================================================
    SUPABASE
-===================================================== */
+========================================================= */
 
 const SUPABASE_URL =
     "https://zjacblnkmybfxdlpltlm.supabase.co";
@@ -792,30 +1211,23 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
     "sb_publishable_jIY4M_d1MpgiZhryHU7yQQ_bW4YiIQo";
 
-
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+    window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
-/* =====================================================
+/* =========================================================
    VARIABLES
-===================================================== */
+========================================================= */
 
 let mapa = null;
-
 let todosLosRegistros = [];
-
 let todosLosSiniestros = [];
-
 let marcadores = [];
 
 
-/* =====================================================
+/* =========================================================
    NORMALIZAR TEXTO
-===================================================== */
+========================================================= */
 
 function normalizarTexto(valor) {
 
@@ -823,877 +1235,339 @@ function normalizarTexto(valor) {
         .trim()
         .toUpperCase()
         .normalize("NFD")
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        );
+        .replace(/[\u0300-\u036f]/g, "");
 
 }
 
 
-/* =====================================================
+/* =========================================================
    AGRUPAR PERSONAS POR SINIESTRO
-===================================================== */
+========================================================= */
 
 function agruparSiniestros(registros) {
 
     const grupos = new Map();
 
-
     registros.forEach(registro => {
 
-        const codigo =
-            String(
-                registro.codigo_observatorio ?? ""
-            ).trim();
+        const codigo = String(registro.codigo_observatorio ?? "").trim();
 
-
-        if (!codigo) {
-            return;
-        }
-
+        if (!codigo) return;
 
         if (!grupos.has(codigo)) {
-
-            grupos.set(
-                codigo,
-                {
-                    ...registro,
-                    personas: 0
-                }
-            );
-
+            grupos.set(codigo, { ...registro, personas: 0 });
         }
 
-
-        const siniestro =
-            grupos.get(codigo);
-
-
-        /*
-         * Cada fila de historical_events_public
-         * representa una persona.
-         */
+        const siniestro = grupos.get(codigo);
 
         siniestro.personas++;
 
-
-        /*
-         * Recuperar información del evento
-         * si la primera fila no la tenía.
-         */
-
         const campos = [
-
-            "fecha",
-            "latitude",
-            "longitude",
-            "altitud",
-            "tipo_siniestro",
-            "novedad",
-            "accidente_geografico",
-            "nombre_volcan",
-            "abm_montana",
-            "grupo",
-            "causa_ambiental",
-            "causa_humana",
-            "causa_primaria",
+            "fecha", "latitude", "longitude", "altitud",
+            "tipo_siniestro", "novedad", "accidente_geografico",
+            "nombre_volcan", "abm_montana", "grupo",
+            "causa_ambiental", "causa_humana", "causa_primaria",
             "consecuencia"
-
         ];
 
-
         campos.forEach(campo => {
-
-            if (
-                !siniestro[campo] &&
-                registro[campo]
-            ) {
-
-                siniestro[campo] =
-                    registro[campo];
-
+            if (!siniestro[campo] && registro[campo]) {
+                siniestro[campo] = registro[campo];
             }
-
         });
 
     });
 
-
-    return Array.from(
-        grupos.values()
-    );
+    return Array.from(grupos.values());
 
 }
 
 
-/* =====================================================
+/* =========================================================
    INICIAR MAPA
-===================================================== */
+========================================================= */
 
 function iniciarMapa() {
 
-    mapa =
-        L.map("map")
-        .setView(
-            [-1.5, -78.4],
-            7
-        );
-
+    mapa = L.map("map").setView([-1.5, -78.4], 7);
 
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-            maxZoom: 19,
-            attribution:
-                "© OpenStreetMap contributors"
-        }
+        { maxZoom: 19, attribution: "© OpenStreetMap contributors" }
     ).addTo(mapa);
 
 }
 
 
-/* =====================================================
+/* =========================================================
    CARGAR DATOS DESDE LA VISTA PUBLICA
-===================================================== */
+========================================================= */
 
 async function cargarDatos() {
 
-    const estado =
-        document.getElementById(
-            "estadoMapa"
-        );
+    const estado = document.getElementById("estadoMapa");
 
+    estado.textContent = "Consultando datos...";
 
-    estado.textContent =
-        "Consultando datos...";
-
-
-    console.log(
-        "Consultando historical_events_public..."
-    );
-
-
-    const resultado =
+    const { data, error } =
         await supabaseClient
-            .from(
-                "historical_events_public"
-            )
+            .from("historical_events_public")
             .select("*");
-
-
-    const data =
-        resultado.data;
-
-
-    const error =
-        resultado.error;
-
 
     if (error) {
 
-        console.error(
-            "ERROR SUPABASE:",
-            error
-        );
-
-
-        estado.textContent =
-            "Error al consultar datos";
-
+        console.error("ERROR SUPABASE:", error);
+        estado.textContent = "Error al consultar datos";
 
         alert(
-            "Error de Supabase:\n\n" +
-            error.message +
+            "Error de Supabase:\n\n" + error.message +
             "\n\nRevisa la consola del navegador (F12)."
         );
-
 
         return;
 
     }
 
+    todosLosRegistros = data || [];
 
-    console.log(
-        "Datos recibidos:",
-        data
-    );
+    todosLosSiniestros = agruparSiniestros(todosLosRegistros);
 
+    llenarFiltros(todosLosSiniestros);
+    actualizarEstadisticas(todosLosSiniestros);
+    mostrarSiniestrosEnMapa(todosLosSiniestros);
 
-    todosLosRegistros =
-        data || [];
-
-
-    const personas =
-        todosLosRegistros.length;
-
-
-    todosLosSiniestros =
-        agruparSiniestros(
-            todosLosRegistros
-        );
-
-
-    console.log(
-        "Personas:",
-        personas
-    );
-
-
-    console.log(
-        "Siniestros:",
-        todosLosSiniestros.length
-    );
-
-
-    llenarFiltros(
-        todosLosSiniestros
-    );
-
-
-    actualizarEstadisticas(
-        todosLosSiniestros
-    );
-
-
-    mostrarSiniestrosEnMapa(
-        todosLosSiniestros
-    );
-
-
-    estado.textContent =
-        todosLosSiniestros.length +
-        " siniestros";
+    estado.textContent = todosLosSiniestros.length + " siniestros";
 
 }
 
 
-/* =====================================================
+/* =========================================================
    ESTADISTICAS
-===================================================== */
+========================================================= */
 
-function actualizarEstadisticas(
-    siniestros
-) {
+function actualizarEstadisticas(siniestros) {
 
-    const totalSiniestros =
-        siniestros.length;
+    const totalAccidentes = siniestros.filter(
+        s => normalizarTexto(s.tipo_siniestro) === "A"
+    ).length;
 
+    const totalIncidentes = siniestros.filter(
+        s => normalizarTexto(s.tipo_siniestro) === "I"
+    ).length;
 
-    const totalAccidentes =
-        siniestros.filter(
-            s =>
-                normalizarTexto(
-                    s.tipo_siniestro
-                ) === "A"
-        ).length;
+    const totalPersonas = siniestros.reduce(
+        (total, s) => total + s.personas, 0
+    );
 
-
-    const totalIncidentes =
-        siniestros.filter(
-            s =>
-                normalizarTexto(
-                    s.tipo_siniestro
-                ) === "I"
-        ).length;
-
-
-    const totalPersonas =
-        siniestros.reduce(
-            (
-                total,
-                siniestro
-            ) =>
-                total +
-                siniestro.personas,
-            0
-        );
-
-
-    document.getElementById(
-        "totalSiniestros"
-    ).textContent =
-        totalSiniestros;
-
-
-    document.getElementById(
-        "totalAccidentes"
-    ).textContent =
-        totalAccidentes;
-
-
-    document.getElementById(
-        "totalIncidentes"
-    ).textContent =
-        totalIncidentes;
-
-
-    document.getElementById(
-        "totalPersonas"
-    ).textContent =
-        totalPersonas;
+    document.getElementById("totalSiniestros").textContent = siniestros.length;
+    document.getElementById("totalAccidentes").textContent = totalAccidentes;
+    document.getElementById("totalIncidentes").textContent = totalIncidentes;
+    document.getElementById("totalPersonas").textContent = totalPersonas;
 
 }
 
 
-/* =====================================================
-   VALORES DE FILTROS
-===================================================== */
+/* =========================================================
+   VALORES / SELECTS DE FILTROS
+========================================================= */
 
-function obtenerValores(
-    registros,
-    campo
-) {
+function obtenerValores(registros, campo) {
 
-    return [
-        ...new Set(
-
-            registros
-                .map(
-                    r =>
-                        String(
-                            r[campo] ?? ""
-                        ).trim()
-                )
-                .filter(Boolean)
-
-        )
-    ].sort();
+    return [...new Set(
+        registros.map(r => String(r[campo] ?? "").trim()).filter(Boolean)
+    )].sort();
 
 }
 
+function llenarSelect(id, valores) {
 
-function llenarSelect(
-    id,
-    valores
-) {
-
-    const select =
-        document.getElementById(id);
-
+    const select = document.getElementById(id);
 
     valores.forEach(valor => {
 
-        const option =
-            document.createElement(
-                "option"
-            );
+        const option = document.createElement("option");
 
+        option.value = valor;
+        option.textContent = valor;
 
-        option.value =
-            valor;
-
-
-        option.textContent =
-            valor;
-
-
-        select.appendChild(
-            option
-        );
+        select.appendChild(option);
 
     });
 
 }
 
+function llenarFiltros(siniestros) {
 
-function llenarFiltros(
-    siniestros
-) {
+    const anios = [...new Set(
+        siniestros
+            .map(s => s.fecha ? new Date(s.fecha).getFullYear() : null)
+            .filter(Boolean)
+    )].sort();
 
-    const anios =
-        [
-            ...new Set(
-
-                siniestros
-                    .map(
-                        s =>
-                            s.fecha
-                                ? new Date(
-                                    s.fecha
-                                ).getFullYear()
-                                : null
-                    )
-                    .filter(Boolean)
-
-            )
-        ].sort();
-
-
-    llenarSelect(
-        "filtroAnio",
-        anios
-    );
-
-
-    llenarSelect(
-        "filtroABM",
-        obtenerValores(
-            siniestros,
-            "abm_montana"
-        )
-    );
-
-
-    llenarSelect(
-        "filtroVolcan",
-        obtenerValores(
-            siniestros,
-            "nombre_volcan"
-        )
-    );
-
-
-    llenarSelect(
-        "filtroGeografico",
-        obtenerValores(
-            siniestros,
-            "accidente_geografico"
-        )
-    );
-
-
-    llenarSelect(
-        "filtroConsecuencia",
-        obtenerValores(
-            siniestros,
-            "consecuencia"
-        )
-    );
-
-
-    llenarSelect(
-        "filtroCausa",
-        obtenerValores(
-            siniestros,
-            "causa_primaria"
-        )
-    );
+    llenarSelect("filtroAnio", anios);
+    llenarSelect("filtroABM", obtenerValores(siniestros, "abm_montana"));
+    llenarSelect("filtroVolcan", obtenerValores(siniestros, "nombre_volcan"));
+    llenarSelect("filtroGeografico", obtenerValores(siniestros, "accidente_geografico"));
+    llenarSelect("filtroConsecuencia", obtenerValores(siniestros, "consecuencia"));
+    llenarSelect("filtroCausa", obtenerValores(siniestros, "causa_primaria"));
 
 }
 
 
-/* =====================================================
+/* =========================================================
    MOSTRAR SINIESTROS EN MAPA
-===================================================== */
+========================================================= */
 
-function mostrarSiniestrosEnMapa(
-    siniestros
-) {
+function mostrarSiniestrosEnMapa(siniestros) {
 
-    marcadores.forEach(
-        marcador =>
-            mapa.removeLayer(
-                marcador
-            )
-    );
-
-
+    marcadores.forEach(m => mapa.removeLayer(m));
     marcadores = [];
-
 
     const coordenadas = [];
 
+    siniestros.forEach(siniestro => {
 
-    siniestros.forEach(
-        siniestro => {
+        const lat = Number(siniestro.latitude);
+        const lng = Number(siniestro.longitude);
 
-            const lat =
-                Number(
-                    siniestro.latitude
-                );
+        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
 
+        coordenadas.push([lat, lng]);
 
-            const lng =
-                Number(
-                    siniestro.longitude
-                );
+        const tipo = normalizarTexto(siniestro.tipo_siniestro);
+        const color = tipo === "A" ? "#e5484d" : "#d68a34";
 
+        const marcador = L.circleMarker([lat, lng], {
+            radius: 8,
+            fillColor: color,
+            color: "#0a0a0c",
+            weight: 1.5,
+            fillOpacity: .9
+        });
 
-            if (
-                !Number.isFinite(lat) ||
-                !Number.isFinite(lng)
-            ) {
+        marcador.bindPopup(crearPopup(siniestro));
+        marcador.addTo(mapa);
 
-                return;
+        marcadores.push(marcador);
 
-            }
+    });
 
-
-            coordenadas.push(
-                [lat, lng]
-            );
-
-
-            const tipo =
-                normalizarTexto(
-                    siniestro.tipo_siniestro
-                );
-
-
-            const color =
-                tipo === "A"
-                    ? "#ef4444"
-                    : "#f59e0b";
-
-
-            const marcador =
-                L.circleMarker(
-                    [lat, lng],
-                    {
-                        radius: 8,
-                        fillColor: color,
-                        color: "#ffffff",
-                        weight: 1.5,
-                        fillOpacity: .85
-                    }
-                );
-
-
-            marcador.bindPopup(
-                crearPopup(
-                    siniestro
-                )
-            );
-
-
-            marcador.addTo(
-                mapa
-            );
-
-
-            marcadores.push(
-                marcador
-            );
-
-        }
-    );
-
-
-    if (
-        coordenadas.length
-    ) {
-
-        mapa.fitBounds(
-            coordenadas,
-            {
-                padding: [30,30],
-                maxZoom: 12
-            }
-        );
-
+    if (coordenadas.length) {
+        mapa.fitBounds(coordenadas, { padding: [30, 30], maxZoom: 12 });
     }
 
 }
 
 
-/* =====================================================
+/* =========================================================
    POPUP
-===================================================== */
+========================================================= */
 
-function crearPopup(
-    r
-) {
+function crearPopup(r) {
 
-    const tipo =
-        normalizarTexto(
-            r.tipo_siniestro
-        );
-
+    const tipo = normalizarTexto(r.tipo_siniestro);
 
     const tipoTexto =
-        tipo === "A"
-            ? "ACCIDENTE"
-            : tipo === "I"
-                ? "INCIDENTE"
-                : "SIN CLASIFICAR";
+        tipo === "A" ? "ACCIDENTE" :
+        tipo === "I" ? "INCIDENTE" : "SIN CLASIFICAR";
 
+    const clase = tipo === "A" ? "popup-accidente" : "popup-incidente";
 
-    const clase =
-        tipo === "A"
-            ? "popup-accidente"
-            : "popup-incidente";
-
-
-    const fecha =
-        r.fecha
-            ? new Date(
-                r.fecha
-            ).toLocaleDateString(
-                "es-EC"
-            )
-            : "No registrada";
-
+    const fecha = r.fecha
+        ? new Date(r.fecha).toLocaleDateString("es-EC")
+        : "No registrada";
 
     return `
-
         <div style="min-width:270px">
 
             <div class="popup-titulo">
-                Siniestro
-                ${r.codigo_observatorio || ""}
+                Siniestro <span class="popup-codigo">${r.codigo_observatorio || ""}</span>
             </div>
 
-            <div class="popup-tipo ${clase}">
-                ${tipoTexto}
-            </div>
+            <div class="popup-tipo ${clase}">${tipoTexto}</div>
 
-            <div class="popup-dato">
-                <strong>Fecha:</strong>
-                ${fecha}
-            </div>
-
-            <div class="popup-dato">
-                <strong>Montaña / volcán:</strong>
-                ${r.nombre_volcan || "No registrado"}
-            </div>
-
-            <div class="popup-dato">
-                <strong>Accidente geográfico:</strong>
-                ${r.accidente_geografico || "No registrado"}
-            </div>
-
-            <div class="popup-dato">
-                <strong>Altitud:</strong>
-                ${r.altitud || "No registrada"} m
-            </div>
-
-            <div class="popup-dato">
-                <strong>Clasificación:</strong>
-                ${r.abm_montana || "No registrada"}
-            </div>
-
-            <div class="popup-dato">
-                <strong>Personas involucradas:</strong>
-                ${r.personas}
-            </div>
-
-            <div class="popup-dato">
-                <strong>Causa primaria:</strong>
-                ${r.causa_primaria || "No registrada"}
-            </div>
-
-            <div class="popup-dato">
-                <strong>Consecuencia:</strong>
-                ${r.consecuencia || "No registrada"}
-            </div>
+            <div class="popup-dato"><strong>Fecha:</strong> ${fecha}</div>
+            <div class="popup-dato"><strong>Montaña / volcán:</strong> ${r.nombre_volcan || "No registrado"}</div>
+            <div class="popup-dato"><strong>Accidente geográfico:</strong> ${r.accidente_geografico || "No registrado"}</div>
+            <div class="popup-dato"><strong>Altitud:</strong> ${r.altitud || "No registrada"} m</div>
+            <div class="popup-dato"><strong>Clasificación:</strong> ${r.abm_montana || "No registrada"}</div>
+            <div class="popup-dato"><strong>Personas involucradas:</strong> ${r.personas}</div>
+            <div class="popup-dato"><strong>Causa primaria:</strong> ${r.causa_primaria || "No registrada"}</div>
+            <div class="popup-dato"><strong>Consecuencia:</strong> ${r.consecuencia || "No registrada"}</div>
 
         </div>
-
     `;
 
 }
 
 
-/* =====================================================
+/* =========================================================
    APLICAR FILTROS
-===================================================== */
+========================================================= */
 
 function aplicarFiltros() {
 
-    const anio =
-        document.getElementById(
-            "filtroAnio"
-        ).value;
+    const anio = document.getElementById("filtroAnio").value;
+    const tipo = document.getElementById("filtroTipo").value;
+    const abm = document.getElementById("filtroABM").value;
+    const volcan = document.getElementById("filtroVolcan").value;
+    const geografico = document.getElementById("filtroGeografico").value;
+    const consecuencia = document.getElementById("filtroConsecuencia").value;
+    const causa = document.getElementById("filtroCausa").value;
 
+    const filtrados = todosLosSiniestros.filter(r => {
 
-    const tipo =
-        document.getElementById(
-            "filtroTipo"
-        ).value;
+        if (anio && (!r.fecha || new Date(r.fecha).getFullYear().toString() !== anio)) return false;
+        if (tipo && normalizarTexto(r.tipo_siniestro) !== tipo) return false;
+        if (abm && String(r.abm_montana ?? "").trim() !== abm) return false;
+        if (volcan && String(r.nombre_volcan ?? "").trim() !== volcan) return false;
+        if (geografico && String(r.accidente_geografico ?? "").trim() !== geografico) return false;
+        if (consecuencia && String(r.consecuencia ?? "").trim() !== consecuencia) return false;
+        if (causa && String(r.causa_primaria ?? "").trim() !== causa) return false;
 
+        return true;
 
-    const abm =
-        document.getElementById(
-            "filtroABM"
-        ).value;
+    });
 
+    mostrarSiniestrosEnMapa(filtrados);
+    actualizarEstadisticas(filtrados);
 
-    const volcan =
-        document.getElementById(
-            "filtroVolcan"
-        ).value;
-
-
-    const geografico =
-        document.getElementById(
-            "filtroGeografico"
-        ).value;
-
-
-    const consecuencia =
-        document.getElementById(
-            "filtroConsecuencia"
-        ).value;
-
-
-    const causa =
-        document.getElementById(
-            "filtroCausa"
-        ).value;
-
-
-    const filtrados =
-        todosLosSiniestros.filter(
-            r => {
-
-                if (
-                    anio &&
-                    (
-                        !r.fecha ||
-                        new Date(
-                            r.fecha
-                        )
-                        .getFullYear()
-                        .toString()
-                        !== anio
-                    )
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    tipo &&
-                    normalizarTexto(
-                        r.tipo_siniestro
-                    ) !== tipo
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    abm &&
-                    String(
-                        r.abm_montana ?? ""
-                    ).trim() !== abm
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    volcan &&
-                    String(
-                        r.nombre_volcan ?? ""
-                    ).trim() !== volcan
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    geografico &&
-                    String(
-                        r.accidente_geografico ?? ""
-                    ).trim() !== geografico
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    consecuencia &&
-                    String(
-                        r.consecuencia ?? ""
-                    ).trim() !== consecuencia
-                ) {
-                    return false;
-                }
-
-
-                if (
-                    causa &&
-                    String(
-                        r.causa_primaria ?? ""
-                    ).trim() !== causa
-                ) {
-                    return false;
-                }
-
-
-                return true;
-
-            }
-        );
-
-
-    mostrarSiniestrosEnMapa(
-        filtrados
-    );
-
-
-    actualizarEstadisticas(
-        filtrados
-    );
-
-
-    document.getElementById(
-        "estadoMapa"
-    ).textContent =
-        filtrados.length +
-        " siniestros";
+    document.getElementById("estadoMapa").textContent =
+        filtrados.length + " siniestros";
 
 }
 
 
-/* =====================================================
+/* =========================================================
    LIMPIAR FILTROS
-===================================================== */
+========================================================= */
 
 function limpiarFiltros() {
 
     [
-        "filtroAnio",
-        "filtroTipo",
-        "filtroABM",
-        "filtroVolcan",
-        "filtroGeografico",
-        "filtroConsecuencia",
-        "filtroCausa"
-    ]
-    .forEach(
-        id =>
-            document.getElementById(
-                id
-            ).value = ""
-    );
+        "filtroAnio", "filtroTipo", "filtroABM", "filtroVolcan",
+        "filtroGeografico", "filtroConsecuencia", "filtroCausa"
+    ].forEach(id => document.getElementById(id).value = "");
 
+    mostrarSiniestrosEnMapa(todosLosSiniestros);
+    actualizarEstadisticas(todosLosSiniestros);
 
-    mostrarSiniestrosEnMapa(
-        todosLosSiniestros
-    );
-
-
-    actualizarEstadisticas(
-        todosLosSiniestros
-    );
-
-
-    document.getElementById(
-        "estadoMapa"
-    ).textContent =
-        todosLosSiniestros.length +
-        " siniestros";
+    document.getElementById("estadoMapa").textContent =
+        todosLosSiniestros.length + " siniestros";
 
 }
 
 
-/* =====================================================
+/* =========================================================
    INICIO
-===================================================== */
+========================================================= */
 
-window.addEventListener(
-    "DOMContentLoaded",
-    async function() {
+window.addEventListener("DOMContentLoaded", async () => {
 
-        iniciarMapa();
+    iniciarMapa();
+    await cargarDatos();
 
-        await cargarDatos();
-
-    }
-);
+});
 
 </script>
 
