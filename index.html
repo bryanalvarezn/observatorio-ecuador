@@ -1259,6 +1259,8 @@ let mapa = null;
 let todosLosRegistros = [];
 let todosLosSiniestros = [];
 let marcadores = [];
+let capaAreasNaturales = null;
+let capaSitiosSeguridad = null;
 
 
 /* =========================================================
@@ -1374,12 +1376,76 @@ function iniciarMapa() {
 
     mapa = L.map("map").setView([-1.5, -78.4], 7);
 
-    L.tileLayer(
+    // -----------------------------------------------------
+    // CAPAS BASE (alternables: normal vs topográfica)
+    // -----------------------------------------------------
+
+    const capaNormal = L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         { maxZoom: 19, attribution: "© OpenStreetMap contributors" }
+    );
+
+    const capaTopografica = L.tileLayer(
+        "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 17,
+            attribution:
+                "Map data: © OpenStreetMap contributors, SRTM | " +
+                "Map style: © OpenTopoMap (CC-BY-SA)"
+        }
+    );
+
+    capaNormal.addTo(mapa);
+
+    // -----------------------------------------------------
+    // CAPAS SUPERPUESTAS (shapes de referencia, alternables)
+    // Se cargan vacías por ahora; cargarCapaGeoJSON() las
+    // llena cuando haya datos disponibles.
+    // -----------------------------------------------------
+
+    capaAreasNaturales = L.layerGroup();
+    capaSitiosSeguridad = L.layerGroup();
+
+    // -----------------------------------------------------
+    // CONTROL DE CAPAS (permite prender/apagar cada una)
+    // -----------------------------------------------------
+
+    L.control.layers(
+        {
+            "Mapa normal": capaNormal,
+            "Mapa topográfico (curvas de nivel)": capaTopografica
+        },
+        {
+            "Áreas naturales": capaAreasNaturales,
+            "Sitios de seguridad": capaSitiosSeguridad
+        },
+        { collapsed: true }
     ).addTo(mapa);
 
     ajustarAlturaMapa();
+
+}
+
+
+/* =========================================================
+   CARGAR UNA CAPA GEOJSON EN UN LAYERGROUP EXISTENTE
+   (uso: cargarCapaGeoJSON('/ruta/areas.geojson', capaAreasNaturales, {...estilo}))
+========================================================= */
+
+async function cargarCapaGeoJSON(url, layerGroup, opciones = {}) {
+
+    try {
+
+        const respuesta = await fetch(url);
+        const datos = await respuesta.json();
+
+        L.geoJSON(datos, opciones).addTo(layerGroup);
+
+    } catch (error) {
+
+        console.error("Error cargando capa GeoJSON:", url, error);
+
+    }
 
 }
 
