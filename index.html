@@ -421,26 +421,28 @@ a {
 
     display: grid;
     grid-template-columns: minmax(0, 1fr) 260px;
-    grid-template-rows: auto 1fr;
     gap: 12px 14px;
     align-items: start;
-    height: calc(100vh - 30px);
 
 }
 
-.grid-mapa .estadisticas {
+.columna-observatorio {
 
-    grid-column: 1;
-    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+
+}
+
+.columna-observatorio .estadisticas {
+
     margin-bottom: 0;
 
 }
 
-.grid-mapa .panel-mapa {
+.columna-observatorio .panel-mapa {
 
-    grid-column: 1;
-    grid-row: 2;
-    height: 100%;
     display: flex;
     flex-direction: column;
 
@@ -449,9 +451,6 @@ a {
 .grid-mapa .filtros {
 
     grid-column: 2;
-    grid-row: 1 / 3;
-    height: 100%;
-    overflow-y: auto;
 
 }
 
@@ -467,8 +466,7 @@ a {
 #map {
 
     width: 100%;
-    flex: 1;
-    min-height: 400px;
+    min-height: 300px;
     background: #08080a;
 
 }
@@ -794,26 +792,15 @@ select:focus {
 
     .grid-mapa {
         grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        height: auto;
     }
 
-    .grid-mapa .estadisticas,
-    .grid-mapa .panel-mapa,
     .grid-mapa .filtros {
         grid-column: 1;
-        grid-row: auto;
-        height: auto;
-    }
-
-    .grid-mapa .panel-mapa {
-        display: block;
     }
 
     #map {
         height: 55vh;
         min-height: 400px;
-        flex: none;
     }
 
     .estadisticas {
@@ -972,40 +959,44 @@ select:focus {
 
         <section class="vista activa vista-observatorio" data-vista="observatorio">
 
-            <div class="estadisticas estadisticas-compactas">
-
-                <div class="stat">
-                    <div class="stat-numero" id="totalSiniestros">—</div>
-                    <div class="stat-label">Siniestros</div>
-                </div>
-
-                <div class="stat stat-accidente">
-                    <div class="stat-numero" id="totalAccidentes">—</div>
-                    <div class="stat-label">Accidentes</div>
-                </div>
-
-                <div class="stat stat-incidente">
-                    <div class="stat-numero" id="totalIncidentes">—</div>
-                    <div class="stat-label">Incidentes</div>
-                </div>
-
-                <div class="stat">
-                    <div class="stat-numero" id="totalPersonas">—</div>
-                    <div class="stat-label">Personas registradas</div>
-                </div>
-
-            </div>
-
             <div class="grid-mapa">
 
-                <div class="panel panel-mapa">
+                <div class="columna-observatorio">
 
-                    <div class="leyenda">
-                        <span><span class="punto punto-accidente"></span>Accidente</span>
-                        <span><span class="punto punto-incidente"></span>Incidente</span>
+                    <div class="estadisticas estadisticas-compactas">
+
+                        <div class="stat">
+                            <div class="stat-numero" id="totalSiniestros">—</div>
+                            <div class="stat-label">Siniestros</div>
+                        </div>
+
+                        <div class="stat stat-accidente">
+                            <div class="stat-numero" id="totalAccidentes">—</div>
+                            <div class="stat-label">Accidentes</div>
+                        </div>
+
+                        <div class="stat stat-incidente">
+                            <div class="stat-numero" id="totalIncidentes">—</div>
+                            <div class="stat-label">Incidentes</div>
+                        </div>
+
+                        <div class="stat">
+                            <div class="stat-numero" id="totalPersonas">—</div>
+                            <div class="stat-label">Personas registradas</div>
+                        </div>
+
                     </div>
 
-                    <div id="map"></div>
+                    <div class="panel panel-mapa">
+
+                        <div class="leyenda">
+                            <span><span class="punto punto-accidente"></span>Accidente</span>
+                            <span><span class="punto punto-incidente"></span>Incidente</span>
+                        </div>
+
+                        <div id="map"></div>
+
+                    </div>
 
                 </div>
 
@@ -1237,7 +1228,7 @@ document.querySelectorAll(".nav-item").forEach(boton => {
 
         if (destino === "observatorio" && mapa) {
 
-            setTimeout(() => mapa.invalidateSize(), 50);
+            ajustarAlturaMapa();
 
         }
 
@@ -1335,6 +1326,47 @@ function agruparSiniestros(registros) {
 
 
 /* =========================================================
+   AJUSTAR ALTURA DEL MAPA
+   (para que su borde inferior coincida con el final del
+   panel de filtros, ej. el botón "Limpiar filtros")
+========================================================= */
+
+function ajustarAlturaMapa() {
+
+    if (window.innerWidth <= 980) {
+        // En móvil/tablet el mapa usa una altura fija por CSS (55vh)
+        return;
+    }
+
+    const filtros = document.querySelector(".grid-mapa .filtros");
+    const leyenda = document.querySelector(".leyenda");
+    const mapaEl = document.getElementById("map");
+
+    if (!filtros || !leyenda || !mapaEl) return;
+
+    // Medimos posiciones reales ya renderizadas (no restamos alturas
+    // "a ciegas") para garantizar que el borde inferior del mapa
+    // quede exactamente alineado con el borde inferior del panel de
+    // filtros, sin importar cómo el navegador reparta el espacio
+    // entre las filas del grid.
+
+    const bordeInferiorFiltros = filtros.getBoundingClientRect().bottom;
+    const topeDelMapa = mapaEl.getBoundingClientRect().top;
+
+    const alturaCalculada = bordeInferiorFiltros - topeDelMapa;
+
+    mapaEl.style.height = Math.max(alturaCalculada, 300) + "px";
+
+    if (mapa) {
+        setTimeout(() => mapa.invalidateSize(), 30);
+    }
+
+}
+
+window.addEventListener("resize", ajustarAlturaMapa);
+
+
+/* =========================================================
    INICIAR MAPA
 ========================================================= */
 
@@ -1346,6 +1378,8 @@ function iniciarMapa() {
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         { maxZoom: 19, attribution: "© OpenStreetMap contributors" }
     ).addTo(mapa);
+
+    ajustarAlturaMapa();
 
 }
 
@@ -1381,6 +1415,8 @@ async function cargarDatos() {
     llenarFiltros(todosLosSiniestros);
     actualizarEstadisticas(todosLosSiniestros);
     mostrarSiniestrosEnMapa(todosLosSiniestros);
+
+    ajustarAlturaMapa();
 
 }
 
