@@ -161,6 +161,39 @@ a {
 
 }
 
+.marca-fila {
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+
+}
+
+.menu-toggle {
+
+    display: none;
+    background: transparent;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    color: var(--texto);
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    flex-shrink: 0;
+
+}
+
+.marca-contacto-movil {
+
+    display: none;
+    margin-top: 8px;
+    color: var(--texto-3);
+    font-size: 10.5px;
+
+}
+
 .nav-grupo {
 
     padding: 18px 12px 4px;
@@ -1004,40 +1037,51 @@ select:focus {
         width: 100%;
         min-width: 0;
         height: auto;
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: visible;
-        align-items: center;
+        overflow: visible;
+        position: relative;
     }
 
     .sidebar-marca {
         border-bottom: none;
-        border-right: 1px solid var(--borde);
-        white-space: nowrap;
         padding: 14px 16px;
     }
 
-    .nav-grupo {
-        display: flex;
-        padding: 10px 8px;
-        white-space: nowrap;
+    .menu-toggle {
+        display: block;
     }
 
-    .nav-grupo-titulo {
+    .marca-contacto-movil {
+        display: block;
+    }
+
+    .nav-panel {
+
         display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 50;
+
+        background: var(--bg-panel);
+        border-bottom: 1px solid var(--borde);
+        box-shadow: 0 12px 24px rgba(0,0,0,.4);
+
+        max-height: 70vh;
+        overflow-y: auto;
+
+    }
+
+    .nav-panel.abierto {
+        display: block;
+    }
+
+    .nav-grupo {
+        padding: 12px 12px 4px;
     }
 
     .nav-item {
-        width: auto;
-    }
-
-    .nav-item.activo::before {
-        left: 8px;
-        right: 8px;
-        top: auto;
-        bottom: -2px;
-        height: 2px;
-        width: auto;
+        width: 100%;
     }
 
     .sidebar-footer {
@@ -1071,51 +1115,67 @@ select:focus {
 
         <div class="sidebar-marca">
 
-            <div class="icono">🏔️</div>
+            <div class="marca-fila">
 
-            <h1>Observatorio Ecuatoriano<br>de Accidentes en Montaña</h1>
+                <div>
+                    <div class="icono">🏔️</div>
+                    <h1>Observatorio Ecuatoriano<br>de Accidentes en Montaña</h1>
+                    <small>Datos &amp; monitoreo</small>
+                </div>
 
-            <small>Datos &amp; monitoreo</small>
+                <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+                    ☰
+                </button>
+
+            </div>
+
+            <div class="marca-contacto-movil">
+                Bryan Alvarez · alvarezbran@outlook.com
+            </div>
 
         </div>
 
-        <nav class="nav-grupo">
+        <div class="nav-panel" id="navPanel">
 
-            <div class="nav-grupo-titulo">Panorama</div>
+            <nav class="nav-grupo">
 
-            <button class="nav-item activo" data-vista="observatorio">
-                <span class="nav-icono">🗺️</span> Observatorio
-            </button>
+                <div class="nav-grupo-titulo">Panorama</div>
 
-            <button class="nav-item" data-vista="analisis">
-                <span class="nav-icono">📊</span> Análisis
-            </button>
+                <button class="nav-item activo" data-vista="observatorio">
+                    <span class="nav-icono">🗺️</span> Observatorio
+                </button>
 
-        </nav>
+                <button class="nav-item" data-vista="analisis">
+                    <span class="nav-icono">📊</span> Análisis
+                </button>
 
-        <nav class="nav-grupo">
+            </nav>
 
-            <div class="nav-grupo-titulo">Información</div>
+            <nav class="nav-grupo">
 
-            <button class="nav-item" data-vista="metodologia">
-                <span class="nav-icono">🔬</span> Metodología
-            </button>
+                <div class="nav-grupo-titulo">Información</div>
 
-            <button class="nav-item" data-vista="principios">
-                <span class="nav-icono">🧭</span> Principios
-            </button>
+                <button class="nav-item" data-vista="metodologia">
+                    <span class="nav-icono">🔬</span> Metodología
+                </button>
 
-        </nav>
+                <button class="nav-item" data-vista="principios">
+                    <span class="nav-icono">🧭</span> Principios
+                </button>
 
-        <nav class="nav-grupo">
+            </nav>
 
-            <div class="nav-grupo-titulo">Apoyar</div>
+            <nav class="nav-grupo">
 
-            <button class="nav-item" data-vista="apoyar">
-                <span class="nav-icono">☕</span> Donaciones
-            </button>
+                <div class="nav-grupo-titulo">Apoyar</div>
 
-        </nav>
+                <button class="nav-item" data-vista="apoyar">
+                    <span class="nav-icono">☕</span> Donaciones
+                </button>
+
+            </nav>
+
+        </div>
 
         <div class="sidebar-footer">
 
@@ -1324,77 +1384,54 @@ select:focus {
             <div class="analisis-grid">
 
                 <div class="analisis-card">
-
-                    <h4>Prueba Chi-cuadrado (χ²)</h4>
+                    <h4>Estacionalidad</h4>
                     <p class="analisis-desc">
-                        Evalúa si existe una asociación estadísticamente
-                        significativa entre dos variables categóricas.
+                        Distribución de siniestros por mes del año (todos los años combinados).
                     </p>
-
-                    <div class="analisis-controles">
-
-                        <div>
-                            <label>Variable A</label>
-                            <select id="chiVarA"></select>
-                        </div>
-
-                        <div>
-                            <label>Variable B</label>
-                            <select id="chiVarB"></select>
-                        </div>
-
-                    </div>
-
-                    <button class="btn-analisis" onclick="calcularChiCuadrado()">
-                        Calcular
-                    </button>
-
-                    <div class="resultado-analisis" id="resultadoChi"></div>
-
+                    <canvas id="chartEstacionalidad"></canvas>
                 </div>
 
                 <div class="analisis-card">
-
-                    <h4>Prueba t de Student</h4>
+                    <h4>Causas más frecuentes</h4>
                     <p class="analisis-desc">
-                        Compara el promedio de una variable numérica entre
-                        dos grupos, para saber si la diferencia es real o
-                        producto del azar.
+                        Causas primarias con mayor número de registros.
                     </p>
+                    <canvas id="chartCausas"></canvas>
+                </div>
 
-                    <div class="analisis-controles">
+            </div>
 
-                        <div>
-                            <label>Variable numérica</label>
-                            <select id="tVarNumerica">
-                                <option value="altitud">Altitud (m)</option>
-                                <option value="grupo">Tamaño del grupo</option>
-                            </select>
-                        </div>
+            <div class="analisis-grid">
 
-                        <div>
-                            <label>Agrupar por</label>
-                            <select id="tVarCategorica"></select>
-                        </div>
+                <div class="analisis-card">
+                    <h4>Gravedad de las consecuencias</h4>
+                    <p class="analisis-desc">
+                        Consecuencias más registradas entre las personas afectadas.
+                    </p>
+                    <canvas id="chartGravedad"></canvas>
+                </div>
 
-                        <div>
-                            <label>Grupo 1</label>
-                            <select id="tGrupo1"></select>
-                        </div>
+                <div class="analisis-card">
+                    <h4>Distribución por clasificación ABM</h4>
+                    <p class="analisis-desc">
+                        Proporción de siniestros según altitud del evento
+                        (Baja / Media / Alta montaña).
+                    </p>
+                    <canvas id="chartABM"></canvas>
+                </div>
 
-                        <div>
-                            <label>Grupo 2</label>
-                            <select id="tGrupo2"></select>
-                        </div>
+            </div>
 
-                    </div>
+            <div class="analisis-grid">
 
-                    <button class="btn-analisis" onclick="calcularTTest()">
-                        Calcular
-                    </button>
-
-                    <div class="resultado-analisis" id="resultadoTTest"></div>
-
+                <div class="analisis-card" style="grid-column: 1 / -1;">
+                    <h4>Tiempo de respuesta de emergencia</h4>
+                    <p class="analisis-desc">
+                        Tiempo promedio entre el despacho y la llegada al lugar
+                        del siniestro (minutos), según clasificación de montaña.
+                    </p>
+                    <canvas id="chartTiempoRespuesta"></canvas>
+                    <div id="avisoTiempoRespuesta" class="analisis-desc" style="margin-top:10px;"></div>
                 </div>
 
             </div>
@@ -1531,7 +1568,21 @@ document.querySelectorAll(".nav-item").forEach(boton => {
 
         }
 
+        // En móvil, cerrar el menú desplegable al elegir una opción
+        document.getElementById("navPanel").classList.remove("abierto");
+
     });
+
+});
+
+
+/* =========================================================
+   MENU HAMBURGUESA (MOVIL)
+========================================================= */
+
+document.getElementById("menuToggle").addEventListener("click", () => {
+
+    document.getElementById("navPanel").classList.toggle("abierto");
 
 });
 
@@ -2065,16 +2116,11 @@ function limpiarFiltros() {
 let analisisInicializado = false;
 let chartTendenciaInstancia = null;
 let chartZonasInstancia = null;
-
-const VARIABLES_CATEGORICAS = [
-    { valor: "tipo_siniestro", etiqueta: "Tipo de siniestro" },
-    { valor: "abm_montana", etiqueta: "Clasificación ABM" },
-    { valor: "sexo", etiqueta: "Sexo" },
-    { valor: "rango_edad", etiqueta: "Rango de edad (OMS)" },
-    { valor: "causa_primaria", etiqueta: "Causa primaria" },
-    { valor: "consecuencia", etiqueta: "Consecuencia" },
-    { valor: "accidente_geografico", etiqueta: "Accidente geográfico" }
-];
+let chartEstacionalidadInstancia = null;
+let chartCausasInstancia = null;
+let chartGravedadInstancia = null;
+let chartABMInstancia = null;
+let chartTiempoRespuestaInstancia = null;
 
 function esValorValido(valor) {
 
@@ -2090,85 +2136,31 @@ function inicializarAnalisis() {
 
     analisisInicializado = true;
 
-    // --- Poblar selects de Chi-cuadrado ---
-
-    const selectChiA = document.getElementById("chiVarA");
-    const selectChiB = document.getElementById("chiVarB");
-
-    VARIABLES_CATEGORICAS.forEach(v => {
-
-        const opcionA = document.createElement("option");
-        opcionA.value = v.valor;
-        opcionA.textContent = v.etiqueta;
-        selectChiA.appendChild(opcionA);
-
-        const opcionB = document.createElement("option");
-        opcionB.value = v.valor;
-        opcionB.textContent = v.etiqueta;
-        selectChiB.appendChild(opcionB);
-
-    });
-
-    selectChiB.selectedIndex = 1;
-
-    // --- Poblar select "Agrupar por" de la prueba t ---
-
-    const selectTCategorica = document.getElementById("tVarCategorica");
-
-    VARIABLES_CATEGORICAS.forEach(v => {
-
-        const opcion = document.createElement("option");
-        opcion.value = v.valor;
-        opcion.textContent = v.etiqueta;
-        selectTCategorica.appendChild(opcion);
-
-    });
-
-    selectTCategorica.addEventListener("change", actualizarGruposTTest);
-    actualizarGruposTTest();
-
-    // --- Renderizar gráficas ---
-
     renderTendencia();
     renderZonas();
+    renderEstacionalidad();
+    renderCausas();
+    renderGravedad();
+    renderABM();
+    renderTiempoRespuesta();
 
 }
 
-function actualizarGruposTTest() {
 
-    const campo = document.getElementById("tVarCategorica").value;
+/* =========================================================
+   COLORES REUTILIZABLES PARA GRAFICAS
+========================================================= */
 
-    const valores = [...new Set(
-        todosLosRegistros
-            .map(r => String(r[campo] ?? "").trim())
-            .filter(esValorValido)
-    )].sort();
+const PALETA_GRAFICAS = [
+    "#4d9fff", "#e5484d", "#f97316", "#3fb87f",
+    "#a78bfa", "#f472b6", "#facc15", "#22d3ee",
+    "#94a3b8", "#fb7185"
+];
 
-    const grupo1 = document.getElementById("tGrupo1");
-    const grupo2 = document.getElementById("tGrupo2");
-
-    grupo1.innerHTML = "";
-    grupo2.innerHTML = "";
-
-    valores.forEach(valor => {
-
-        const op1 = document.createElement("option");
-        op1.value = valor;
-        op1.textContent = valor;
-        grupo1.appendChild(op1);
-
-        const op2 = document.createElement("option");
-        op2.value = valor;
-        op2.textContent = valor;
-        grupo2.appendChild(op2);
-
-    });
-
-    if (valores.length > 1) {
-        grupo2.selectedIndex = 1;
-    }
-
-}
+const OPCIONES_EJES_OSCURO = {
+    x: { ticks: { color: "#6b6b73", font: { size: 10 } }, grid: { color: "#29292f" } },
+    y: { ticks: { color: "#6b6b73", font: { size: 10 } }, grid: { color: "#29292f" }, beginAtZero: true }
+};
 
 
 /* =========================================================
@@ -2241,10 +2233,7 @@ function renderTendencia() {
             plugins: {
                 legend: { labels: { color: "#a3a3ab", font: { size: 10.5 } } }
             },
-            scales: {
-                x: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" } },
-                y: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" }, beginAtZero: true }
-            }
+            scales: OPCIONES_EJES_OSCURO
         }
     });
 
@@ -2305,196 +2294,296 @@ function renderZonas() {
 
 
 /* =========================================================
-   PRUEBA CHI-CUADRADO DE INDEPENDENCIA
+   ESTACIONALIDAD (POR MES DEL AÑO)
 ========================================================= */
 
-function calcularChiCuadrado() {
+function renderEstacionalidad() {
 
-    const campoA = document.getElementById("chiVarA").value;
-    const campoB = document.getElementById("chiVarB").value;
+    const nombresMeses = [
+        "Ene", "Feb", "Mar", "Abr", "May", "Jun",
+        "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"
+    ];
 
-    const resultadoEl = document.getElementById("resultadoChi");
+    const conteoPorMes = new Array(12).fill(0);
 
-    if (campoA === campoB) {
+    todosLosSiniestros.forEach(s => {
 
-        resultadoEl.className = "resultado-analisis visible";
-        resultadoEl.innerHTML =
-            "Elige dos variables distintas para comparar.";
-        return;
+        if (!s.fecha) return;
 
-    }
+        const mes = new Date(s.fecha).getMonth();
 
-    // Filtrar filas válidas para ambas variables
-    const filas = todosLosRegistros.filter(
-        r => esValorValido(r[campoA]) && esValorValido(r[campoB])
-    );
-
-    const categoriasA = [...new Set(filas.map(r => String(r[campoA]).trim()))].sort();
-    const categoriasB = [...new Set(filas.map(r => String(r[campoB]).trim()))].sort();
-
-    if (categoriasA.length < 2 || categoriasB.length < 2 || filas.length < 5) {
-
-        resultadoEl.className = "resultado-analisis visible";
-        resultadoEl.innerHTML =
-            "No hay suficientes datos válidos para calcular esta prueba " +
-            "con las variables seleccionadas.";
-        return;
-
-    }
-
-    // Tabla de contingencia observada
-    const observado = categoriasA.map(() => categoriasB.map(() => 0));
-
-    filas.forEach(r => {
-
-        const i = categoriasA.indexOf(String(r[campoA]).trim());
-        const j = categoriasB.indexOf(String(r[campoB]).trim());
-
-        observado[i][j]++;
+        conteoPorMes[mes]++;
 
     });
 
-    const totalesFila = observado.map(fila => fila.reduce((a, b) => a + b, 0));
-    const totalesColumna = categoriasB.map((_, j) =>
-        observado.reduce((suma, fila) => suma + fila[j], 0)
-    );
-    const totalGeneral = totalesFila.reduce((a, b) => a + b, 0);
+    if (chartEstacionalidadInstancia) chartEstacionalidadInstancia.destroy();
 
-    // Chi-cuadrado
-    let chi2 = 0;
+    const ctx = document.getElementById("chartEstacionalidad");
 
-    categoriasA.forEach((_, i) => {
-        categoriasB.forEach((_, j) => {
-
-            const esperado = (totalesFila[i] * totalesColumna[j]) / totalGeneral;
-
-            if (esperado > 0) {
-                chi2 += Math.pow(observado[i][j] - esperado, 2) / esperado;
-            }
-
-        });
+    chartEstacionalidadInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: nombresMeses,
+            datasets: [{
+                label: "Siniestros",
+                data: conteoPorMes,
+                backgroundColor: "#4d9fff"
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: OPCIONES_EJES_OSCURO
+        }
     });
-
-    const gradosLibertad = (categoriasA.length - 1) * (categoriasB.length - 1);
-    const valorP = 1 - jStat.chisquare.cdf(chi2, gradosLibertad);
-
-    const esSignificativo = valorP < 0.05;
-
-    // Construir tabla HTML
-    let tablaHTML = '<table class="tabla-contingencia"><thead><tr><th></th>';
-
-    categoriasB.forEach(b => { tablaHTML += `<th>${b}</th>`; });
-    tablaHTML += "</tr></thead><tbody>";
-
-    categoriasA.forEach((a, i) => {
-        tablaHTML += `<tr><th>${a}</th>`;
-        categoriasB.forEach((_, j) => {
-            tablaHTML += `<td>${observado[i][j]}</td>`;
-        });
-        tablaHTML += "</tr>";
-    });
-
-    tablaHTML += "</tbody></table>";
-
-    resultadoEl.className = "resultado-analisis visible";
-    resultadoEl.innerHTML = `
-        ${tablaHTML}
-        <div style="margin-top:10px;">
-            χ² = <span class="valor-clave">${chi2.toFixed(3)}</span> &nbsp;|&nbsp;
-            gl = <span class="valor-clave">${gradosLibertad}</span> &nbsp;|&nbsp;
-            p = <span class="valor-clave">${valorP.toFixed(4)}</span> &nbsp;|&nbsp;
-            n = <span class="valor-clave">${totalGeneral}</span>
-        </div>
-        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
-            ${esSignificativo
-                ? "Existe una asociación estadísticamente significativa entre ambas variables (p < 0.05)."
-                : "No hay evidencia suficiente de asociación entre ambas variables (p ≥ 0.05)."}
-        </div>
-    `;
 
 }
 
 
 /* =========================================================
-   PRUEBA T DE STUDENT (Welch)
+   CAUSAS MAS FRECUENTES
 ========================================================= */
 
-function calcularTTest() {
+function renderCausas() {
 
-    const campoNumerico = document.getElementById("tVarNumerica").value;
-    const campoCategorico = document.getElementById("tVarCategorica").value;
-    const valorGrupo1 = document.getElementById("tGrupo1").value;
-    const valorGrupo2 = document.getElementById("tGrupo2").value;
+    const conteo = new Map();
 
-    const resultadoEl = document.getElementById("resultadoTTest");
+    todosLosSiniestros.forEach(s => {
 
-    if (valorGrupo1 === valorGrupo2) {
+        const causa = String(s.causa_primaria ?? "").trim();
 
-        resultadoEl.className = "resultado-analisis visible";
-        resultadoEl.innerHTML = "Elige dos grupos distintos para comparar.";
+        if (!esValorValido(causa)) return;
+
+        conteo.set(causa, (conteo.get(causa) || 0) + 1);
+
+    });
+
+    const ordenado = [...conteo.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8);
+
+    const etiquetas = ordenado.map(e => e[0]);
+    const valores = ordenado.map(e => e[1]);
+
+    if (chartCausasInstancia) chartCausasInstancia.destroy();
+
+    const ctx = document.getElementById("chartCausas");
+
+    chartCausasInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: "Siniestros",
+                data: valores,
+                backgroundColor: "#f97316"
+            }]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" }, beginAtZero: true },
+                y: { ticks: { color: "#a3a3ab", font: { size: 10 } }, grid: { display: false } }
+            }
+        }
+    });
+
+}
+
+
+/* =========================================================
+   GRAVEDAD DE LAS CONSECUENCIAS
+========================================================= */
+
+function renderGravedad() {
+
+    // Usamos registros a nivel persona, ya que consecuencia
+    // es un dato por individuo, no por siniestro completo.
+
+    const conteo = new Map();
+
+    todosLosRegistros.forEach(r => {
+
+        const consecuencia = String(r.consecuencia ?? "").trim();
+
+        if (!esValorValido(consecuencia)) return;
+
+        conteo.set(consecuencia, (conteo.get(consecuencia) || 0) + 1);
+
+    });
+
+    const ordenado = [...conteo.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8);
+
+    const etiquetas = ordenado.map(e => e[0]);
+    const valores = ordenado.map(e => e[1]);
+
+    if (chartGravedadInstancia) chartGravedadInstancia.destroy();
+
+    const ctx = document.getElementById("chartGravedad");
+
+    chartGravedadInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: "Personas",
+                data: valores,
+                backgroundColor: "#e5484d"
+            }]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" }, beginAtZero: true },
+                y: { ticks: { color: "#a3a3ab", font: { size: 10 } }, grid: { display: false } }
+            }
+        }
+    });
+
+}
+
+
+/* =========================================================
+   DISTRIBUCION POR CLASIFICACION ABM
+========================================================= */
+
+function renderABM() {
+
+    const conteo = { "Baja Montaña": 0, "Media Montaña": 0, "Alta Montaña": 0 };
+
+    todosLosSiniestros.forEach(s => {
+
+        const clasificacion = String(s.abm_montana ?? "").trim();
+
+        if (conteo.hasOwnProperty(clasificacion)) {
+            conteo[clasificacion]++;
+        }
+
+    });
+
+    if (chartABMInstancia) chartABMInstancia.destroy();
+
+    const ctx = document.getElementById("chartABM");
+
+    chartABMInstancia = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: Object.keys(conteo),
+            datasets: [{
+                data: Object.values(conteo),
+                backgroundColor: ["#3fb87f", "#f97316", "#e5484d"],
+                borderColor: "#131316",
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: "bottom", labels: { color: "#a3a3ab", font: { size: 10.5 } } }
+            }
+        }
+    });
+
+}
+
+
+/* =========================================================
+   TIEMPO DE RESPUESTA DE EMERGENCIA
+========================================================= */
+
+function horaASegundos(horaTexto) {
+
+    if (!horaTexto) return null;
+
+    const partes = String(horaTexto).split(":").map(Number);
+
+    if (partes.length < 2 || partes.some(n => !Number.isFinite(n))) return null;
+
+    const [h, m, s = 0] = partes;
+
+    return h * 3600 + m * 60 + s;
+
+}
+
+function renderTiempoRespuesta() {
+
+    const aviso = document.getElementById("avisoTiempoRespuesta");
+
+    // Estos campos deben existir en historical_events_public.
+    // Si el registro no los tiene, el análisis simplemente los omite.
+
+    const tiemposPorABM = { "Baja Montaña": [], "Media Montaña": [], "Alta Montaña": [] };
+
+    let totalConDatos = 0;
+
+    todosLosRegistros.forEach(r => {
+
+        const despacho = horaASegundos(r.hora_despacho);
+        const arribo = horaASegundos(r.hora_arribo);
+        const abm = String(r.abm_montana ?? "").trim();
+
+        if (despacho === null || arribo === null) return;
+        if (!tiemposPorABM.hasOwnProperty(abm)) return;
+
+        let diferenciaMin = (arribo - despacho) / 60;
+
+        if (diferenciaMin <= 0) return; // descarta datos inconsistentes
+
+        tiemposPorABM[abm].push(diferenciaMin);
+        totalConDatos++;
+
+    });
+
+    if (totalConDatos === 0) {
+
+        aviso.textContent =
+            "Aún no hay datos de hora_despacho / hora_arribo disponibles " +
+            "en la vista pública para calcular este análisis.";
+
         return;
 
     }
 
-    const extraerValores = (valorObjetivo) =>
-        todosLosRegistros
-            .filter(r => String(r[campoCategorico] ?? "").trim() === valorObjetivo)
-            .map(r => Number(r[campoNumerico]))
-            .filter(n => Number.isFinite(n));
+    aviso.textContent = `Calculado sobre ${totalConDatos} registros con datos de horario válidos.`;
 
-    const grupo1 = extraerValores(valorGrupo1);
-    const grupo2 = extraerValores(valorGrupo2);
+    const etiquetas = Object.keys(tiemposPorABM);
 
-    if (grupo1.length < 3 || grupo2.length < 3) {
+    const promedios = etiquetas.map(clave => {
 
-        resultadoEl.className = "resultado-analisis visible";
-        resultadoEl.innerHTML =
-            "No hay suficientes datos numéricos válidos en alguno de los " +
-            "dos grupos para calcular esta prueba (mínimo 3 por grupo).";
-        return;
+        const arr = tiemposPorABM[clave];
 
-    }
+        if (arr.length === 0) return 0;
 
-    const media = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+        return arr.reduce((a, b) => a + b, 0) / arr.length;
 
-    const varianza = arr => {
-        const m = media(arr);
-        return arr.reduce((suma, x) => suma + Math.pow(x - m, 2), 0) / (arr.length - 1);
-    };
+    });
 
-    const m1 = media(grupo1), m2 = media(grupo2);
-    const v1 = varianza(grupo1), v2 = varianza(grupo2);
-    const n1 = grupo1.length, n2 = grupo2.length;
+    if (chartTiempoRespuestaInstancia) chartTiempoRespuestaInstancia.destroy();
 
-    const errorEstandar = Math.sqrt(v1 / n1 + v2 / n2);
-    const estadisticoT = (m1 - m2) / errorEstandar;
+    const ctx = document.getElementById("chartTiempoRespuesta");
 
-    const gradosLibertad =
-        Math.pow(v1 / n1 + v2 / n2, 2) /
-        (Math.pow(v1 / n1, 2) / (n1 - 1) + Math.pow(v2 / n2, 2) / (n2 - 1));
-
-    const valorP = 2 * (1 - jStat.studentt.cdf(Math.abs(estadisticoT), gradosLibertad));
-
-    const esSignificativo = valorP < 0.05;
-
-    resultadoEl.className = "resultado-analisis visible";
-    resultadoEl.innerHTML = `
-        <div>
-            <strong>${valorGrupo1}</strong>: media = <span class="valor-clave">${m1.toFixed(2)}</span> (n=${n1})
-            &nbsp;|&nbsp;
-            <strong>${valorGrupo2}</strong>: media = <span class="valor-clave">${m2.toFixed(2)}</span> (n=${n2})
-        </div>
-        <div style="margin-top:8px;">
-            t = <span class="valor-clave">${estadisticoT.toFixed(3)}</span> &nbsp;|&nbsp;
-            gl = <span class="valor-clave">${gradosLibertad.toFixed(1)}</span> &nbsp;|&nbsp;
-            p = <span class="valor-clave">${valorP.toFixed(4)}</span>
-        </div>
-        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
-            ${esSignificativo
-                ? "La diferencia entre ambos grupos es estadísticamente significativa (p < 0.05)."
-                : "No hay evidencia suficiente de una diferencia real entre ambos grupos (p ≥ 0.05)."}
-        </div>
-    `;
+    chartTiempoRespuestaInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: "Minutos promedio",
+                data: promedios.map(p => Math.round(p * 10) / 10),
+                backgroundColor: ["#3fb87f", "#f97316", "#e5484d"]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: OPCIONES_EJES_OSCURO
+        }
+    });
 
 }
 
