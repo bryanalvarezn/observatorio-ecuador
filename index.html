@@ -13,6 +13,8 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
 
 <style>
 
@@ -672,6 +674,182 @@ select:focus {
 
 }
 
+
+/* =========================================================
+   ANALISIS / METRICAS
+========================================================= */
+
+.analisis-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 14px;
+
+}
+
+.analisis-card {
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 18px 20px;
+
+}
+
+.analisis-card h4 {
+
+    margin: 0 0 4px;
+    font-family: var(--fuente-display);
+    font-size: 13.5px;
+    color: var(--texto);
+
+}
+
+.analisis-card .analisis-desc {
+
+    margin: 0 0 14px;
+    color: var(--texto-3);
+    font-size: 11.5px;
+    line-height: 1.5;
+
+}
+
+.analisis-card canvas {
+
+    max-height: 260px;
+
+}
+
+.analisis-controles {
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+    margin-bottom: 12px;
+
+}
+
+.analisis-controles label {
+
+    display: block;
+    margin-bottom: 5px;
+    color: var(--texto-3);
+    font-size: 10.5px;
+    font-weight: 600;
+
+}
+
+.analisis-controles select {
+
+    width: 100%;
+    padding: 8px 9px;
+    background: #08080a;
+    border: 1px solid var(--borde);
+    border-radius: 7px;
+    color: var(--texto);
+    font-family: var(--fuente-texto);
+    font-size: 11.5px;
+
+}
+
+.btn-analisis {
+
+    padding: 9px 16px;
+    border: none;
+    border-radius: 8px;
+    background: var(--acento);
+    color: #06131f;
+    font-family: var(--fuente-texto);
+    font-weight: 600;
+    font-size: 11.5px;
+    cursor: pointer;
+
+}
+
+.btn-analisis:hover {
+    background: #6bafff;
+}
+
+.resultado-analisis {
+
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: #08080a;
+    border: 1px solid var(--borde);
+    border-radius: 9px;
+    font-size: 12px;
+    color: var(--texto-2);
+    line-height: 1.7;
+    display: none;
+
+}
+
+.resultado-analisis.visible {
+    display: block;
+}
+
+.resultado-analisis .valor-clave {
+
+    font-family: var(--fuente-mono);
+    color: var(--acento);
+    font-weight: 600;
+
+}
+
+.resultado-analisis .interpretacion {
+
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--borde);
+    color: var(--texto);
+}
+
+.resultado-analisis .interpretacion.significativo {
+    color: #3fb87f;
+}
+
+.resultado-analisis .interpretacion.no-significativo {
+    color: var(--texto-3);
+}
+
+.tabla-contingencia {
+
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 11px;
+
+}
+
+.tabla-contingencia th,
+.tabla-contingencia td {
+
+    border: 1px solid var(--borde);
+    padding: 6px 8px;
+    text-align: center;
+    color: var(--texto-2);
+
+}
+
+.tabla-contingencia th {
+
+    background: var(--bg-panel-2);
+    color: var(--texto);
+    font-weight: 600;
+
+}
+
+@media(max-width: 980px) {
+
+    .analisis-grid,
+    .analisis-controles {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
 .principios-grid {
 
     display: grid;
@@ -909,6 +1087,10 @@ select:focus {
                 <span class="nav-icono">🗺️</span> Observatorio
             </button>
 
+            <button class="nav-item" data-vista="analisis">
+                <span class="nav-icono">📊</span> Análisis
+            </button>
+
         </nav>
 
         <nav class="nav-grupo">
@@ -1110,6 +1292,117 @@ select:focus {
 
 
         <!-- =================================================
+             VISTA: ANALISIS
+        ================================================== -->
+
+        <section class="vista" data-vista="analisis">
+
+            <div class="vista-header">
+                <h2>Análisis</h2>
+            </div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card">
+                    <h4>Tendencia temporal</h4>
+                    <p class="analisis-desc">
+                        Siniestros registrados por año, según su clasificación.
+                    </p>
+                    <canvas id="chartTendencia"></canvas>
+                </div>
+
+                <div class="analisis-card">
+                    <h4>Siniestros por zona</h4>
+                    <p class="analisis-desc">
+                        Montañas / volcanes con mayor número de siniestros registrados.
+                    </p>
+                    <canvas id="chartZonas"></canvas>
+                </div>
+
+            </div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card">
+
+                    <h4>Prueba Chi-cuadrado (χ²)</h4>
+                    <p class="analisis-desc">
+                        Evalúa si existe una asociación estadísticamente
+                        significativa entre dos variables categóricas.
+                    </p>
+
+                    <div class="analisis-controles">
+
+                        <div>
+                            <label>Variable A</label>
+                            <select id="chiVarA"></select>
+                        </div>
+
+                        <div>
+                            <label>Variable B</label>
+                            <select id="chiVarB"></select>
+                        </div>
+
+                    </div>
+
+                    <button class="btn-analisis" onclick="calcularChiCuadrado()">
+                        Calcular
+                    </button>
+
+                    <div class="resultado-analisis" id="resultadoChi"></div>
+
+                </div>
+
+                <div class="analisis-card">
+
+                    <h4>Prueba t de Student</h4>
+                    <p class="analisis-desc">
+                        Compara el promedio de una variable numérica entre
+                        dos grupos, para saber si la diferencia es real o
+                        producto del azar.
+                    </p>
+
+                    <div class="analisis-controles">
+
+                        <div>
+                            <label>Variable numérica</label>
+                            <select id="tVarNumerica">
+                                <option value="altitud">Altitud (m)</option>
+                                <option value="grupo">Tamaño del grupo</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Agrupar por</label>
+                            <select id="tVarCategorica"></select>
+                        </div>
+
+                        <div>
+                            <label>Grupo 1</label>
+                            <select id="tGrupo1"></select>
+                        </div>
+
+                        <div>
+                            <label>Grupo 2</label>
+                            <select id="tGrupo2"></select>
+                        </div>
+
+                    </div>
+
+                    <button class="btn-analisis" onclick="calcularTTest()">
+                        Calcular
+                    </button>
+
+                    <div class="resultado-analisis" id="resultadoTTest"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
              VISTA: PRINCIPIOS
         ================================================== -->
 
@@ -1229,6 +1522,12 @@ document.querySelectorAll(".nav-item").forEach(boton => {
         if (destino === "observatorio" && mapa) {
 
             ajustarAlturaMapa();
+
+        }
+
+        if (destino === "analisis") {
+
+            inicializarAnalisis();
 
         }
 
@@ -1755,6 +2054,447 @@ function limpiarFiltros() {
 
     mostrarSiniestrosEnMapa(todosLosSiniestros);
     actualizarEstadisticas(todosLosSiniestros);
+
+}
+
+
+/* =========================================================
+   ANALISIS / METRICAS
+========================================================= */
+
+let analisisInicializado = false;
+let chartTendenciaInstancia = null;
+let chartZonasInstancia = null;
+
+const VARIABLES_CATEGORICAS = [
+    { valor: "tipo_siniestro", etiqueta: "Tipo de siniestro" },
+    { valor: "abm_montana", etiqueta: "Clasificación ABM" },
+    { valor: "sexo", etiqueta: "Sexo" },
+    { valor: "rango_edad", etiqueta: "Rango de edad (OMS)" },
+    { valor: "causa_primaria", etiqueta: "Causa primaria" },
+    { valor: "consecuencia", etiqueta: "Consecuencia" },
+    { valor: "accidente_geografico", etiqueta: "Accidente geográfico" }
+];
+
+function esValorValido(valor) {
+
+    const texto = String(valor ?? "").trim();
+
+    return texto !== "" && normalizarTexto(texto) !== "NA";
+
+}
+
+function inicializarAnalisis() {
+
+    if (analisisInicializado) return;
+
+    analisisInicializado = true;
+
+    // --- Poblar selects de Chi-cuadrado ---
+
+    const selectChiA = document.getElementById("chiVarA");
+    const selectChiB = document.getElementById("chiVarB");
+
+    VARIABLES_CATEGORICAS.forEach(v => {
+
+        const opcionA = document.createElement("option");
+        opcionA.value = v.valor;
+        opcionA.textContent = v.etiqueta;
+        selectChiA.appendChild(opcionA);
+
+        const opcionB = document.createElement("option");
+        opcionB.value = v.valor;
+        opcionB.textContent = v.etiqueta;
+        selectChiB.appendChild(opcionB);
+
+    });
+
+    selectChiB.selectedIndex = 1;
+
+    // --- Poblar select "Agrupar por" de la prueba t ---
+
+    const selectTCategorica = document.getElementById("tVarCategorica");
+
+    VARIABLES_CATEGORICAS.forEach(v => {
+
+        const opcion = document.createElement("option");
+        opcion.value = v.valor;
+        opcion.textContent = v.etiqueta;
+        selectTCategorica.appendChild(opcion);
+
+    });
+
+    selectTCategorica.addEventListener("change", actualizarGruposTTest);
+    actualizarGruposTTest();
+
+    // --- Renderizar gráficas ---
+
+    renderTendencia();
+    renderZonas();
+
+}
+
+function actualizarGruposTTest() {
+
+    const campo = document.getElementById("tVarCategorica").value;
+
+    const valores = [...new Set(
+        todosLosRegistros
+            .map(r => String(r[campo] ?? "").trim())
+            .filter(esValorValido)
+    )].sort();
+
+    const grupo1 = document.getElementById("tGrupo1");
+    const grupo2 = document.getElementById("tGrupo2");
+
+    grupo1.innerHTML = "";
+    grupo2.innerHTML = "";
+
+    valores.forEach(valor => {
+
+        const op1 = document.createElement("option");
+        op1.value = valor;
+        op1.textContent = valor;
+        grupo1.appendChild(op1);
+
+        const op2 = document.createElement("option");
+        op2.value = valor;
+        op2.textContent = valor;
+        grupo2.appendChild(op2);
+
+    });
+
+    if (valores.length > 1) {
+        grupo2.selectedIndex = 1;
+    }
+
+}
+
+
+/* =========================================================
+   TENDENCIA TEMPORAL
+========================================================= */
+
+function renderTendencia() {
+
+    const porAnio = new Map();
+
+    todosLosSiniestros.forEach(s => {
+
+        if (!s.fecha) return;
+
+        const anio = new Date(s.fecha).getFullYear();
+
+        if (!porAnio.has(anio)) {
+            porAnio.set(anio, { total: 0, accidentes: 0, incidentes: 0 });
+        }
+
+        const registro = porAnio.get(anio);
+
+        registro.total++;
+
+        if (normalizarTexto(s.tipo_siniestro) === "A") registro.accidentes++;
+        if (normalizarTexto(s.tipo_siniestro) === "I") registro.incidentes++;
+
+    });
+
+    const anios = [...porAnio.keys()].sort();
+
+    const datosTotal = anios.map(a => porAnio.get(a).total);
+    const datosAccidentes = anios.map(a => porAnio.get(a).accidentes);
+    const datosIncidentes = anios.map(a => porAnio.get(a).incidentes);
+
+    if (chartTendenciaInstancia) chartTendenciaInstancia.destroy();
+
+    const ctx = document.getElementById("chartTendencia");
+
+    chartTendenciaInstancia = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: anios,
+            datasets: [
+                {
+                    label: "Total siniestros",
+                    data: datosTotal,
+                    borderColor: "#4d9fff",
+                    backgroundColor: "transparent",
+                    tension: 0.25
+                },
+                {
+                    label: "Accidentes",
+                    data: datosAccidentes,
+                    borderColor: "#e5484d",
+                    backgroundColor: "transparent",
+                    tension: 0.25
+                },
+                {
+                    label: "Incidentes",
+                    data: datosIncidentes,
+                    borderColor: "#f97316",
+                    backgroundColor: "transparent",
+                    tension: 0.25
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { labels: { color: "#a3a3ab", font: { size: 10.5 } } }
+            },
+            scales: {
+                x: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" } },
+                y: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" }, beginAtZero: true }
+            }
+        }
+    });
+
+}
+
+
+/* =========================================================
+   ANALISIS POR ZONA
+========================================================= */
+
+function renderZonas() {
+
+    const conteo = new Map();
+
+    todosLosSiniestros.forEach(s => {
+
+        const zona = String(s.nombre_volcan ?? "").trim();
+
+        if (!esValorValido(zona)) return;
+
+        conteo.set(zona, (conteo.get(zona) || 0) + 1);
+
+    });
+
+    const ordenado = [...conteo.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
+
+    const etiquetas = ordenado.map(e => e[0]);
+    const valores = ordenado.map(e => e[1]);
+
+    if (chartZonasInstancia) chartZonasInstancia.destroy();
+
+    const ctx = document.getElementById("chartZonas");
+
+    chartZonasInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: "Siniestros",
+                data: valores,
+                backgroundColor: "#4d9fff"
+            }]
+        },
+        options: {
+            indexAxis: "y",
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" }, beginAtZero: true },
+                y: { ticks: { color: "#a3a3ab", font: { size: 10 } }, grid: { display: false } }
+            }
+        }
+    });
+
+}
+
+
+/* =========================================================
+   PRUEBA CHI-CUADRADO DE INDEPENDENCIA
+========================================================= */
+
+function calcularChiCuadrado() {
+
+    const campoA = document.getElementById("chiVarA").value;
+    const campoB = document.getElementById("chiVarB").value;
+
+    const resultadoEl = document.getElementById("resultadoChi");
+
+    if (campoA === campoB) {
+
+        resultadoEl.className = "resultado-analisis visible";
+        resultadoEl.innerHTML =
+            "Elige dos variables distintas para comparar.";
+        return;
+
+    }
+
+    // Filtrar filas válidas para ambas variables
+    const filas = todosLosRegistros.filter(
+        r => esValorValido(r[campoA]) && esValorValido(r[campoB])
+    );
+
+    const categoriasA = [...new Set(filas.map(r => String(r[campoA]).trim()))].sort();
+    const categoriasB = [...new Set(filas.map(r => String(r[campoB]).trim()))].sort();
+
+    if (categoriasA.length < 2 || categoriasB.length < 2 || filas.length < 5) {
+
+        resultadoEl.className = "resultado-analisis visible";
+        resultadoEl.innerHTML =
+            "No hay suficientes datos válidos para calcular esta prueba " +
+            "con las variables seleccionadas.";
+        return;
+
+    }
+
+    // Tabla de contingencia observada
+    const observado = categoriasA.map(() => categoriasB.map(() => 0));
+
+    filas.forEach(r => {
+
+        const i = categoriasA.indexOf(String(r[campoA]).trim());
+        const j = categoriasB.indexOf(String(r[campoB]).trim());
+
+        observado[i][j]++;
+
+    });
+
+    const totalesFila = observado.map(fila => fila.reduce((a, b) => a + b, 0));
+    const totalesColumna = categoriasB.map((_, j) =>
+        observado.reduce((suma, fila) => suma + fila[j], 0)
+    );
+    const totalGeneral = totalesFila.reduce((a, b) => a + b, 0);
+
+    // Chi-cuadrado
+    let chi2 = 0;
+
+    categoriasA.forEach((_, i) => {
+        categoriasB.forEach((_, j) => {
+
+            const esperado = (totalesFila[i] * totalesColumna[j]) / totalGeneral;
+
+            if (esperado > 0) {
+                chi2 += Math.pow(observado[i][j] - esperado, 2) / esperado;
+            }
+
+        });
+    });
+
+    const gradosLibertad = (categoriasA.length - 1) * (categoriasB.length - 1);
+    const valorP = 1 - jStat.chisquare.cdf(chi2, gradosLibertad);
+
+    const esSignificativo = valorP < 0.05;
+
+    // Construir tabla HTML
+    let tablaHTML = '<table class="tabla-contingencia"><thead><tr><th></th>';
+
+    categoriasB.forEach(b => { tablaHTML += `<th>${b}</th>`; });
+    tablaHTML += "</tr></thead><tbody>";
+
+    categoriasA.forEach((a, i) => {
+        tablaHTML += `<tr><th>${a}</th>`;
+        categoriasB.forEach((_, j) => {
+            tablaHTML += `<td>${observado[i][j]}</td>`;
+        });
+        tablaHTML += "</tr>";
+    });
+
+    tablaHTML += "</tbody></table>";
+
+    resultadoEl.className = "resultado-analisis visible";
+    resultadoEl.innerHTML = `
+        ${tablaHTML}
+        <div style="margin-top:10px;">
+            χ² = <span class="valor-clave">${chi2.toFixed(3)}</span> &nbsp;|&nbsp;
+            gl = <span class="valor-clave">${gradosLibertad}</span> &nbsp;|&nbsp;
+            p = <span class="valor-clave">${valorP.toFixed(4)}</span> &nbsp;|&nbsp;
+            n = <span class="valor-clave">${totalGeneral}</span>
+        </div>
+        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
+            ${esSignificativo
+                ? "Existe una asociación estadísticamente significativa entre ambas variables (p < 0.05)."
+                : "No hay evidencia suficiente de asociación entre ambas variables (p ≥ 0.05)."}
+        </div>
+    `;
+
+}
+
+
+/* =========================================================
+   PRUEBA T DE STUDENT (Welch)
+========================================================= */
+
+function calcularTTest() {
+
+    const campoNumerico = document.getElementById("tVarNumerica").value;
+    const campoCategorico = document.getElementById("tVarCategorica").value;
+    const valorGrupo1 = document.getElementById("tGrupo1").value;
+    const valorGrupo2 = document.getElementById("tGrupo2").value;
+
+    const resultadoEl = document.getElementById("resultadoTTest");
+
+    if (valorGrupo1 === valorGrupo2) {
+
+        resultadoEl.className = "resultado-analisis visible";
+        resultadoEl.innerHTML = "Elige dos grupos distintos para comparar.";
+        return;
+
+    }
+
+    const extraerValores = (valorObjetivo) =>
+        todosLosRegistros
+            .filter(r => String(r[campoCategorico] ?? "").trim() === valorObjetivo)
+            .map(r => Number(r[campoNumerico]))
+            .filter(n => Number.isFinite(n));
+
+    const grupo1 = extraerValores(valorGrupo1);
+    const grupo2 = extraerValores(valorGrupo2);
+
+    if (grupo1.length < 3 || grupo2.length < 3) {
+
+        resultadoEl.className = "resultado-analisis visible";
+        resultadoEl.innerHTML =
+            "No hay suficientes datos numéricos válidos en alguno de los " +
+            "dos grupos para calcular esta prueba (mínimo 3 por grupo).";
+        return;
+
+    }
+
+    const media = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
+
+    const varianza = arr => {
+        const m = media(arr);
+        return arr.reduce((suma, x) => suma + Math.pow(x - m, 2), 0) / (arr.length - 1);
+    };
+
+    const m1 = media(grupo1), m2 = media(grupo2);
+    const v1 = varianza(grupo1), v2 = varianza(grupo2);
+    const n1 = grupo1.length, n2 = grupo2.length;
+
+    const errorEstandar = Math.sqrt(v1 / n1 + v2 / n2);
+    const estadisticoT = (m1 - m2) / errorEstandar;
+
+    const gradosLibertad =
+        Math.pow(v1 / n1 + v2 / n2, 2) /
+        (Math.pow(v1 / n1, 2) / (n1 - 1) + Math.pow(v2 / n2, 2) / (n2 - 1));
+
+    const valorP = 2 * (1 - jStat.studentt.cdf(Math.abs(estadisticoT), gradosLibertad));
+
+    const esSignificativo = valorP < 0.05;
+
+    resultadoEl.className = "resultado-analisis visible";
+    resultadoEl.innerHTML = `
+        <div>
+            <strong>${valorGrupo1}</strong>: media = <span class="valor-clave">${m1.toFixed(2)}</span> (n=${n1})
+            &nbsp;|&nbsp;
+            <strong>${valorGrupo2}</strong>: media = <span class="valor-clave">${m2.toFixed(2)}</span> (n=${n2})
+        </div>
+        <div style="margin-top:8px;">
+            t = <span class="valor-clave">${estadisticoT.toFixed(3)}</span> &nbsp;|&nbsp;
+            gl = <span class="valor-clave">${gradosLibertad.toFixed(1)}</span> &nbsp;|&nbsp;
+            p = <span class="valor-clave">${valorP.toFixed(4)}</span>
+        </div>
+        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
+            ${esSignificativo
+                ? "La diferencia entre ambos grupos es estadísticamente significativa (p < 0.05)."
+                : "No hay evidencia suficiente de una diferencia real entre ambos grupos (p ≥ 0.05)."}
+        </div>
+    `;
 
 }
 
