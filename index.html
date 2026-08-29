@@ -1422,6 +1422,70 @@ function iniciarMapa() {
         { collapsed: true }
     ).addTo(mapa);
 
+    // -----------------------------------------------------
+    // CARGA DE CAPAS ADICIONALES (rutas de ejemplo — ajusta
+    // según dónde subas cada archivo GeoJSON)
+    // -----------------------------------------------------
+
+    // Áreas protegidas (polígonos) — dataset SNAP/MAATE
+    cargarCapaGeoJSON(
+        "https://raw.githubusercontent.com/bryanalvarezn/observatorio-ecuador/main/maps_shapes/SNAP_AreasProtegidas_Ecuador_wgs84.json",
+        capaAreasNaturales,
+        {
+            style: {
+                color: "#3fb87f",
+                weight: 1.5,
+                fillColor: "#3fb87f",
+                fillOpacity: 0.15
+            },
+            onEachFeature: function (feature, capa) {
+
+                const p = feature.properties || {};
+
+                const nombre =
+                    p.Nombre || p.nombre || p.NOMBRE ||
+                    "Área protegida";
+
+                const categoria =
+                    p["Categoría"] || p.categoria || p.CATEGORIA || "";
+
+                const tipo =
+                    p.Tipo || p.tipo || p.TIPO || "";
+
+                capa.bindPopup(`
+                    <strong>${nombre}</strong>
+                    ${categoria ? `<br>Categoría: ${categoria}` : ""}
+                    ${tipo ? `<br>Tipo: ${tipo}` : ""}
+                `);
+
+            }
+        }
+    );
+
+    // Refugios de montaña (puntos) — pendiente de datos
+    cargarCapaGeoJSON(
+        "./data/refugios.geojson",
+        capaSitiosSeguridad,
+        {
+            pointToLayer: function (feature, latlng) {
+                return L.circleMarker(latlng, {
+                    radius: 6,
+                    fillColor: "#4d9fff",
+                    color: "#0a0a0c",
+                    weight: 1.5,
+                    fillOpacity: 0.9
+                });
+            },
+            onEachFeature: function (feature, capa) {
+                const nombre =
+                    feature.properties?.nombre ||
+                    feature.properties?.NOMBRE ||
+                    "Refugio";
+                capa.bindPopup(`<strong>🏠 ${nombre}</strong>`);
+            }
+        }
+    );
+
     ajustarAlturaMapa();
 
 }
