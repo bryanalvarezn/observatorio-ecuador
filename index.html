@@ -394,6 +394,47 @@ a {
 
 }
 
+.modo-conteo {
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+
+}
+
+.modo-conteo-etiqueta {
+
+    color: var(--texto-3);
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .2px;
+
+}
+
+.modo-conteo-btn {
+
+    padding: 5px 11px;
+    border: 1px solid var(--borde);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--texto-2);
+    font-family: var(--fuente-texto);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+
+}
+
+.modo-conteo-btn.activo {
+
+    background: var(--acento-suave);
+    border-color: var(--acento-dim);
+    color: var(--texto);
+
+}
+
 /* Version compacta usada en la vista Observatorio, para
    dejar el mayor espacio posible al mapa y los filtros */
 
@@ -581,6 +622,106 @@ select:focus {
     border-color: var(--acento);
 }
 
+.dropdown-multi {
+
+    position: relative;
+    margin-bottom: 11px;
+
+}
+
+.dropdown-multi-boton {
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 8px 9px;
+
+    background: #08080a;
+    border: 1px solid var(--borde);
+    border-radius: 7px;
+
+    color: var(--texto);
+    font-family: var(--fuente-texto);
+    font-size: 11.5px;
+
+    cursor: pointer;
+
+}
+
+.dropdown-multi-boton:hover {
+    border-color: var(--acento-dim);
+}
+
+.dropdown-multi-flecha {
+    color: var(--texto-3);
+    font-size: 10px;
+    transition: transform .15s;
+}
+
+.dropdown-multi.abierto .dropdown-multi-flecha {
+    transform: rotate(180deg);
+}
+
+.dropdown-multi-panel {
+
+    display: none;
+
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    z-index: 40;
+
+    max-height: 160px;
+    overflow-y: auto;
+
+    padding: 8px;
+
+    background: #0e0e12;
+    border: 1px solid var(--borde-fuerte);
+    border-radius: 8px;
+    box-shadow: 0 12px 24px rgba(0,0,0,.5);
+
+    flex-wrap: wrap;
+    gap: 5px;
+
+}
+
+.dropdown-multi.abierto .dropdown-multi-panel {
+    display: flex;
+}
+
+.filtro-anio-opcion {
+
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    padding: 3px 7px;
+    border-radius: 5px;
+    background: var(--bg-panel-2);
+
+    font-size: 10.5px;
+    color: var(--texto-2);
+    cursor: pointer;
+
+}
+
+.filtro-anio-opcion input {
+
+    margin: 0;
+    accent-color: var(--acento);
+    cursor: pointer;
+
+}
+
+.filtro-anio-opcion.marcado {
+    background: var(--acento-suave);
+    color: var(--texto);
+}
+
 .btn {
 
     width: 100%;
@@ -657,6 +798,20 @@ select:focus {
 
 }
 
+.credito-fuente {
+
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--borde);
+
+    color: var(--texto-3);
+    font-size: 10.5px;
+    font-style: italic;
+    line-height: 1.6;
+    max-width: 620px;
+
+}
+
 .codigo-formato {
 
     display: inline-block;
@@ -712,6 +867,37 @@ select:focus {
    ANALISIS / METRICAS
 ========================================================= */
 
+.analisis-filtro-global {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding: 12px 16px;
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+
+}
+
+.analisis-filtro-global label {
+
+    margin: 0;
+    color: var(--texto-2);
+    font-size: 11.5px;
+    font-weight: 600;
+    white-space: nowrap;
+
+}
+
+.analisis-filtro-global select {
+
+    max-width: 280px;
+    margin: 0;
+
+}
+
 .analisis-grid {
 
     display: grid;
@@ -751,6 +937,12 @@ select:focus {
 .analisis-card canvas {
 
     max-height: 260px;
+
+}
+
+.analisis-card-pequena canvas {
+
+    max-height: 150px;
 
 }
 
@@ -945,6 +1137,64 @@ select:focus {
 
 }
 
+.institucion-card {
+
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 20px 22px;
+    margin-top: 16px;
+    max-width: 620px;
+
+}
+
+.institucion-icono {
+
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 10px;
+
+    background: #ffffff;
+    border: 1px solid var(--borde);
+    padding: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.institucion-icono img {
+
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+}
+
+.institucion-card strong {
+
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--fuente-display);
+    font-size: 13.5px;
+    color: var(--texto);
+
+}
+
+.institucion-card span {
+
+    color: var(--texto-2);
+    font-size: 12.5px;
+    line-height: 1.6;
+
+}
+
 
 /* =========================================================
    POPUP DEL MAPA
@@ -1118,9 +1368,7 @@ select:focus {
             <div class="marca-fila">
 
                 <div>
-                    <div class="icono">🏔️</div>
                     <h1>Observatorio Ecuatoriano<br>de Accidentes en Montaña</h1>
-                    <small>Datos &amp; monitoreo</small>
                 </div>
 
                 <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
@@ -1130,7 +1378,7 @@ select:focus {
             </div>
 
             <div class="marca-contacto-movil">
-                Bryan Alvarez · alvarezbran@outlook.com
+                Fundador: Bryan Alvarez · alvarezbran@outlook.com
             </div>
 
         </div>
@@ -1161,6 +1409,16 @@ select:focus {
 
                 <button class="nav-item" data-vista="principios">
                     <span class="nav-icono">🧭</span> Principios
+                </button>
+
+            </nav>
+
+            <nav class="nav-grupo">
+
+                <div class="nav-grupo-titulo">Créditos</div>
+
+                <button class="nav-item" data-vista="agradecimientos">
+                    <span class="nav-icono">🤝</span> Agradecimientos
                 </button>
 
             </nav>
@@ -1205,6 +1463,20 @@ select:focus {
 
                 <div class="columna-observatorio">
 
+                    <div class="modo-conteo">
+
+                        <span class="modo-conteo-etiqueta">Contar por:</span>
+
+                        <button class="modo-conteo-btn activo" data-modo="personas" onclick="cambiarModoConteo('personas')">
+                            Personas afectadas
+                        </button>
+
+                        <button class="modo-conteo-btn" data-modo="siniestros" onclick="cambiarModoConteo('siniestros')">
+                            Siniestros
+                        </button>
+
+                    </div>
+
                     <div class="estadisticas estadisticas-compactas">
 
                         <div class="stat">
@@ -1224,7 +1496,7 @@ select:focus {
 
                         <div class="stat">
                             <div class="stat-numero" id="totalPersonas">—</div>
-                            <div class="stat-label">Personas registradas</div>
+                            <div class="stat-label">Personas involucradas</div>
                         </div>
 
                     </div>
@@ -1247,7 +1519,16 @@ select:focus {
                     <h3>Filtros de observación</h3>
 
                     <label>Año</label>
-                    <select id="filtroAnio"><option value="">Todos los años</option></select>
+                    <div class="dropdown-multi" id="dropdownAnio">
+
+                        <button type="button" class="dropdown-multi-boton" id="botonFiltroAnio" onclick="toggleDropdownAnio()">
+                            <span id="textoFiltroAnio">Todos los años</span>
+                            <span class="dropdown-multi-flecha">▾</span>
+                        </button>
+
+                        <div class="dropdown-multi-panel" id="filtroAnioCaja"></div>
+
+                    </div>
 
                     <label>Tipo de siniestro</label>
                     <select id="filtroTipo">
@@ -1259,14 +1540,14 @@ select:focus {
                     <label>Clasificación de montaña</label>
                     <select id="filtroABM"><option value="">Todas</option></select>
 
-                    <label>Montaña / volcán</label>
+                    <label>Lugar</label>
                     <select id="filtroVolcan"><option value="">Todos</option></select>
-
-                    <label>Consecuencia</label>
-                    <select id="filtroConsecuencia"><option value="">Todas</option></select>
 
                     <label>Causa primaria</label>
                     <select id="filtroCausa"><option value="">Todas</option></select>
+
+                    <label>Consecuencia</label>
+                    <select id="filtroConsecuencia"><option value="">Todas</option></select>
 
                     <button class="btn btn-aplicar" onclick="aplicarFiltros()">Aplicar filtros</button>
                     <button class="btn btn-limpiar" onclick="limpiarFiltros()">Limpiar filtros</button>
@@ -1348,6 +1629,12 @@ select:focus {
 
             </div>
 
+            <div class="credito-fuente">
+                Los datos históricos utilizados en esta primera fase fueron
+                facilitados por el Cuerpo de Bomberos del Distrito
+                Metropolitano de Quito.
+            </div>
+
         </section>
 
 
@@ -1359,6 +1646,15 @@ select:focus {
 
             <div class="vista-header">
                 <h2>Análisis</h2>
+            </div>
+
+            <div class="analisis-filtro-global">
+
+                <label>Filtrar todo el análisis por lugar</label>
+                <select id="analisisFiltroLugar" onchange="cambiarFiltroLugarAnalisis()">
+                    <option value="">Todos los lugares</option>
+                </select>
+
             </div>
 
             <div class="analisis-grid">
@@ -1424,14 +1720,67 @@ select:focus {
 
             <div class="analisis-grid">
 
-                <div class="analisis-card" style="grid-column: 1 / -1;">
+                <div class="analisis-card analisis-card-pequena">
                     <h4>Tiempo de respuesta de emergencia</h4>
                     <p class="analisis-desc">
                         Tiempo promedio entre el despacho y la llegada al lugar
                         del siniestro (minutos), según clasificación de montaña.
+                        Se excluyen casos atípicos (≥ 9 horas) que distorsionarían el promedio.
                     </p>
                     <canvas id="chartTiempoRespuesta"></canvas>
                     <div id="avisoTiempoRespuesta" class="analisis-desc" style="margin-top:10px;"></div>
+                </div>
+
+            </div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card">
+                    <h4>Siniestros por hora del día</h4>
+                    <p class="analisis-desc">
+                        Hora de despacho de los siniestros registrados (0-23h).
+                    </p>
+                    <canvas id="chartPorHora"></canvas>
+                </div>
+
+                <div class="analisis-card">
+                    <h4>Siniestros por día de la semana</h4>
+                    <p class="analisis-desc">
+                        Distribución de siniestros según el día de la semana.
+                    </p>
+                    <canvas id="chartPorDiaSemana"></canvas>
+                </div>
+
+            </div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card">
+                    <h4>Distribución por sexo</h4>
+                    <p class="analisis-desc">
+                        Personas registradas según sexo.
+                    </p>
+                    <canvas id="chartPorSexo"></canvas>
+                </div>
+
+                <div class="analisis-card">
+                    <h4>Distribución por edad</h4>
+                    <p class="analisis-desc">
+                        Personas registradas según rango de edad (categorías OMS).
+                    </p>
+                    <canvas id="chartPorEdad"></canvas>
+                </div>
+
+            </div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card" style="grid-column: 1 / -1;">
+                    <h4>Tamaño del grupo</h4>
+                    <p class="analisis-desc">
+                        Cantidad de personas que integraban el grupo al momento del siniestro.
+                    </p>
+                    <canvas id="chartTamanoGrupo"></canvas>
                 </div>
 
             </div>
@@ -1485,6 +1834,69 @@ select:focus {
                     personas involucradas.</span>
                 </div>
 
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VISTA: AGRADECIMIENTOS
+        ================================================== -->
+
+        <section class="vista" data-vista="agradecimientos">
+
+            <div class="vista-header">
+                <h2>Agradecimientos</h2>
+            </div>
+
+            <p class="texto-vista">
+                Este Observatorio existe gracias a la colaboración de
+                instituciones que han facilitado información para su
+                construcción. A medida que el proyecto crezca, se solicitará
+                la colaboración de más instituciones, y esta sección se irá
+                ampliando para reconocerlas.
+            </p>
+
+            <div class="institucion-card">
+
+                <div class="institucion-icono">
+                    <img src="https://www.bomberosquito.gob.ec/wp-content/uploads/2021/10/logo-bomberos.png" alt="Escudo del Cuerpo de Bomberos de Quito">
+                </div>
+
+                <div>
+                    <strong>Cuerpo de Bomberos del Distrito Metropolitano de Quito</strong>
+                    <span>
+                        Fuente de la base histórica de siniestros utilizada
+                        en esta primera fase del Observatorio.
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="credito-fuente" style="margin-top:24px;">
+                <strong style="color:var(--texto-2);">Descargo de responsabilidad:</strong>
+                Los datos históricos utilizados en este Observatorio fueron
+                facilitados por las instituciones mencionadas en esta sección
+                con fines de estudio, prevención y divulgación. El
+                procesamiento, clasificación, análisis y visualización de la
+                información es responsabilidad exclusiva del Observatorio
+                Ecuatoriano de Accidentes en Montaña, y no compromete ni
+                representa necesariamente la posición oficial de las
+                instituciones fuente. Cualquier error de interpretación,
+                clasificación o presentación de los datos es responsabilidad
+                del equipo del Observatorio, no de las instituciones que
+                facilitaron la información.
+                <br><br>
+                La información presentada en este sitio tiene fines
+                exclusivamente informativos, estadísticos y de prevención.
+                No constituye una garantía de seguridad ni sustituye la
+                planificación, el equipamiento adecuado, la capacitación
+                técnica ni el juicio propio de quienes realizan actividades
+                al aire libre. El uso de esta plataforma no elimina el
+                riesgo inherente a las actividades de montaña, y el
+                Observatorio no se hace responsable por accidentes,
+                lesiones, pérdidas o daños de cualquier naturaleza que
+                puedan derivarse del uso de esta información.
             </div>
 
         </section>
@@ -1905,18 +2317,58 @@ async function cargarDatos() {
    ESTADISTICAS
 ========================================================= */
 
+let modoConteoActual = "personas";
+let ultimoConjuntoEstadisticas = [];
+
+function cambiarModoConteo(modo) {
+
+    modoConteoActual = modo;
+
+    document.querySelectorAll(".modo-conteo-btn").forEach(btn => {
+        btn.classList.toggle("activo", btn.dataset.modo === modo);
+    });
+
+    actualizarEstadisticas(ultimoConjuntoEstadisticas);
+
+}
+
 function actualizarEstadisticas(siniestros) {
 
-    const totalAccidentes = siniestros
-        .filter(s => normalizarTexto(s.tipo_siniestro) === "A")
-        .reduce((total, s) => total + (s.afectados || 0), 0);
+    ultimoConjuntoEstadisticas = siniestros;
 
-    const totalIncidentes = siniestros
-        .filter(s => normalizarTexto(s.tipo_siniestro) === "I")
-        .reduce((total, s) => total + (s.afectados || 0), 0);
+    let totalAccidentes, totalIncidentes;
 
+    if (modoConteoActual === "siniestros") {
+
+        // Cuenta el EVENTO (siniestro) completo, sin importar
+        // cuántas personas involucró.
+        totalAccidentes = siniestros.filter(
+            s => normalizarTexto(s.tipo_siniestro) === "A"
+        ).length;
+
+        totalIncidentes = siniestros.filter(
+            s => normalizarTexto(s.tipo_siniestro) === "I"
+        ).length;
+
+    } else {
+
+        // Cuenta PERSONAS afectadas (columna accidentados),
+        // según la clasificación del siniestro al que pertenecen.
+        totalAccidentes = siniestros
+            .filter(s => normalizarTexto(s.tipo_siniestro) === "A")
+            .reduce((total, s) => total + (s.afectados || 0), 0);
+
+        totalIncidentes = siniestros
+            .filter(s => normalizarTexto(s.tipo_siniestro) === "I")
+            .reduce((total, s) => total + (s.afectados || 0), 0);
+
+    }
+
+    // "Personas involucradas" es una métrica fija: la suma total de
+    // la columna accidentados (personas efectivamente afectadas),
+    // sin importar el modo de conteo elegido para Accidentes/Incidentes.
     const totalPersonas = siniestros.reduce(
-        (total, s) => total + s.personas, 0
+        (total, s) => total + (s.afectados || 0), 0
     );
 
     document.getElementById("totalSiniestros").textContent = siniestros.length;
@@ -1960,17 +2412,90 @@ function llenarFiltros(siniestros) {
 
     const anios = [...new Set(
         siniestros
-            .map(s => s.fecha ? new Date(s.fecha).getFullYear() : null)
+            .map(s => s.fecha ? new Date(s.fecha).getUTCFullYear() : null)
             .filter(Boolean)
     )].sort();
 
-    llenarSelect("filtroAnio", anios);
+    llenarCajaAnios(anios);
     llenarSelect("filtroABM", obtenerValores(siniestros, "abm_montana"));
     llenarSelect("filtroVolcan", obtenerValores(siniestros, "nombre_volcan"));
-    llenarSelect("filtroConsecuencia", obtenerValores(siniestros, "consecuencia"));
     llenarSelect("filtroCausa", obtenerValores(siniestros, "causa_primaria"));
+    llenarSelect("filtroConsecuencia", obtenerValores(siniestros, "consecuencia"));
 
 }
+
+
+/* =========================================================
+   CASILLAS DE AÑO (SELECCION MULTIPLE)
+========================================================= */
+
+function llenarCajaAnios(anios) {
+
+    const caja = document.getElementById("filtroAnioCaja");
+
+    caja.innerHTML = "";
+
+    anios.forEach(anio => {
+
+        const etiqueta = document.createElement("label");
+        etiqueta.className = "filtro-anio-opcion";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.value = anio;
+
+        input.addEventListener("change", () => {
+            etiqueta.classList.toggle("marcado", input.checked);
+            actualizarTextoFiltroAnio();
+        });
+
+        etiqueta.appendChild(input);
+        etiqueta.appendChild(document.createTextNode(anio));
+
+        caja.appendChild(etiqueta);
+
+    });
+
+}
+
+function obtenerAniosSeleccionados() {
+
+    return [...document.querySelectorAll('#filtroAnioCaja input:checked')]
+        .map(input => input.value);
+
+}
+
+function actualizarTextoFiltroAnio() {
+
+    const seleccionados = obtenerAniosSeleccionados();
+    const texto = document.getElementById("textoFiltroAnio");
+
+    if (seleccionados.length === 0) {
+        texto.textContent = "Todos los años";
+    } else if (seleccionados.length <= 2) {
+        texto.textContent = seleccionados.join(", ");
+    } else {
+        texto.textContent = seleccionados.length + " años seleccionados";
+    }
+
+}
+
+function toggleDropdownAnio() {
+
+    document.getElementById("dropdownAnio").classList.toggle("abierto");
+
+}
+
+// Cerrar el desplegable al hacer clic fuera de él
+document.addEventListener("click", (evento) => {
+
+    const dropdown = document.getElementById("dropdownAnio");
+
+    if (dropdown && !dropdown.contains(evento.target)) {
+        dropdown.classList.remove("abierto");
+    }
+
+});
 
 
 /* =========================================================
@@ -2046,7 +2571,7 @@ function crearPopup(r) {
             <div class="popup-tipo ${clase}">${tipoTexto}</div>
 
             <div class="popup-dato"><strong>Fecha:</strong> ${fecha}</div>
-            <div class="popup-dato"><strong>Montaña / volcán:</strong> ${r.nombre_volcan || "No registrado"}</div>
+            <div class="popup-dato"><strong>Lugar:</strong> ${r.nombre_volcan || "No registrado"}</div>
             <div class="popup-dato"><strong>Accidente geográfico:</strong> ${r.accidente_geografico || "No registrado"}</div>
             <div class="popup-dato"><strong>Altitud:</strong> ${r.altitud || "No registrada"} m</div>
             <div class="popup-dato"><strong>Clasificación:</strong> ${r.abm_montana || "No registrada"}</div>
@@ -2066,7 +2591,7 @@ function crearPopup(r) {
 
 function aplicarFiltros() {
 
-    const anio = document.getElementById("filtroAnio").value;
+    const aniosSeleccionados = obtenerAniosSeleccionados();
     const tipo = document.getElementById("filtroTipo").value;
     const abm = document.getElementById("filtroABM").value;
     const volcan = document.getElementById("filtroVolcan").value;
@@ -2075,7 +2600,11 @@ function aplicarFiltros() {
 
     const filtrados = todosLosSiniestros.filter(r => {
 
-        if (anio && (!r.fecha || new Date(r.fecha).getFullYear().toString() !== anio)) return false;
+        if (
+            aniosSeleccionados.length > 0 &&
+            (!r.fecha || !aniosSeleccionados.includes(new Date(r.fecha).getUTCFullYear().toString()))
+        ) return false;
+
         if (tipo && normalizarTexto(r.tipo_siniestro) !== tipo) return false;
         if (abm && String(r.abm_montana ?? "").trim() !== abm) return false;
         if (volcan && String(r.nombre_volcan ?? "").trim() !== volcan) return false;
@@ -2098,9 +2627,16 @@ function aplicarFiltros() {
 
 function limpiarFiltros() {
 
+    document.querySelectorAll('#filtroAnioCaja input:checked').forEach(input => {
+        input.checked = false;
+        input.closest(".filtro-anio-opcion").classList.remove("marcado");
+    });
+
+    actualizarTextoFiltroAnio();
+
     [
-        "filtroAnio", "filtroTipo", "filtroABM", "filtroVolcan",
-        "filtroConsecuencia", "filtroCausa"
+        "filtroTipo", "filtroABM", "filtroVolcan",
+        "filtroCausa", "filtroConsecuencia"
     ].forEach(id => document.getElementById(id).value = "");
 
     mostrarSiniestrosEnMapa(todosLosSiniestros);
@@ -2114,6 +2650,7 @@ function limpiarFiltros() {
 ========================================================= */
 
 let analisisInicializado = false;
+let filtroLugarAnalisis = "";
 let chartTendenciaInstancia = null;
 let chartZonasInstancia = null;
 let chartEstacionalidadInstancia = null;
@@ -2121,6 +2658,11 @@ let chartCausasInstancia = null;
 let chartGravedadInstancia = null;
 let chartABMInstancia = null;
 let chartTiempoRespuestaInstancia = null;
+let chartPorHoraInstancia = null;
+let chartPorDiaSemanaInstancia = null;
+let chartPorSexoInstancia = null;
+let chartPorEdadInstancia = null;
+let chartTamanoGrupoInstancia = null;
 
 function esValorValido(valor) {
 
@@ -2130,11 +2672,35 @@ function esValorValido(valor) {
 
 }
 
-function inicializarAnalisis() {
+function obtenerSiniestrosAnalisis() {
 
-    if (analisisInicializado) return;
+    if (!filtroLugarAnalisis) return todosLosSiniestros;
 
-    analisisInicializado = true;
+    return todosLosSiniestros.filter(
+        s => String(s.nombre_volcan ?? "").trim() === filtroLugarAnalisis
+    );
+
+}
+
+function obtenerRegistrosAnalisis() {
+
+    if (!filtroLugarAnalisis) return todosLosRegistros;
+
+    return todosLosRegistros.filter(
+        r => String(r.nombre_volcan ?? "").trim() === filtroLugarAnalisis
+    );
+
+}
+
+function cambiarFiltroLugarAnalisis() {
+
+    filtroLugarAnalisis = document.getElementById("analisisFiltroLugar").value;
+
+    renderTodosLosAnalisis();
+
+}
+
+function renderTodosLosAnalisis() {
 
     renderTendencia();
     renderZonas();
@@ -2143,6 +2709,25 @@ function inicializarAnalisis() {
     renderGravedad();
     renderABM();
     renderTiempoRespuesta();
+    renderPorHora();
+    renderPorDiaSemana();
+    renderPorSexo();
+    renderPorEdad();
+    renderTamanoGrupo();
+
+}
+
+function inicializarAnalisis() {
+
+    if (analisisInicializado) return;
+
+    analisisInicializado = true;
+
+    const lugares = obtenerValores(todosLosSiniestros, "nombre_volcan");
+
+    llenarSelect("analisisFiltroLugar", lugares);
+
+    renderTodosLosAnalisis();
 
 }
 
@@ -2171,11 +2756,11 @@ function renderTendencia() {
 
     const porAnio = new Map();
 
-    todosLosSiniestros.forEach(s => {
+    obtenerSiniestrosAnalisis().forEach(s => {
 
         if (!s.fecha) return;
 
-        const anio = new Date(s.fecha).getFullYear();
+        const anio = new Date(s.fecha).getUTCFullYear();
 
         if (!porAnio.has(anio)) {
             porAnio.set(anio, { total: 0, accidentes: 0, incidentes: 0 });
@@ -2248,7 +2833,7 @@ function renderZonas() {
 
     const conteo = new Map();
 
-    todosLosSiniestros.forEach(s => {
+    obtenerSiniestrosAnalisis().forEach(s => {
 
         const zona = String(s.nombre_volcan ?? "").trim();
 
@@ -2306,11 +2891,11 @@ function renderEstacionalidad() {
 
     const conteoPorMes = new Array(12).fill(0);
 
-    todosLosSiniestros.forEach(s => {
+    obtenerSiniestrosAnalisis().forEach(s => {
 
         if (!s.fecha) return;
 
-        const mes = new Date(s.fecha).getMonth();
+        const mes = new Date(s.fecha).getUTCMonth();
 
         conteoPorMes[mes]++;
 
@@ -2348,7 +2933,7 @@ function renderCausas() {
 
     const conteo = new Map();
 
-    todosLosSiniestros.forEach(s => {
+    obtenerSiniestrosAnalisis().forEach(s => {
 
         const causa = String(s.causa_primaria ?? "").trim();
 
@@ -2404,7 +2989,7 @@ function renderGravedad() {
 
     const conteo = new Map();
 
-    todosLosRegistros.forEach(r => {
+    obtenerRegistrosAnalisis().forEach(r => {
 
         const consecuencia = String(r.consecuencia ?? "").trim();
 
@@ -2457,7 +3042,7 @@ function renderABM() {
 
     const conteo = { "Baja Montaña": 0, "Media Montaña": 0, "Alta Montaña": 0 };
 
-    todosLosSiniestros.forEach(s => {
+    obtenerSiniestrosAnalisis().forEach(s => {
 
         const clasificacion = String(s.abm_montana ?? "").trim();
 
@@ -2518,11 +3103,16 @@ function renderTiempoRespuesta() {
     // Estos campos deben existir en historical_events_public.
     // Si el registro no los tiene, el análisis simplemente los omite.
 
+    const LIMITE_MINUTOS = 9 * 60; // 9 horas: casos atípicos que
+                                     // deben explicarse aparte, no
+                                     // promediarse con el resto.
+
     const tiemposPorABM = { "Baja Montaña": [], "Media Montaña": [], "Alta Montaña": [] };
 
     let totalConDatos = 0;
+    let totalExcluidos = 0;
 
-    todosLosRegistros.forEach(r => {
+    obtenerRegistrosAnalisis().forEach(r => {
 
         const despacho = horaASegundos(r.hora_despacho);
         const arribo = horaASegundos(r.hora_arribo);
@@ -2534,6 +3124,11 @@ function renderTiempoRespuesta() {
         let diferenciaMin = (arribo - despacho) / 60;
 
         if (diferenciaMin <= 0) return; // descarta datos inconsistentes
+
+        if (diferenciaMin >= LIMITE_MINUTOS) {
+            totalExcluidos++;
+            return; // caso atípico, se excluye del promedio
+        }
 
         tiemposPorABM[abm].push(diferenciaMin);
         totalConDatos++;
@@ -2550,7 +3145,11 @@ function renderTiempoRespuesta() {
 
     }
 
-    aviso.textContent = `Calculado sobre ${totalConDatos} registros con datos de horario válidos.`;
+    aviso.textContent =
+        `Calculado sobre ${totalConDatos} registros con datos de horario válidos` +
+        (totalExcluidos > 0
+            ? ` (se excluyeron ${totalExcluidos} casos atípicos de 9+ horas).`
+            : ".");
 
     const etiquetas = Object.keys(tiemposPorABM);
 
@@ -2576,6 +3175,254 @@ function renderTiempoRespuesta() {
                 label: "Minutos promedio",
                 data: promedios.map(p => Math.round(p * 10) / 10),
                 backgroundColor: ["#3fb87f", "#f97316", "#e5484d"]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: OPCIONES_EJES_OSCURO
+        }
+    });
+
+}
+
+
+/* =========================================================
+   SINIESTROS POR HORA DEL DIA
+========================================================= */
+
+function renderPorHora() {
+
+    const conteoPorHora = new Array(24).fill(0);
+
+    obtenerRegistrosAnalisis().forEach(r => {
+
+        const segundos = horaASegundos(r.hora_despacho);
+
+        if (segundos === null) return;
+
+        const hora = Math.floor(segundos / 3600) % 24;
+
+        conteoPorHora[hora]++;
+
+    });
+
+    if (chartPorHoraInstancia) chartPorHoraInstancia.destroy();
+
+    const ctx = document.getElementById("chartPorHora");
+
+    chartPorHoraInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: [...Array(24).keys()].map(h => h + "h"),
+            datasets: [{
+                label: "Siniestros",
+                data: conteoPorHora,
+                backgroundColor: "#4d9fff"
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: OPCIONES_EJES_OSCURO
+        }
+    });
+
+}
+
+
+/* =========================================================
+   SINIESTROS POR DIA DE LA SEMANA
+========================================================= */
+
+function renderPorDiaSemana() {
+
+    const nombresDias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+    const conteoPorDia = new Array(7).fill(0);
+
+    obtenerSiniestrosAnalisis().forEach(s => {
+
+        if (!s.fecha) return;
+
+        const diaSemana = new Date(s.fecha).getUTCDay();
+
+        conteoPorDia[diaSemana]++;
+
+    });
+
+    // Reordenar para que la semana inicie en lunes
+    const orden = [1, 2, 3, 4, 5, 6, 0];
+    const etiquetas = orden.map(i => nombresDias[i]);
+    const valores = orden.map(i => conteoPorDia[i]);
+
+    if (chartPorDiaSemanaInstancia) chartPorDiaSemanaInstancia.destroy();
+
+    const ctx = document.getElementById("chartPorDiaSemana");
+
+    chartPorDiaSemanaInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: "Siniestros",
+                data: valores,
+                backgroundColor: "#3fb87f"
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: OPCIONES_EJES_OSCURO
+        }
+    });
+
+}
+
+
+/* =========================================================
+   DISTRIBUCION POR SEXO
+========================================================= */
+
+function renderPorSexo() {
+
+    const conteo = new Map();
+
+    obtenerRegistrosAnalisis().forEach(r => {
+
+        const sexo = String(r.sexo ?? "").trim();
+
+        if (!esValorValido(sexo)) return;
+
+        const etiqueta = sexo.toUpperCase() === "M" ? "Masculino" :
+                          sexo.toUpperCase() === "F" ? "Femenino" : sexo;
+
+        conteo.set(etiqueta, (conteo.get(etiqueta) || 0) + 1);
+
+    });
+
+    if (chartPorSexoInstancia) chartPorSexoInstancia.destroy();
+
+    const ctx = document.getElementById("chartPorSexo");
+
+    chartPorSexoInstancia = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: [...conteo.keys()],
+            datasets: [{
+                data: [...conteo.values()],
+                backgroundColor: ["#4d9fff", "#f472b6", "#94a3b8"],
+                borderColor: "#131316",
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: "bottom", labels: { color: "#a3a3ab", font: { size: 10.5 } } }
+            }
+        }
+    });
+
+}
+
+
+/* =========================================================
+   DISTRIBUCION POR EDAD (CATEGORIAS OMS)
+========================================================= */
+
+function renderPorEdad() {
+
+    const ordenCategorias = [
+        "Menor de 1 año",
+        "Niño (1-9 años)",
+        "Adolescente (10-19 años)",
+        "Adulto (20-64 años)",
+        "Adulto mayor (65+ años)"
+    ];
+
+    const conteo = new Map(ordenCategorias.map(c => [c, 0]));
+
+    obtenerRegistrosAnalisis().forEach(r => {
+
+        const categoria = String(r.rango_edad ?? "").trim();
+
+        if (conteo.has(categoria)) {
+            conteo.set(categoria, conteo.get(categoria) + 1);
+        }
+
+    });
+
+    if (chartPorEdadInstancia) chartPorEdadInstancia.destroy();
+
+    const ctx = document.getElementById("chartPorEdad");
+
+    chartPorEdadInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: [...conteo.keys()],
+            datasets: [{
+                label: "Personas",
+                data: [...conteo.values()],
+                backgroundColor: "#a78bfa"
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    ticks: { color: "#6b6b73", font: { size: 9 } },
+                    grid: { color: "#29292f" }
+                },
+                y: { ticks: { color: "#6b6b73" }, grid: { color: "#29292f" }, beginAtZero: true }
+            }
+        }
+    });
+
+}
+
+
+/* =========================================================
+   TAMAÑO DEL GRUPO
+========================================================= */
+
+function renderTamanoGrupo() {
+
+    const rangos = [
+        { etiqueta: "1 persona", prueba: n => n === 1 },
+        { etiqueta: "2-3 personas", prueba: n => n >= 2 && n <= 3 },
+        { etiqueta: "4-6 personas", prueba: n => n >= 4 && n <= 6 },
+        { etiqueta: "7-10 personas", prueba: n => n >= 7 && n <= 10 },
+        { etiqueta: "Más de 10", prueba: n => n > 10 }
+    ];
+
+    const conteo = rangos.map(() => 0);
+
+    obtenerSiniestrosAnalisis().forEach(s => {
+
+        const tamano = Number(s.grupo);
+
+        if (!Number.isFinite(tamano)) return;
+
+        const indice = rangos.findIndex(r => r.prueba(tamano));
+
+        if (indice !== -1) conteo[indice]++;
+
+    });
+
+    if (chartTamanoGrupoInstancia) chartTamanoGrupoInstancia.destroy();
+
+    const ctx = document.getElementById("chartTamanoGrupo");
+
+    chartTamanoGrupoInstancia = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: rangos.map(r => r.etiqueta),
+            datasets: [{
+                label: "Siniestros",
+                data: conteo,
+                backgroundColor: "#f472b6"
             }]
         },
         options: {
