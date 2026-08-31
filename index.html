@@ -789,6 +789,13 @@ select:focus {
 
 }
 
+.bloque-alerta {
+
+    background: rgba(214,138,52,.08);
+    border-color: var(--ambar);
+
+}
+
 .bloque-metodologia h4 {
 
     margin: 0 0 8px;
@@ -895,6 +902,65 @@ select:focus {
 
     max-width: 280px;
     margin: 0;
+
+}
+
+.analisis-seccion-titulo {
+
+    font-family: var(--fuente-display);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--texto-3);
+    margin-bottom: 10px;
+
+}
+
+.btn-analisis-detallado {
+
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 14px;
+
+    background: var(--bg-panel);
+    border: 1px dashed var(--borde-fuerte);
+    border-radius: 10px;
+
+    color: var(--texto-2);
+    font-family: var(--fuente-texto);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+
+}
+
+.btn-analisis-detallado:hover {
+    color: var(--texto);
+    border-color: var(--acento-dim);
+}
+
+.analisis-detallado {
+
+    display: none;
+
+}
+
+.analisis-detallado.visible {
+    display: block;
+}
+
+.nota-metodologica {
+
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--borde);
+
+    color: var(--texto-3);
+    font-size: 10px;
+    font-style: italic;
+    line-height: 1.5;
 
 }
 
@@ -1569,6 +1635,62 @@ select:focus {
                 <h2>Metodología</h2>
             </div>
 
+            <div class="bloque-metodologia bloque-alerta">
+
+                <h4>⚠️ Cobertura de los datos</h4>
+
+                <p class="texto-vista" style="margin:0;">
+                    Esta primera fase utiliza registros facilitados por el
+                    <strong>Cuerpo de Bomberos del Distrito Metropolitano de
+                    Quito</strong>. Los datos presentados
+                    <strong>todavía no representan el universo nacional de
+                    accidentes en montaña</strong>: pueden existir eventos
+                    atendidos por otras instituciones (otros cuerpos de
+                    bomberos, ECU 911, Policía Nacional, Fuerzas Armadas,
+                    Cruz Roja, operadores privados o comunidades locales) o
+                    eventos que nunca fueron reportados oficialmente, que no
+                    están incluidos en esta base.
+                    <br><br>
+                    Por este motivo, los resultados deben interpretarse como
+                    <strong>tendencias dentro de los registros disponibles</strong>,
+                    no como una descripción definitiva de todos los
+                    accidentes ocurridos en el país. A medida que se
+                    incorporen más fuentes institucionales, la cobertura del
+                    Observatorio se ampliará progresivamente.
+                </p>
+
+            </div>
+
+            <div class="bloque-metodologia">
+
+                <h4>Definiciones</h4>
+
+                <p class="texto-vista" style="margin:0 0 10px;">
+                    Para evitar ambigüedad, el Observatorio utiliza estas
+                    definiciones de trabajo:
+                </p>
+
+                <p class="texto-vista" style="margin:0 0 8px;">
+                    <strong>Siniestro:</strong> unidad general de registro.
+                    Es el evento macro, independientemente de cuántas
+                    personas estuvieron involucradas.
+                </p>
+
+                <p class="texto-vista" style="margin:0 0 8px;">
+                    <strong>Accidente:</strong> siniestro que produjo
+                    lesiones, fallecimientos o daños importantes a una o más
+                    personas del grupo.
+                </p>
+
+                <p class="texto-vista" style="margin:0;">
+                    <strong>Incidente:</strong> siniestro que no causó una
+                    lesión grave, pero que implicó riesgo, activación de
+                    protocolos de rescate o pudo haber derivado en un
+                    accidente.
+                </p>
+
+            </div>
+
             <div class="bloque-metodologia">
 
                 <h4>Unidad de análisis</h4>
@@ -1657,6 +1779,8 @@ select:focus {
 
             </div>
 
+            <div class="analisis-seccion-titulo">Análisis principal</div>
+
             <div class="analisis-grid">
 
                 <div class="analisis-card">
@@ -1665,19 +1789,8 @@ select:focus {
                         Siniestros registrados por año, según su clasificación.
                     </p>
                     <canvas id="chartTendencia"></canvas>
+                    <div class="nota-metodologica" id="notaTendencia"></div>
                 </div>
-
-                <div class="analisis-card">
-                    <h4>Siniestros por zona</h4>
-                    <p class="analisis-desc">
-                        Montañas / volcanes con mayor número de siniestros registrados.
-                    </p>
-                    <canvas id="chartZonas"></canvas>
-                </div>
-
-            </div>
-
-            <div class="analisis-grid">
 
                 <div class="analisis-card">
                     <h4>Estacionalidad</h4>
@@ -1685,7 +1798,12 @@ select:focus {
                         Distribución de siniestros por mes del año (todos los años combinados).
                     </p>
                     <canvas id="chartEstacionalidad"></canvas>
+                    <div class="nota-metodologica" id="notaEstacionalidad"></div>
                 </div>
+
+            </div>
+
+            <div class="analisis-grid">
 
                 <div class="analisis-card">
                     <h4>Causas más frecuentes</h4>
@@ -1693,11 +1811,8 @@ select:focus {
                         Causas primarias con mayor número de registros.
                     </p>
                     <canvas id="chartCausas"></canvas>
+                    <div class="nota-metodologica" id="notaCausas"></div>
                 </div>
-
-            </div>
-
-            <div class="analisis-grid">
 
                 <div class="analisis-card">
                     <h4>Gravedad de las consecuencias</h4>
@@ -1705,27 +1820,32 @@ select:focus {
                         Consecuencias más registradas entre las personas afectadas.
                     </p>
                     <canvas id="chartGravedad"></canvas>
-                </div>
-
-                <div class="analisis-card">
-                    <h4>Distribución por clasificación ABM</h4>
-                    <p class="analisis-desc">
-                        Proporción de siniestros según altitud del evento
-                        (Baja / Media / Alta montaña).
-                    </p>
-                    <canvas id="chartABM"></canvas>
+                    <div class="nota-metodologica" id="notaGravedad"></div>
                 </div>
 
             </div>
 
             <div class="analisis-grid">
 
-                <div class="analisis-card analisis-card-pequena">
+                <div class="analisis-card">
+                    <h4>Siniestros por zona</h4>
+                    <p class="analisis-desc">
+                        Montañas / volcanes con mayor número de siniestros
+                        <strong>registrados</strong> (no implica que sean las
+                        zonas más peligrosas: montañas más visitadas
+                        naturalmente acumulan más registros).
+                    </p>
+                    <canvas id="chartZonas"></canvas>
+                    <div class="nota-metodologica" id="notaZonas"></div>
+                </div>
+
+                <div class="analisis-card">
                     <h4>Tiempo de respuesta de emergencia</h4>
                     <p class="analisis-desc">
-                        Tiempo promedio entre el despacho y la llegada al lugar
-                        del siniestro (minutos), según clasificación de montaña.
-                        Se excluyen casos atípicos (≥ 9 horas) que distorsionarían el promedio.
+                        Tiempo entre el despacho y la llegada al lugar del
+                        siniestro (minutos), según clasificación de montaña.
+                        Se excluyen casos atípicos (≥ 9 horas) que
+                        distorsionarían el promedio.
                     </p>
                     <canvas id="chartTiempoRespuesta"></canvas>
                     <div id="avisoTiempoRespuesta" class="analisis-desc" style="margin-top:10px;"></div>
@@ -1733,54 +1853,82 @@ select:focus {
 
             </div>
 
-            <div class="analisis-grid">
+            <button class="btn-analisis-detallado" id="botonAnalisisDetallado" onclick="toggleAnalisisDetallado()">
+                Ver análisis detallado ▾
+            </button>
 
-                <div class="analisis-card">
-                    <h4>Siniestros por hora del día</h4>
-                    <p class="analisis-desc">
-                        Hora de despacho de los siniestros registrados (0-23h).
-                    </p>
-                    <canvas id="chartPorHora"></canvas>
+            <div class="analisis-detallado" id="panelAnalisisDetallado">
+
+                <div class="analisis-seccion-titulo" style="margin-top:20px;">
+                    Análisis detallado
                 </div>
 
-                <div class="analisis-card">
-                    <h4>Siniestros por día de la semana</h4>
-                    <p class="analisis-desc">
-                        Distribución de siniestros según el día de la semana.
-                    </p>
-                    <canvas id="chartPorDiaSemana"></canvas>
+                <div class="analisis-grid">
+
+                    <div class="analisis-card">
+                        <h4>Distribución por clasificación ABM</h4>
+                        <p class="analisis-desc">
+                            Proporción de siniestros según altitud del evento
+                            (Baja / Media / Alta montaña). Clasificación
+                            metodológica propia del Observatorio.
+                        </p>
+                        <canvas id="chartABM"></canvas>
+                        <div class="nota-metodologica" id="notaABM"></div>
+                    </div>
+
+                    <div class="analisis-card">
+                        <h4>Tamaño del grupo</h4>
+                        <p class="analisis-desc">
+                            Cantidad de personas que integraban el grupo al momento del siniestro.
+                        </p>
+                        <canvas id="chartTamanoGrupo"></canvas>
+                        <div class="nota-metodologica" id="notaTamanoGrupo"></div>
+                    </div>
+
                 </div>
 
-            </div>
+                <div class="analisis-grid">
 
-            <div class="analisis-grid">
+                    <div class="analisis-card">
+                        <h4>Siniestros por hora del día</h4>
+                        <p class="analisis-desc">
+                            Hora de despacho de los siniestros registrados (0-23h).
+                        </p>
+                        <canvas id="chartPorHora"></canvas>
+                        <div class="nota-metodologica" id="notaPorHora"></div>
+                    </div>
 
-                <div class="analisis-card">
-                    <h4>Distribución por sexo</h4>
-                    <p class="analisis-desc">
-                        Personas registradas según sexo.
-                    </p>
-                    <canvas id="chartPorSexo"></canvas>
+                    <div class="analisis-card">
+                        <h4>Siniestros por día de la semana</h4>
+                        <p class="analisis-desc">
+                            Distribución de siniestros según el día de la semana.
+                        </p>
+                        <canvas id="chartPorDiaSemana"></canvas>
+                        <div class="nota-metodologica" id="notaPorDiaSemana"></div>
+                    </div>
+
                 </div>
 
-                <div class="analisis-card">
-                    <h4>Distribución por edad</h4>
-                    <p class="analisis-desc">
-                        Personas registradas según rango de edad (categorías OMS).
-                    </p>
-                    <canvas id="chartPorEdad"></canvas>
-                </div>
+                <div class="analisis-grid">
 
-            </div>
+                    <div class="analisis-card">
+                        <h4>Distribución por sexo</h4>
+                        <p class="analisis-desc">
+                            Personas registradas según sexo.
+                        </p>
+                        <canvas id="chartPorSexo"></canvas>
+                        <div class="nota-metodologica" id="notaPorSexo"></div>
+                    </div>
 
-            <div class="analisis-grid">
+                    <div class="analisis-card">
+                        <h4>Distribución por edad</h4>
+                        <p class="analisis-desc">
+                            Personas registradas según rango de edad (categorías OMS).
+                        </p>
+                        <canvas id="chartPorEdad"></canvas>
+                        <div class="nota-metodologica" id="notaPorEdad"></div>
+                    </div>
 
-                <div class="analisis-card" style="grid-column: 1 / -1;">
-                    <h4>Tamaño del grupo</h4>
-                    <p class="analisis-desc">
-                        Cantidad de personas que integraban el grupo al momento del siniestro.
-                    </p>
-                    <canvas id="chartTamanoGrupo"></canvas>
                 </div>
 
             </div>
@@ -2700,6 +2848,19 @@ function cambiarFiltroLugarAnalisis() {
 
 }
 
+function toggleAnalisisDetallado() {
+
+    const panel = document.getElementById("panelAnalisisDetallado");
+    const boton = document.getElementById("botonAnalisisDetallado");
+
+    const abierto = panel.classList.toggle("visible");
+
+    boton.textContent = abierto
+        ? "Ocultar análisis detallado ▴"
+        : "Ver análisis detallado ▾";
+
+}
+
 function renderTodosLosAnalisis() {
 
     renderTendencia();
@@ -2747,6 +2908,47 @@ const OPCIONES_EJES_OSCURO = {
     y: { ticks: { color: "#6b6b73", font: { size: 10 } }, grid: { color: "#29292f" }, beginAtZero: true }
 };
 
+// Tooltip reutilizable para gráficas de dona: muestra el número
+// absoluto junto al porcentaje, para no inducir a conclusiones
+// solo con el porcentaje sin conocer el tamaño real de la muestra.
+function tooltipConAbsolutoYPorcentaje() {
+
+    return {
+        callbacks: {
+            label: function (contexto) {
+
+                const valores = contexto.dataset.data;
+                const total = valores.reduce((a, b) => a + b, 0);
+                const valor = contexto.parsed;
+                const porcentaje = total > 0 ? ((valor / total) * 100).toFixed(1) : 0;
+
+                return `${contexto.label}: ${valor} (${porcentaje}%)`;
+
+            }
+        }
+    };
+
+}
+
+// Muestra una nota breve de transparencia metodológica debajo de
+// cada gráfica: cuántos registros tienen dato válido para esa
+// variable específica, sobre el total disponible en ese momento
+// (respetando filtros de lugar/año ya aplicados).
+function mostrarNotaMetodologica(idElemento, disponibles, total) {
+
+    const elemento = document.getElementById(idElemento);
+
+    if (!elemento) return;
+
+    const porcentaje = total > 0 ? ((disponibles / total) * 100).toFixed(0) : 0;
+
+    elemento.textContent =
+        `Fuente: Cuerpo de Bomberos de Quito · Basado en ${disponibles} de ` +
+        `${total} registros con dato disponible (${porcentaje}%). Resultados ` +
+        `dentro de los registros disponibles, no representan el total nacional.`;
+
+}
+
 
 /* =========================================================
    TENDENCIA TEMPORAL
@@ -2754,11 +2956,15 @@ const OPCIONES_EJES_OSCURO = {
 
 function renderTendencia() {
 
+    const conjunto = obtenerSiniestrosAnalisis();
     const porAnio = new Map();
+    let conFecha = 0;
 
-    obtenerSiniestrosAnalisis().forEach(s => {
+    conjunto.forEach(s => {
 
         if (!s.fecha) return;
+
+        conFecha++;
 
         const anio = new Date(s.fecha).getUTCFullYear();
 
@@ -2774,6 +2980,8 @@ function renderTendencia() {
         if (normalizarTexto(s.tipo_siniestro) === "I") registro.incidentes++;
 
     });
+
+    mostrarNotaMetodologica("notaTendencia", conFecha, conjunto.length);
 
     const anios = [...porAnio.keys()].sort();
 
@@ -2793,22 +3001,25 @@ function renderTendencia() {
                 {
                     label: "Total siniestros",
                     data: datosTotal,
-                    borderColor: "#4d9fff",
+                    borderColor: "#1d4ed8",
                     backgroundColor: "transparent",
+                    borderWidth: 2.5,
                     tension: 0.25
                 },
                 {
                     label: "Accidentes",
                     data: datosAccidentes,
-                    borderColor: "#e5484d",
+                    borderColor: "#4d9fff",
                     backgroundColor: "transparent",
+                    borderDash: [6, 3],
                     tension: 0.25
                 },
                 {
                     label: "Incidentes",
                     data: datosIncidentes,
-                    borderColor: "#f97316",
+                    borderColor: "#93c5fd",
                     backgroundColor: "transparent",
+                    borderDash: [2, 3],
                     tension: 0.25
                 }
             ]
@@ -2832,16 +3043,22 @@ function renderTendencia() {
 function renderZonas() {
 
     const conteo = new Map();
+    const conjunto = obtenerSiniestrosAnalisis();
+    let conDato = 0;
 
-    obtenerSiniestrosAnalisis().forEach(s => {
+    conjunto.forEach(s => {
 
         const zona = String(s.nombre_volcan ?? "").trim();
 
         if (!esValorValido(zona)) return;
 
+        conDato++;
+
         conteo.set(zona, (conteo.get(zona) || 0) + 1);
 
     });
+
+    mostrarNotaMetodologica("notaZonas", conDato, conjunto.length);
 
     const ordenado = [...conteo.entries()]
         .sort((a, b) => b[1] - a[1])
@@ -2890,16 +3107,22 @@ function renderEstacionalidad() {
     ];
 
     const conteoPorMes = new Array(12).fill(0);
+    const conjunto = obtenerSiniestrosAnalisis();
+    let conFecha = 0;
 
-    obtenerSiniestrosAnalisis().forEach(s => {
+    conjunto.forEach(s => {
 
         if (!s.fecha) return;
+
+        conFecha++;
 
         const mes = new Date(s.fecha).getUTCMonth();
 
         conteoPorMes[mes]++;
 
     });
+
+    mostrarNotaMetodologica("notaEstacionalidad", conFecha, conjunto.length);
 
     if (chartEstacionalidadInstancia) chartEstacionalidadInstancia.destroy();
 
@@ -2932,16 +3155,22 @@ function renderEstacionalidad() {
 function renderCausas() {
 
     const conteo = new Map();
+    const conjunto = obtenerSiniestrosAnalisis();
+    let conDato = 0;
 
-    obtenerSiniestrosAnalisis().forEach(s => {
+    conjunto.forEach(s => {
 
         const causa = String(s.causa_primaria ?? "").trim();
 
         if (!esValorValido(causa)) return;
 
+        conDato++;
+
         conteo.set(causa, (conteo.get(causa) || 0) + 1);
 
     });
+
+    mostrarNotaMetodologica("notaCausas", conDato, conjunto.length);
 
     const ordenado = [...conteo.entries()]
         .sort((a, b) => b[1] - a[1])
@@ -2961,7 +3190,7 @@ function renderCausas() {
             datasets: [{
                 label: "Siniestros",
                 data: valores,
-                backgroundColor: "#f97316"
+                backgroundColor: "#4d9fff"
             }]
         },
         options: {
@@ -2988,16 +3217,22 @@ function renderGravedad() {
     // es un dato por individuo, no por siniestro completo.
 
     const conteo = new Map();
+    const conjunto = obtenerRegistrosAnalisis();
+    let conDato = 0;
 
-    obtenerRegistrosAnalisis().forEach(r => {
+    conjunto.forEach(r => {
 
         const consecuencia = String(r.consecuencia ?? "").trim();
 
         if (!esValorValido(consecuencia)) return;
 
+        conDato++;
+
         conteo.set(consecuencia, (conteo.get(consecuencia) || 0) + 1);
 
     });
+
+    mostrarNotaMetodologica("notaGravedad", conDato, conjunto.length);
 
     const ordenado = [...conteo.entries()]
         .sort((a, b) => b[1] - a[1])
@@ -3017,7 +3252,7 @@ function renderGravedad() {
             datasets: [{
                 label: "Personas",
                 data: valores,
-                backgroundColor: "#e5484d"
+                backgroundColor: "#4d9fff"
             }]
         },
         options: {
@@ -3041,16 +3276,21 @@ function renderGravedad() {
 function renderABM() {
 
     const conteo = { "Baja Montaña": 0, "Media Montaña": 0, "Alta Montaña": 0 };
+    const conjunto = obtenerSiniestrosAnalisis();
+    let conDato = 0;
 
-    obtenerSiniestrosAnalisis().forEach(s => {
+    conjunto.forEach(s => {
 
         const clasificacion = String(s.abm_montana ?? "").trim();
 
         if (conteo.hasOwnProperty(clasificacion)) {
             conteo[clasificacion]++;
+            conDato++;
         }
 
     });
+
+    mostrarNotaMetodologica("notaABM", conDato, conjunto.length);
 
     if (chartABMInstancia) chartABMInstancia.destroy();
 
@@ -3070,7 +3310,8 @@ function renderABM() {
         options: {
             responsive: true,
             plugins: {
-                legend: { position: "bottom", labels: { color: "#a3a3ab", font: { size: 10.5 } } }
+                legend: { position: "bottom", labels: { color: "#a3a3ab", font: { size: 10.5 } } },
+                tooltip: tooltipConAbsolutoYPorcentaje()
             }
         }
     });
@@ -3096,6 +3337,19 @@ function horaASegundos(horaTexto) {
 
 }
 
+function calcularMediana(valores) {
+
+    if (valores.length === 0) return 0;
+
+    const ordenado = [...valores].sort((a, b) => a - b);
+    const mitad = Math.floor(ordenado.length / 2);
+
+    return ordenado.length % 2 === 0
+        ? (ordenado[mitad - 1] + ordenado[mitad]) / 2
+        : ordenado[mitad];
+
+}
+
 function renderTiempoRespuesta() {
 
     const aviso = document.getElementById("avisoTiempoRespuesta");
@@ -3108,11 +3362,13 @@ function renderTiempoRespuesta() {
                                      // promediarse con el resto.
 
     const tiemposPorABM = { "Baja Montaña": [], "Media Montaña": [], "Alta Montaña": [] };
+    const todosLosTiempos = [];
 
     let totalConDatos = 0;
     let totalExcluidos = 0;
+    const conjunto = obtenerRegistrosAnalisis();
 
-    obtenerRegistrosAnalisis().forEach(r => {
+    conjunto.forEach(r => {
 
         const despacho = horaASegundos(r.hora_despacho);
         const arribo = horaASegundos(r.hora_arribo);
@@ -3131,6 +3387,7 @@ function renderTiempoRespuesta() {
         }
 
         tiemposPorABM[abm].push(diferenciaMin);
+        todosLosTiempos.push(diferenciaMin);
         totalConDatos++;
 
     });
@@ -3145,11 +3402,19 @@ function renderTiempoRespuesta() {
 
     }
 
-    aviso.textContent =
-        `Calculado sobre ${totalConDatos} registros con datos de horario válidos` +
+    const mediana = calcularMediana(todosLosTiempos).toFixed(1);
+    const minimo = Math.min(...todosLosTiempos).toFixed(1);
+    const maximo = Math.max(...todosLosTiempos).toFixed(1);
+
+    aviso.innerHTML =
+        `Calculado sobre ${totalConDatos} de ${conjunto.length} registros ` +
+        `con datos de horario válidos` +
         (totalExcluidos > 0
             ? ` (se excluyeron ${totalExcluidos} casos atípicos de 9+ horas).`
-            : ".");
+            : ".") +
+        `<br>Mediana: <strong>${mediana} min</strong> · ` +
+        `Mínimo: <strong>${minimo} min</strong> · ` +
+        `Máximo: <strong>${maximo} min</strong>.`;
 
     const etiquetas = Object.keys(tiemposPorABM);
 
@@ -3174,7 +3439,7 @@ function renderTiempoRespuesta() {
             datasets: [{
                 label: "Minutos promedio",
                 data: promedios.map(p => Math.round(p * 10) / 10),
-                backgroundColor: ["#3fb87f", "#f97316", "#e5484d"]
+                backgroundColor: "#4d9fff"
             }]
         },
         options: {
@@ -3194,18 +3459,24 @@ function renderTiempoRespuesta() {
 function renderPorHora() {
 
     const conteoPorHora = new Array(24).fill(0);
+    const conjunto = obtenerRegistrosAnalisis();
+    let conDato = 0;
 
-    obtenerRegistrosAnalisis().forEach(r => {
+    conjunto.forEach(r => {
 
         const segundos = horaASegundos(r.hora_despacho);
 
         if (segundos === null) return;
+
+        conDato++;
 
         const hora = Math.floor(segundos / 3600) % 24;
 
         conteoPorHora[hora]++;
 
     });
+
+    mostrarNotaMetodologica("notaPorHora", conDato, conjunto.length);
 
     if (chartPorHoraInstancia) chartPorHoraInstancia.destroy();
 
@@ -3240,16 +3511,22 @@ function renderPorDiaSemana() {
     const nombresDias = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
     const conteoPorDia = new Array(7).fill(0);
+    const conjunto = obtenerSiniestrosAnalisis();
+    let conDato = 0;
 
-    obtenerSiniestrosAnalisis().forEach(s => {
+    conjunto.forEach(s => {
 
         if (!s.fecha) return;
+
+        conDato++;
 
         const diaSemana = new Date(s.fecha).getUTCDay();
 
         conteoPorDia[diaSemana]++;
 
     });
+
+    mostrarNotaMetodologica("notaPorDiaSemana", conDato, conjunto.length);
 
     // Reordenar para que la semana inicie en lunes
     const orden = [1, 2, 3, 4, 5, 6, 0];
@@ -3267,7 +3544,7 @@ function renderPorDiaSemana() {
             datasets: [{
                 label: "Siniestros",
                 data: valores,
-                backgroundColor: "#3fb87f"
+                backgroundColor: "#4d9fff"
             }]
         },
         options: {
@@ -3287,12 +3564,16 @@ function renderPorDiaSemana() {
 function renderPorSexo() {
 
     const conteo = new Map();
+    const conjunto = obtenerRegistrosAnalisis();
+    let conDato = 0;
 
-    obtenerRegistrosAnalisis().forEach(r => {
+    conjunto.forEach(r => {
 
         const sexo = String(r.sexo ?? "").trim();
 
         if (!esValorValido(sexo)) return;
+
+        conDato++;
 
         const etiqueta = sexo.toUpperCase() === "M" ? "Masculino" :
                           sexo.toUpperCase() === "F" ? "Femenino" : sexo;
@@ -3300,6 +3581,8 @@ function renderPorSexo() {
         conteo.set(etiqueta, (conteo.get(etiqueta) || 0) + 1);
 
     });
+
+    mostrarNotaMetodologica("notaPorSexo", conDato, conjunto.length);
 
     if (chartPorSexoInstancia) chartPorSexoInstancia.destroy();
 
@@ -3319,7 +3602,8 @@ function renderPorSexo() {
         options: {
             responsive: true,
             plugins: {
-                legend: { position: "bottom", labels: { color: "#a3a3ab", font: { size: 10.5 } } }
+                legend: { position: "bottom", labels: { color: "#a3a3ab", font: { size: 10.5 } } },
+                tooltip: tooltipConAbsolutoYPorcentaje()
             }
         }
     });
@@ -3342,16 +3626,21 @@ function renderPorEdad() {
     ];
 
     const conteo = new Map(ordenCategorias.map(c => [c, 0]));
+    const conjunto = obtenerRegistrosAnalisis();
+    let conDato = 0;
 
-    obtenerRegistrosAnalisis().forEach(r => {
+    conjunto.forEach(r => {
 
         const categoria = String(r.rango_edad ?? "").trim();
 
         if (conteo.has(categoria)) {
             conteo.set(categoria, conteo.get(categoria) + 1);
+            conDato++;
         }
 
     });
+
+    mostrarNotaMetodologica("notaPorEdad", conDato, conjunto.length);
 
     if (chartPorEdadInstancia) chartPorEdadInstancia.destroy();
 
@@ -3364,7 +3653,7 @@ function renderPorEdad() {
             datasets: [{
                 label: "Personas",
                 data: [...conteo.values()],
-                backgroundColor: "#a78bfa"
+                backgroundColor: "#4d9fff"
             }]
         },
         options: {
@@ -3398,18 +3687,24 @@ function renderTamanoGrupo() {
     ];
 
     const conteo = rangos.map(() => 0);
+    const conjunto = obtenerSiniestrosAnalisis();
+    let conDato = 0;
 
-    obtenerSiniestrosAnalisis().forEach(s => {
+    conjunto.forEach(s => {
 
         const tamano = Number(s.grupo);
 
         if (!Number.isFinite(tamano)) return;
+
+        conDato++;
 
         const indice = rangos.findIndex(r => r.prueba(tamano));
 
         if (indice !== -1) conteo[indice]++;
 
     });
+
+    mostrarNotaMetodologica("notaTamanoGrupo", conDato, conjunto.length);
 
     if (chartTamanoGrupoInstancia) chartTamanoGrupoInstancia.destroy();
 
@@ -3422,7 +3717,7 @@ function renderTamanoGrupo() {
             datasets: [{
                 label: "Siniestros",
                 data: conteo,
-                backgroundColor: "#f472b6"
+                backgroundColor: "#4d9fff"
             }]
         },
         options: {
