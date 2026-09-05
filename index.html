@@ -12,6 +12,7 @@
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
@@ -2171,6 +2172,7 @@ let todosLosSiniestros = [];
 let marcadores = [];
 let capaAreasNaturales = null;
 let capaSitiosSeguridad = null;
+let capaMapaCalor = null;
 
 
 /* =========================================================
@@ -2317,6 +2319,24 @@ function iniciarMapa() {
     capaSitiosSeguridad = L.layerGroup();
 
     // -----------------------------------------------------
+    // MAPA DE CALOR (densidad de siniestros)
+    // Se actualiza cada vez que se filtran/muestran registros
+    // en mostrarSiniestrosEnMapa(). Apagado por defecto.
+    // -----------------------------------------------------
+
+    capaMapaCalor = L.heatLayer([], {
+        radius: 28,
+        blur: 22,
+        maxZoom: 12,
+        gradient: {
+            0.2: "#1d4ed8",
+            0.4: "#4d9fff",
+            0.6: "#f97316",
+            1.0: "#e5484d"
+        }
+    });
+
+    // -----------------------------------------------------
     // CONTROL DE CAPAS (permite prender/apagar cada una)
     // -----------------------------------------------------
 
@@ -2327,7 +2347,8 @@ function iniciarMapa() {
         },
         {
             "Áreas naturales": capaAreasNaturales,
-            "Sitios de seguridad": capaSitiosSeguridad
+            "Sitios de seguridad": capaSitiosSeguridad,
+            "Mapa de calor": capaMapaCalor
         },
         { collapsed: true }
     ).addTo(mapa);
@@ -2656,6 +2677,7 @@ function mostrarSiniestrosEnMapa(siniestros) {
     marcadores = [];
 
     const coordenadas = [];
+    const puntosCalor = [];
 
     siniestros.forEach(siniestro => {
 
@@ -2665,6 +2687,12 @@ function mostrarSiniestrosEnMapa(siniestros) {
         if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
 
         coordenadas.push([lat, lng]);
+
+        // Peso del mapa de calor: cantidad de personas afectadas
+        // en ese siniestro (mínimo 1), para que los eventos con más
+        // personas involucradas se vean más "calientes".
+        const peso = Math.max(siniestro.afectados || 0, 1);
+        puntosCalor.push([lat, lng, peso]);
 
         const tipo = normalizarTexto(siniestro.tipo_siniestro);
         const color = tipo === "A" ? "#e5484d" : "#f97316";
@@ -2683,6 +2711,10 @@ function mostrarSiniestrosEnMapa(siniestros) {
         marcadores.push(marcador);
 
     });
+
+    if (capaMapaCalor) {
+        capaMapaCalor.setLatLngs(puntosCalor);
+    }
 
     if (coordenadas.length) {
         mapa.fitBounds(coordenadas, { padding: [30, 30], maxZoom: 12 });
