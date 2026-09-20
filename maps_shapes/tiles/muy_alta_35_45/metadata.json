@@ -1,0 +1,12 @@
+{
+  "name":"teselas_muy_alta_35_45",
+  "description":"",
+  "version":2,
+  "minzoom":5,
+  "maxzoom":13,
+  "center":"-84.2369187,-1.8126674,5",
+  "bounds":"-91.8189911,-5.0139740,-76.6548462,1.3886393",
+  "type":"overlay",
+  "format":"pbf",
+  "json":"{\n  \"vector_layers\":[\n    {\n      \"id\":\"muy_alta_35_45\",\n      \"description\":\"\",\n      \"minzoom\":5,\n      \"maxzoom\":13,\n      \"fields\":{\n        \"DN\":\"Number\"\n      }\n    }\n  ],\n  \"tilestats\":{\n    \"layerCount\":1,\n    \"layers\":[\n      {\n        \"layer\":\"muy_alta_35_45\",\n        \"count\":161937,\n        \"geometry\":\"Polygon\",\n        \"attributeCount\":1,\n        \"attributes\":[\n          {\n            \"attribute\":\"DN\",\n            \"count\":1,\n            \"type\":\"number\",\n            \"values\":[\n              4\n            ],\n            \"min\":4,\n            \"max\":4\n          }\n        ]\n      }\n    ]\n  }\n}"
+}
