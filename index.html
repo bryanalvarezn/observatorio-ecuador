@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
@@ -2171,8 +2172,10 @@ let todosLosRegistros = [];
 let todosLosSiniestros = [];
 let marcadores = [];
 let capaAreasNaturales = null;
-let capaSitiosSeguridad = null;
 let capaMapaCalor = null;
+let capaMuyAlta = null;
+let capaPeligroExtremo = null;
+let capaABM = null;
 
 
 /* =========================================================
@@ -2315,8 +2318,33 @@ function iniciarMapa() {
     // llena cuando haya datos disponibles.
     // -----------------------------------------------------
 
-    capaAreasNaturales = L.layerGroup();
-    capaSitiosSeguridad = L.layerGroup();
+        capaAreasNaturales = L.layerGroup();
+
+    // -----------------------------------------------------
+    // EXPOSICION POR PENDIENTE (terreno tecnico)
+    // Cortes basados en Kayastha (2015). c4 se sirve como
+    // teselas vectoriales (MVT); c5 y ABM como GeoJSON directo.
+    // -----------------------------------------------------
+
+    capaMuyAlta = L.vectorGrid.protobuf(
+        "./maps_shapes/tiles/muy_alta_35_45/{z}/{x}/{y}.pbf",
+        {
+            rendererFactory: L.canvas.tile,
+            vectorTileLayerStyles: {
+                muy_alta_35_45: {
+                    weight: 0.5,
+                    color: "#b45309",
+                    fillColor: "#f59e0b",
+                    fillOpacity: 0.35
+                }
+            },
+            interactive: false,
+            maxNativeZoom: 13
+        }
+    );
+
+    capaPeligroExtremo = L.layerGroup();
+    capaABM = L.layerGroup();
 
     // -----------------------------------------------------
     // MAPA DE CALOR (densidad de siniestros)
@@ -2340,15 +2368,17 @@ function iniciarMapa() {
     // CONTROL DE CAPAS (permite prender/apagar cada una)
     // -----------------------------------------------------
 
-    L.control.layers(
+       L.control.layers(
         {
             "Mapa normal": capaNormal,
             "Mapa topográfico (curvas de nivel)": capaTopografica
         },
         {
             "Áreas naturales": capaAreasNaturales,
-            "Sitios de seguridad": capaSitiosSeguridad,
-            "Mapa de calor": capaMapaCalor
+            "Mapa de calor": capaMapaCalor,
+            "Exposición: Muy Alta (35°-45°)": capaMuyAlta,
+            "Exposición: Peligro Extremo (>45°)": capaPeligroExtremo,
+            "Clasificación por altitud (ABM)": capaABM
         },
         { collapsed: true }
     ).addTo(mapa);
@@ -2393,26 +2423,48 @@ function iniciarMapa() {
         }
     );
 
-    // Refugios de montaña (puntos) — pendiente de datos
+      // Peligro Extremo (>45°)
     cargarCapaGeoJSON(
-        "./data/refugios.geojson",
-        capaSitiosSeguridad,
+        "https://raw.githubusercontent.com/bryanalvarezn/observatorio-ecuador/main/maps_shapes/c5_peligro_extremo_gt45.geojson",
+        capaPeligroExtremo,
         {
-            pointToLayer: function (feature, latlng) {
-                return L.circleMarker(latlng, {
-                    radius: 6,
-                    fillColor: "#4d9fff",
-                    color: "#0a0a0c",
-                    weight: 1.5,
-                    fillOpacity: 0.9
-                });
+            style: {
+                color: "#7f1d1d",
+                weight: 0.6,
+                fillColor: "#dc2626",
+                fillOpacity: 0.4
             },
             onEachFeature: function (feature, capa) {
-                const nombre =
-                    feature.properties?.nombre ||
-                    feature.properties?.NOMBRE ||
-                    "Refugio";
-                capa.bindPopup(`<strong>🏠 ${nombre}</strong>`);
+                capa.bindPopup(
+                    "<strong>Peligro Extremo (&gt;45°)</strong><br>" +
+                    "Paredes verticales y escarpes de roca expuesta."
+                );
+            }
+        }
+    );
+
+    // Clasificacion por altitud (ABM): Baja / Media / Alta montaña
+    cargarCapaGeoJSON(
+        "https://raw.githubusercontent.com/bryanalvarezn/observatorio-ecuador/main/maps_shapes/abm_montana_ecuador.geojson",
+        capaABM,
+        {
+            style: function (feature) {
+                const colores = {
+                    "Baja Montaña":  "#3fb87f",
+                    "Media Montaña": "#f97316",
+                    "Alta Montaña":  "#e5484d"
+                };
+                const denom = feature.properties?.denominacion;
+                return {
+                    color: colores[denom] || "#4d9fff",
+                    weight: 1,
+                    fillColor: colores[denom] || "#4d9fff",
+                    fillOpacity: 0.08
+                };
+            },
+            onEachFeature: function (feature, capa) {
+                const denom = feature.properties?.denominacion || "Sin clasificar";
+                capa.bindPopup(`<strong>${denom}</strong>`);
             }
         }
     );
