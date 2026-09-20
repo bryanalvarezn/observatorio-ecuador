@@ -13,7 +13,6 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
-<script src="https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
@@ -2430,7 +2429,13 @@ select:focus {
                         ✉️ alvarezbran@outlook.com
                     </a>
                 </div>
+
             </div>
+
+            <div class="creditos-tecnicos">
+                Desarrollo de interfaz (frontend) con asistencia de Claude (Anthropic).
+            </div>
+
         </section>
 
 
@@ -2834,20 +2839,23 @@ function iniciarMapa() {
     // como teselas vectoriales (MVT); c5 y ABM como GeoJSON directo.
     // -----------------------------------------------------
 
-    capaMuyAlta = L.vectorGrid.protobuf(
-        "./maps_shapes/tiles/muy_alta_35_45/{z}/{x}/{y}.pbf",
+    // -----------------------------------------------------
+    // EXPOSICION POR PENDIENTE (terreno tecnico) + ABM
+    // Cortes de pendiente basados en Kayastha (2015). c4 se sirve
+    // como teselas RASTER (PNG) con L.tileLayer nativo -- sin
+    // librerias de terceros, evita el bug sin resolver de
+    // Leaflet.VectorGrid con archivos .pbf generados por GDAL.
+    // c5 y ABM siguen como GeoJSON directo (si permiten clic).
+    // -----------------------------------------------------
+
+    capaMuyAlta = L.tileLayer(
+        "./maps_shapes/tiles_raster/muy_alta_35_45/{z}/{x}/{y}.png",
         {
-            rendererFactory: L.canvas.tile,
-            vectorTileLayerStyles: {
-                muy_alta_35_45: {
-                    weight: 0.5,
-                    color: "#b45309",
-                    fillColor: "#f59e0b",
-                    fillOpacity: 0.35
-                }
-            },
-            interactive: false,
-            maxNativeZoom: 13
+            minZoom: 5,
+            maxZoom: 13,
+            maxNativeZoom: 13,
+            opacity: 1,
+            attribution: "Exposición por pendiente 35°-45°"
         }
     );
 
