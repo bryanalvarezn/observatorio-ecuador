@@ -70,6 +70,32 @@ html, body {
     color: white;
 }
 
+/* Scrollbar oscura (Chrome/Edge/Safari) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--borde-fuerte);
+    border-radius: 20px;
+    border: 2px solid var(--bg-panel);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--texto-3);
+}
+
+/* Scrollbar oscura (Firefox) */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--borde-fuerte) transparent;
+}
+
 a {
     color: inherit;
 }
@@ -494,7 +520,7 @@ a {
 
 .estadisticas-compactas {
 
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
     margin-bottom: 10px;
 
@@ -502,7 +528,7 @@ a {
 
 .estadisticas-compactas .stat {
 
-    padding: 7px 12px 6px;
+    padding: 9px 12px 8px;
     border-radius: 8px;
 
 }
@@ -515,15 +541,17 @@ a {
 
 .estadisticas-compactas .stat-numero {
 
-    font-size: 17px;
+    font-size: 19px;
     letter-spacing: -.3px;
 
 }
 
 .estadisticas-compactas .stat-label {
 
-    margin-top: 1px;
-    font-size: 9px;
+    margin-top: 2px;
+    font-size: 9.5px;
+    line-height: 1.3;
+    white-space: normal;
 
 }
 
@@ -655,6 +683,55 @@ a {
     border-top: 1px solid var(--borde);
     border-bottom: 1px solid var(--borde);
     margin: 10px 0 4px;
+
+}
+
+/* =========================================================
+   LEYENDA ABM (esquina inferior derecha del mapa)
+========================================================= */
+
+.leyenda-abm {
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde-fuerte);
+    border-radius: 10px;
+    padding: 10px 14px;
+
+    box-shadow: 0 8px 20px rgba(0,0,0,.4);
+    margin: 0 10px 10px 0 !important;
+
+}
+
+.leyenda-abm-titulo {
+
+    font-family: var(--fuente-display);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--texto);
+    margin-bottom: 6px;
+    white-space: nowrap;
+
+}
+
+.leyenda-abm-item {
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    font-size: 11px;
+    color: var(--texto-2);
+    padding: 2px 0;
+    white-space: nowrap;
+
+}
+
+.leyenda-abm-color {
+
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    flex-shrink: 0;
 
 }
 
@@ -1357,6 +1434,102 @@ select:focus {
 
 }
 
+/* =========================================================
+   TARJETA DE AUTORIA (fundador / equipo)
+========================================================= */
+
+.fundador-card {
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-top: 16px;
+    max-width: 620px;
+
+}
+
+.fundador-avatar {
+
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 50%;
+
+    background: var(--acento-suave);
+    border: 1px solid var(--acento-dim);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+
+}
+
+.fundador-nombre {
+
+    font-family: var(--fuente-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--texto);
+    margin-bottom: 3px;
+
+}
+
+.fundador-rol {
+
+    color: var(--acento);
+    font-size: 11.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin-bottom: 8px;
+
+}
+
+.fundador-bio {
+
+    color: var(--texto-2);
+    font-size: 12.5px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+
+}
+
+.fundador-contacto {
+
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    color: var(--texto-3);
+    font-family: var(--fuente-mono);
+    font-size: 11.5px;
+    text-decoration: none;
+
+}
+
+.fundador-contacto:hover {
+    color: var(--acento);
+}
+
+.creditos-tecnicos {
+
+    margin-top: 14px;
+    max-width: 620px;
+
+    color: var(--texto-3);
+    font-size: 10.5px;
+    font-style: italic;
+    line-height: 1.6;
+
+}
+
 .institucion-icono {
 
     width: 52px;
@@ -1583,19 +1756,21 @@ select:focus {
 
         <nav class="topbar-tabs">
 
-            <div class="nav-dropdown" id="dropdownAprender">
+            <div class="nav-dropdown" id="dropdownDatos">
 
-                <button class="nav-tab" type="button" data-grupo="aprender" onclick="toggleDropdownAprender()">
-                    Aprender <span class="dropdown-multi-flecha">▾</span>
+                <button class="nav-tab" type="button" data-grupo="datos" onclick="toggleDropdownDatos()">
+                    Datos <span class="dropdown-multi-flecha">▾</span>
                 </button>
 
                 <div class="nav-dropdown-panel">
                     <button class="nav-item" data-vista="analisis">📊 Análisis</button>
                     <button class="nav-item" data-vista="metodologia">🔬 Metodología</button>
+                    <button class="nav-item" data-vista="descargas">⬇️ Descargas</button>
                 </div>
 
             </div>
 
+            <button class="nav-tab nav-item" data-vista="aprender">Aprender</button>
             <button class="nav-tab nav-item" data-vista="recursos">Recursos</button>
             <button class="nav-tab nav-item" data-vista="agradecimientos">Comunidad</button>
             <button class="nav-tab nav-item" data-vista="apoyar">Tienda</button>
@@ -1628,7 +1803,7 @@ select:focus {
 
         <nav class="nav-grupo">
 
-            <div class="nav-grupo-titulo">Aprender</div>
+            <div class="nav-grupo-titulo">Datos</div>
 
             <button class="nav-item" data-vista="analisis">
                 📊 Análisis
@@ -1636,6 +1811,20 @@ select:focus {
 
             <button class="nav-item" data-vista="metodologia">
                 🔬 Metodología
+            </button>
+
+            <button class="nav-item" data-vista="descargas">
+                ⬇️ Descargas
+            </button>
+
+        </nav>
+
+        <nav class="nav-grupo">
+
+            <div class="nav-grupo-titulo">Aprender</div>
+
+            <button class="nav-item" data-vista="aprender">
+                🎓 Aprender
             </button>
 
         </nav>
@@ -1805,6 +1994,28 @@ select:focus {
         ================================================== -->
 
         <!-- =================================================
+             VISTA: APRENDER
+        ================================================== -->
+
+        <section class="vista" data-vista="aprender">
+
+            <div class="vista-header">
+                <h2>Aprender</h2>
+            </div>
+
+            <div class="bloque-metodologia">
+                <h4>🎓 Próximamente</h4>
+                <p class="texto-vista" style="margin:0;">
+                    Esta sección reunirá contenido educativo sobre seguridad
+                    en montaña, prevención de accidentes y buenas prácticas
+                    para actividades al aire libre. Está en construcción.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
              VISTA: RECURSOS
         ================================================== -->
 
@@ -1820,6 +2031,28 @@ select:focus {
                     Esta sección reunirá guías, enlaces externos y material de
                     apoyo para quienes practican montañismo y actividades al
                     aire libre en Ecuador. Está en construcción.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VISTA: DESCARGAS
+        ================================================== -->
+
+        <section class="vista" data-vista="descargas">
+
+            <div class="vista-header">
+                <h2>Descargas</h2>
+            </div>
+
+            <div class="bloque-metodologia">
+                <h4>⬇️ Próximamente</h4>
+                <p class="texto-vista" style="margin:0;">
+                    Desde aquí se podrán descargar los datos abiertos del
+                    Observatorio (siniestros, capas geográficas y reportes)
+                    en formatos reutilizables. Está en construcción.
                 </p>
             </div>
 
@@ -2181,6 +2414,23 @@ select:focus {
 
             </div>
 
+            <div class="fundador-card">
+
+                <div class="fundador-avatar">🏔️</div>
+
+                <div>
+                    <div class="fundador-nombre">Bryan Alvarez</div>
+                    <div class="fundador-rol">Fundador &amp; Desarrollador</div>
+                    <div class="fundador-bio">
+                        Fundador del Observatorio, responsable de la
+                        recopilación, sistematización y análisis de los
+                        datos que lo sustentan.
+                    </div>
+                    <a class="fundador-contacto" href="mailto:alvarezbran@outlook.com">
+                        ✉️ alvarezbran@outlook.com
+                    </a>
+                </div>
+            </div>
         </section>
 
 
@@ -2295,11 +2545,12 @@ select:focus {
    NAVEGACION ENTRE VISTAS
 ========================================================= */
 
-// Sub-vistas que cuelgan del dropdown "Aprender" en el topbar,
+// Sub-vistas que cuelgan del dropdown "Datos" en el topbar,
 // para saber cuando resaltar esa pestana padre.
 const GRUPO_PADRE_POR_VISTA = {
-    analisis: "aprender",
-    metodologia: "aprender"
+    analisis: "datos",
+    metodologia: "datos",
+    descargas: "datos"
 };
 
 document.querySelectorAll(".nav-item").forEach(boton => {
@@ -2351,9 +2602,9 @@ document.querySelectorAll(".nav-item").forEach(boton => {
 
         }
 
-        // Cerrar el dropdown "Aprender" si estaba abierto
-        const dropdownAprender = document.getElementById("dropdownAprender");
-        if (dropdownAprender) dropdownAprender.classList.remove("abierto");
+        // Cerrar el dropdown "Datos" si estaba abierto
+        const dropdownDatos = document.getElementById("dropdownDatos");
+        if (dropdownDatos) dropdownDatos.classList.remove("abierto");
 
         // En móvil, cerrar el menú desplegable al elegir una opción
         document.getElementById("navPanel").classList.remove("abierto");
@@ -2364,19 +2615,19 @@ document.querySelectorAll(".nav-item").forEach(boton => {
 
 
 /* =========================================================
-   DROPDOWN "APRENDER" (topbar, escritorio)
+   DROPDOWN "DATOS" (topbar, escritorio)
 ========================================================= */
 
-function toggleDropdownAprender() {
+function toggleDropdownDatos() {
 
-    document.getElementById("dropdownAprender").classList.toggle("abierto");
+    document.getElementById("dropdownDatos").classList.toggle("abierto");
 
 }
 
-// Cerrar el dropdown "Aprender" al hacer clic fuera de él
+// Cerrar el dropdown "Datos" al hacer clic fuera de él
 document.addEventListener("click", (evento) => {
 
-    const dropdown = document.getElementById("dropdownAprender");
+    const dropdown = document.getElementById("dropdownDatos");
 
     if (dropdown && !dropdown.contains(evento.target)) {
         dropdown.classList.remove("abierto");
@@ -2536,6 +2787,19 @@ function iniciarMapa() {
     L.control.zoom({ position: "topright" }).addTo(mapa);
 
     // -----------------------------------------------------
+    // PANE DEDICADO PARA LOS PUNTOS DE SINIESTROS
+    // Los poligonos (ABM, Peligro Extremo, Areas naturales) viven
+    // en el pane por defecto (overlayPane, z-index 400). Si se
+    // agregan/activan DESPUES de dibujar los puntos, quedan
+    // encima en el DOM y "roban" el clic. Este pane, con z-index
+    // mas alto, garantiza que los puntos de siniestro siempre
+    // reciban el clic sin importar el orden de activacion de capas.
+    // -----------------------------------------------------
+
+    mapa.createPane("panelSiniestros");
+    mapa.getPane("panelSiniestros").style.zIndex = 650;
+
+    // -----------------------------------------------------
     // CAPAS BASE (alternables: normal vs topográfica)
     // -----------------------------------------------------
 
@@ -2627,6 +2891,55 @@ function iniciarMapa() {
         { collapsed: true }
     ).addTo(mapa);
 
+    // -----------------------------------------------------
+    // LEYENDA DE CLASIFICACION ABM (esquina inferior derecha)
+    // Solo visible mientras esa capa esta activa en el mapa.
+    // -----------------------------------------------------
+
+    let divLeyendaABM = null;
+    const controlLeyendaABM = L.control({ position: "bottomright" });
+
+    controlLeyendaABM.onAdd = function () {
+
+        divLeyendaABM = L.DomUtil.create("div", "leyenda-abm");
+        divLeyendaABM.style.display = "none";
+
+        divLeyendaABM.innerHTML = `
+            <div class="leyenda-abm-titulo">Clasificación por altitud</div>
+            <div class="leyenda-abm-item">
+                <span class="leyenda-abm-color" style="background:#3fb87f"></span>
+                Baja Montaña
+            </div>
+            <div class="leyenda-abm-item">
+                <span class="leyenda-abm-color" style="background:#eab308"></span>
+                Media Montaña
+            </div>
+            <div class="leyenda-abm-item">
+                <span class="leyenda-abm-color" style="background:#38bdf8"></span>
+                Alta Montaña
+            </div>
+        `;
+
+        L.DomEvent.disableClickPropagation(divLeyendaABM);
+
+        return divLeyendaABM;
+
+    };
+
+    controlLeyendaABM.addTo(mapa);
+
+    mapa.on("overlayadd", function (e) {
+        if (e.layer === capaABM && divLeyendaABM) {
+            divLeyendaABM.style.display = "block";
+        }
+    });
+
+    mapa.on("overlayremove", function (e) {
+        if (e.layer === capaABM && divLeyendaABM) {
+            divLeyendaABM.style.display = "none";
+        }
+    });
+
     cargarCapaMeteorologica();
 
     // -----------------------------------------------------
@@ -2641,9 +2954,9 @@ function iniciarMapa() {
         {
             style: {
                 color: "#a78bfa",
-                weight: 1.5,
+                weight: 2,
                 fillColor: "#a78bfa",
-                fillOpacity: 0.12
+                fillOpacity: 0.28
             },
             onEachFeature: function (feature, capa) {
 
@@ -3046,7 +3359,8 @@ function mostrarSiniestrosEnMapa(siniestros) {
             fillColor: color,
             color: "#0a0a0c",
             weight: 1.5,
-            fillOpacity: .9
+            fillOpacity: .9,
+            pane: "panelSiniestros"
         });
 
         marcador.bindPopup(crearPopup(siniestro));
