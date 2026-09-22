@@ -25,21 +25,21 @@
 
 :root {
 
-    --bg: #0a0a0c;
-    --bg-panel: #131316;
-    --bg-panel-2: #1b1b1f;
-    --bg-hover: #202024;
+    --bg: #070b14;
+    --bg-panel: #0e1524;
+    --bg-panel-2: #16203a;
+    --bg-hover: #1c2842;
 
-    --borde: #29292f;
-    --borde-fuerte: #38383f;
+    --borde: #22304d;
+    --borde-fuerte: #32456b;
 
-    --texto: #eaeaec;
-    --texto-2: #a3a3ab;
-    --texto-3: #6b6b73;
+    --texto: #e9edf7;
+    --texto-2: #9fadc7;
+    --texto-3: #66759a;
 
-    --acento: #4d9fff;
-    --acento-dim: #1f3a5c;
-    --acento-suave: rgba(77,159,255,.1);
+    --acento: #2563eb;
+    --acento-dim: #1e3a6e;
+    --acento-suave: rgba(37,99,235,.16);
 
     --rojo: #e5484d;
     --ambar: #d68a34;
@@ -124,7 +124,7 @@ a {
 .topbar {
 
     flex-shrink: 0;
-    height: 58px;
+    height: 68px;
 
     display: flex;
     align-items: center;
@@ -167,10 +167,10 @@ a {
 .topbar-logo-texto {
 
     font-family: var(--fuente-display);
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-weight: 600;
     letter-spacing: .2px;
-    line-height: 1.25;
+    line-height: 1.3;
     color: var(--texto);
     text-transform: uppercase;
     text-align: left;
@@ -207,11 +207,11 @@ a {
     border: none;
     border-radius: 8px;
 
-    padding: 9px 14px;
+    padding: 11px 16px;
 
     color: var(--texto-2);
     font-family: var(--fuente-texto);
-    font-size: 12.8px;
+    font-size: 14px;
     font-weight: 500;
 
     cursor: pointer;
@@ -589,7 +589,7 @@ a {
     inset: 0;
     width: 100%;
     height: 100%;
-    background: #08080a;
+    background: #080e19;
 
 }
 
@@ -598,7 +598,7 @@ a {
     position: absolute;
     top: 16px;
     left: 376px;
-    z-index: 900;
+    z-index: 1100;
 
     width: 30px;
     height: 44px;
@@ -734,7 +734,197 @@ a {
 
 }
 
-@media(max-width: 760px) {
+/* =========================================================
+   ICONOS DE ACCION (Capas / Filtros) -- solo clic, nunca hover
+========================================================= */
+
+.mapa-iconos-accion {
+
+    position: absolute;
+    top: 90px;
+    right: 10px;
+    z-index: 900;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+}
+
+.icono-accion {
+
+    width: 34px;
+    height: 34px;
+
+    background: var(--bg-panel);
+    border: 1px solid var(--borde-fuerte);
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--texto-2);
+    cursor: pointer;
+
+    box-shadow: 0 1px 6px rgba(0,0,0,.4);
+
+}
+
+.icono-accion:hover {
+    background: var(--bg-hover);
+    color: var(--texto);
+}
+
+.icono-accion.activo {
+    background: var(--acento-suave);
+    border-color: var(--acento);
+    color: var(--acento);
+}
+
+.icono-accion svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* =========================================================
+   PANEL LATERAL DE ALTURA COMPLETA (Capas / Filtros)
+========================================================= */
+
+.panel-lateral {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 380px;
+    max-width: 92vw;
+
+    background: var(--bg-panel);
+    border-left: 1px solid var(--borde);
+
+    display: flex;
+    flex-direction: column;
+
+    transform: translateX(100%);
+    transition: transform .25s ease;
+    z-index: 950;
+
+    box-shadow: -10px 0 28px rgba(0,0,0,.45);
+
+}
+
+.panel-lateral.abierto {
+    transform: translateX(0);
+}
+
+.panel-lateral-header {
+
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--borde);
+
+}
+
+.panel-lateral-header h3 {
+
+    margin: 0;
+    font-family: var(--fuente-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--texto);
+
+}
+
+.panel-lateral-cerrar {
+
+    width: 30px;
+    height: 30px;
+
+    background: transparent;
+    border: none;
+    border-radius: 7px;
+
+    color: var(--texto-2);
+    font-size: 16px;
+    cursor: pointer;
+
+}
+
+.panel-lateral-cerrar:hover {
+    background: var(--bg-hover);
+    color: var(--texto);
+}
+
+.panel-lateral-contenido {
+
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 20px 28px;
+
+}
+
+.capas-grupo-titulo {
+
+    margin: 18px 0 8px;
+
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--texto-3);
+
+}
+
+.capas-grupo-titulo:first-child {
+    margin-top: 0;
+}
+
+.capas-opcion {
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 9px 2px;
+
+    color: var(--texto-2);
+    font-size: 13px;
+
+    cursor: pointer;
+
+}
+
+.capas-opcion:hover {
+    color: var(--texto);
+}
+
+.capas-opcion input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--acento);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+@media(max-width: 900px) {
+
+    .mapa-iconos-accion {
+        top: 74px;
+    }
+
+    .panel-lateral {
+        width: 100%;
+        max-width: 100%;
+    }
+
+}
+
+@media(max-width: 900px) {
 
     .panel-flotante {
         width: calc(100% - 32px);
@@ -746,6 +936,7 @@ a {
 
     .panel-flotante-toggle {
         left: calc(100% - 32px);
+        top: 96px;
     }
 
     .panel-flotante-toggle.cerrado {
@@ -772,7 +963,7 @@ a {
 
     width: 100%;
     min-height: 300px;
-    background: #08080a;
+    background: #080e19;
 
 }
 
@@ -822,7 +1013,7 @@ select {
     margin-bottom: 11px;
     padding: 8px 9px;
 
-    background: #08080a;
+    background: #080e19;
     border: 1px solid var(--borde);
     border-radius: 7px;
 
@@ -853,7 +1044,7 @@ select:focus {
 
     padding: 8px 9px;
 
-    background: #08080a;
+    background: #080e19;
     border: 1px solid var(--borde);
     border-radius: 7px;
 
@@ -894,7 +1085,7 @@ select:focus {
 
     padding: 8px;
 
-    background: #0e0e12;
+    background: #101a2c;
     border: 1px solid var(--borde-fuerte);
     border-radius: 8px;
     box-shadow: 0 12px 24px rgba(0,0,0,.5);
@@ -1059,7 +1250,7 @@ select:focus {
 
 .rango-abm div {
 
-    background: #08080a;
+    background: #080e19;
     border: 1px solid var(--borde);
     border-radius: 9px;
     padding: 12px 14px;
@@ -1250,7 +1441,7 @@ select:focus {
 
     width: 100%;
     padding: 8px 9px;
-    background: #08080a;
+    background: #080e19;
     border: 1px solid var(--borde);
     border-radius: 7px;
     color: var(--texto);
@@ -1281,7 +1472,7 @@ select:focus {
 
     margin-top: 14px;
     padding: 14px 16px;
-    background: #08080a;
+    background: #080e19;
     border: 1px solid var(--borde);
     border-radius: 9px;
     font-size: 12px;
@@ -1792,8 +1983,6 @@ select:focus {
             ☰
         </button>
 
-    </header>
-
     <!-- =====================================================
          PANEL DE NAVEGACION MOVIL (overlay bajo el topbar)
     ====================================================== -->
@@ -1874,6 +2063,8 @@ select:focus {
 
     </div>
 
+    </header>
+
 
     <!-- =====================================================
          CONTENIDO
@@ -1892,13 +2083,89 @@ select:focus {
 
                 <div id="map"></div>
 
-                <button class="panel-flotante-toggle" id="botonPanelFlotante" onclick="togglePanelFlotante()">
-                    <span id="iconoPanelFlotante">‹</span>
-                </button>
+                <div class="mapa-iconos-accion">
 
-                <aside class="panel-flotante abierto" id="panelFlotante">
+                    <button class="icono-accion" id="iconoCapas" title="Capas" onclick="togglePanelLateral('capas')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </button>
 
-                    <div class="panel-flotante-contenido">
+                    <button class="icono-accion" id="iconoFiltros" title="Filtros" onclick="togglePanelLateral('filtros')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="6" x2="20" y2="6"></line>
+                            <circle cx="9" cy="6" r="2" fill="currentColor"></circle>
+                            <line x1="4" y1="12" x2="20" y2="12"></line>
+                            <circle cx="16" cy="12" r="2" fill="currentColor"></circle>
+                            <line x1="4" y1="18" x2="20" y2="18"></line>
+                            <circle cx="11" cy="18" r="2" fill="currentColor"></circle>
+                        </svg>
+                    </button>
+
+                </div>
+
+                <aside class="panel-lateral" id="panelLateralCapas">
+
+                    <div class="panel-lateral-header">
+                        <h3>Capas</h3>
+                        <button class="panel-lateral-cerrar" onclick="cerrarPanelesLaterales()">✕</button>
+                    </div>
+
+                    <div class="panel-lateral-contenido">
+
+                        <div class="capas-grupo-titulo">Mapa base</div>
+
+                        <label class="capas-opcion">
+                            <input type="radio" name="capaBase" value="normal" checked onchange="cambiarCapaBase('normal')">
+                            Mapa normal
+                        </label>
+
+                        <label class="capas-opcion">
+                            <input type="radio" name="capaBase" value="topografica" onchange="cambiarCapaBase('topografica')">
+                            Mapa topográfico (curvas de nivel)
+                        </label>
+
+                        <div class="capas-grupo-titulo">Capas adicionales</div>
+
+                        <label class="capas-opcion">
+                            <input type="checkbox" onchange="toggleCapaOverlay('areasNaturales', this.checked)">
+                            Áreas naturales
+                        </label>
+
+                        <label class="capas-opcion">
+                            <input type="checkbox" onchange="toggleCapaOverlay('mapaCalor', this.checked)">
+                            Mapa de calor
+                        </label>
+
+                        <label class="capas-opcion">
+                            <input type="checkbox" onchange="toggleCapaOverlay('muyAlta', this.checked)">
+                            Exposición: Muy Alta (35°-45°)
+                        </label>
+
+                        <label class="capas-opcion">
+                            <input type="checkbox" onchange="toggleCapaOverlay('peligroExtremo', this.checked)">
+                            Exposición: Peligro Extremo (&gt;45°)
+                        </label>
+
+                        <label class="capas-opcion">
+                            <input type="checkbox" onchange="toggleCapaOverlay('abm', this.checked)">
+                            Clasificación por altitud (ABM)
+                        </label>
+
+                    </div>
+
+                </aside>
+
+                <aside class="panel-lateral" id="panelLateralFiltros">
+
+                    <div class="panel-lateral-header">
+                        <h3>Filtros</h3>
+                        <button class="panel-lateral-cerrar" onclick="cerrarPanelesLaterales()">✕</button>
+                    </div>
+
+                    <div class="panel-lateral-contenido">
 
                         <div class="modo-conteo">
 
@@ -2420,16 +2687,15 @@ select:focus {
                 <div>
                     <div class="fundador-nombre">Bryan Alvarez</div>
                     <div class="fundador-rol">Fundador &amp; Desarrollador</div>
-                    <div class="fundador-bio">
-                        Fundador del Observatorio, responsable de la
-                        recopilación, sistematización y análisis de los
-                        datos que lo sustentan.
-                    </div>
                     <a class="fundador-contacto" href="mailto:alvarezbran@outlook.com">
                         ✉️ alvarezbran@outlook.com
                     </a>
                 </div>
 
+            </div>
+
+            <div class="creditos-tecnicos">
+                Desarrollo de interfaz (frontend) con asistencia de Claude (Anthropic).
             </div>
 
         </section>
@@ -2672,8 +2938,9 @@ let todosLosSiniestros = [];
 let marcadores = [];
 let capaAreasNaturales = null;
 let capaMapaCalor = null;
-let controlCapasMapa = null;
 let capaMuyAlta = null;
+let capaNormal = null;
+let capaTopografica = null;
 let capaPeligroExtremo = null;
 let capaABM = null;
 
@@ -2760,19 +3027,102 @@ window.addEventListener("resize", ajustarAlturaMapa);
 
 
 /* =========================================================
-   PANEL FLOTANTE (estadísticas + filtros sobre el mapa)
+   PANELES LATERALES (Capas / Filtros) -- altura completa,
+   mutuamente excluyentes, solo se abren con clic.
 ========================================================= */
 
-function togglePanelFlotante() {
+let panelLateralActivo = null;
 
-    const panel = document.getElementById("panelFlotante");
-    const boton = document.getElementById("botonPanelFlotante");
-    const icono = document.getElementById("iconoPanelFlotante");
+function togglePanelLateral(nombre) {
 
-    const abierto = panel.classList.toggle("abierto");
+    const yaAbierto = panelLateralActivo === nombre;
 
-    boton.classList.toggle("cerrado", !abierto);
-    icono.textContent = abierto ? "‹" : "›";
+    cerrarPanelesLaterales();
+
+    if (!yaAbierto) {
+
+        const idPanel = nombre === "capas" ? "panelLateralCapas" : "panelLateralFiltros";
+        const idIcono = nombre === "capas" ? "iconoCapas" : "iconoFiltros";
+
+        document.getElementById(idPanel).classList.add("abierto");
+        document.getElementById(idIcono).classList.add("activo");
+
+        panelLateralActivo = nombre;
+
+    }
+
+}
+
+function cerrarPanelesLaterales() {
+
+    document.getElementById("panelLateralCapas").classList.remove("abierto");
+    document.getElementById("panelLateralFiltros").classList.remove("abierto");
+    document.getElementById("iconoCapas").classList.remove("activo");
+    document.getElementById("iconoFiltros").classList.remove("activo");
+
+    panelLateralActivo = null;
+
+}
+
+// Cerrar los paneles laterales al hacer clic fuera de ellos
+// (y fuera de los iconos que los abren).
+document.addEventListener("click", (evento) => {
+
+    if (!panelLateralActivo) return;
+
+    const dentroDeUnPanel = evento.target.closest(".panel-lateral");
+    const dentroDeUnIcono = evento.target.closest(".icono-accion");
+
+    if (!dentroDeUnPanel && !dentroDeUnIcono) {
+        cerrarPanelesLaterales();
+    }
+
+});
+
+
+/* =========================================================
+   CAPAS DEL MAPA (reemplaza al control nativo de Leaflet,
+   que se abre con hover y no se puede evitar sin sustituirlo)
+========================================================= */
+
+function cambiarCapaBase(nombre) {
+
+    if (nombre === "normal") {
+        if (mapa.hasLayer(capaTopografica)) mapa.removeLayer(capaTopografica);
+        if (!mapa.hasLayer(capaNormal)) capaNormal.addTo(mapa);
+    } else {
+        if (mapa.hasLayer(capaNormal)) mapa.removeLayer(capaNormal);
+        if (!mapa.hasLayer(capaTopografica)) capaTopografica.addTo(mapa);
+    }
+
+}
+
+function toggleCapaOverlay(nombre, activo) {
+
+    const capasPorNombre = {
+        areasNaturales: capaAreasNaturales,
+        mapaCalor: capaMapaCalor,
+        muyAlta: capaMuyAlta,
+        peligroExtremo: capaPeligroExtremo,
+        abm: capaABM
+    };
+
+    const capa = capasPorNombre[nombre];
+    if (!capa) return;
+
+    if (activo) {
+        capa.addTo(mapa);
+    } else {
+        mapa.removeLayer(capa);
+    }
+
+    // La leyenda ABM ya no depende de eventos "overlayadd"/"overlayremove"
+    // (esos son propios del control nativo de Leaflet, que ya no usamos);
+    // se controla directo aqui.
+    if (nombre === "abm") {
+        const divLeyenda = document.querySelector(".leyenda-abm");
+        if (divLeyenda) divLeyenda.style.display = activo ? "block" : "none";
+    }
 
 }
 
@@ -2804,12 +3154,12 @@ function iniciarMapa() {
     // CAPAS BASE (alternables: normal vs topográfica)
     // -----------------------------------------------------
 
-    const capaNormal = L.tileLayer(
+    capaNormal = L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         { maxZoom: 19, attribution: "© OpenStreetMap contributors" }
     );
 
-    const capaTopografica = L.tileLayer(
+    capaTopografica = L.tileLayer(
         "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
         {
             maxZoom: 17,
@@ -2880,35 +3230,27 @@ function iniciarMapa() {
     // CONTROL DE CAPAS (permite prender/apagar cada una)
     // -----------------------------------------------------
 
-    controlCapasMapa = L.control.layers(
-        {
-            "Mapa normal": capaNormal,
-            "Mapa topográfico (curvas de nivel)": capaTopografica
-        },
-        {
-            "Áreas naturales": capaAreasNaturales,
-            "Mapa de calor": capaMapaCalor,
-            "Exposición: Muy Alta (35°-45°)": capaMuyAlta,
-            "Exposición: Peligro Extremo (>45°)": capaPeligroExtremo,
-            "Clasificación por altitud (ABM)": capaABM
-        },
-        { collapsed: true }
-    ).addTo(mapa);
+    // -----------------------------------------------------
+    // CONTROL DE CAPAS: reemplazado por el panel lateral propio
+    // "Capas" (ver togglePanelLateral / cambiarCapaBase /
+    // toggleCapaOverlay), para poder quitarle el comportamiento
+    // de apertura por hover del widget nativo de Leaflet.
+    // -----------------------------------------------------
 
     // -----------------------------------------------------
     // LEYENDA DE CLASIFICACION ABM (esquina inferior derecha)
     // Solo visible mientras esa capa esta activa en el mapa.
+    // Su visibilidad la controla directamente toggleCapaOverlay().
     // -----------------------------------------------------
 
-    let divLeyendaABM = null;
     const controlLeyendaABM = L.control({ position: "bottomright" });
 
     controlLeyendaABM.onAdd = function () {
 
-        divLeyendaABM = L.DomUtil.create("div", "leyenda-abm");
-        divLeyendaABM.style.display = "none";
+        const div = L.DomUtil.create("div", "leyenda-abm");
+        div.style.display = "none";
 
-        divLeyendaABM.innerHTML = `
+        div.innerHTML = `
             <div class="leyenda-abm-titulo">Clasificación por altitud</div>
             <div class="leyenda-abm-item">
                 <span class="leyenda-abm-color" style="background:#3fb87f"></span>
@@ -2924,27 +3266,13 @@ function iniciarMapa() {
             </div>
         `;
 
-        L.DomEvent.disableClickPropagation(divLeyendaABM);
+        L.DomEvent.disableClickPropagation(div);
 
-        return divLeyendaABM;
+        return div;
 
     };
 
     controlLeyendaABM.addTo(mapa);
-
-    mapa.on("overlayadd", function (e) {
-        if (e.layer === capaABM && divLeyendaABM) {
-            divLeyendaABM.style.display = "block";
-        }
-    });
-
-    mapa.on("overlayremove", function (e) {
-        if (e.layer === capaABM && divLeyendaABM) {
-            divLeyendaABM.style.display = "none";
-        }
-    });
-
-    cargarCapaMeteorologica();
 
     // -----------------------------------------------------
     // CARGA DE CAPAS ADICIONALES (rutas de ejemplo — ajusta
@@ -3057,49 +3385,6 @@ async function cargarCapaGeoJSON(url, layerGroup, opciones = {}) {
     } catch (error) {
 
         console.error("Error cargando capa GeoJSON:", url, error);
-
-    }
-
-}
-
-
-/* =========================================================
-   CAPA METEOROLÓGICA EN TIEMPO REAL (radar de precipitación)
-   Fuente: RainViewer (gratuito, sin necesidad de API key).
-   El radar se actualiza aproximadamente cada 10 minutos.
-========================================================= */
-
-async function cargarCapaMeteorologica() {
-
-    try {
-
-        const respuesta = await fetch("https://api.rainviewer.com/public/weather-maps.json");
-        const datos = await respuesta.json();
-
-        const framesPasados = datos?.radar?.past || [];
-
-        if (framesPasados.length === 0) return;
-
-        // El último frame disponible es el más reciente (más cercano
-        // al tiempo real que ofrece el servicio).
-        const frameActual = framesPasados[framesPasados.length - 1];
-
-        const capaLluvia = L.tileLayer(
-            `${datos.host}${frameActual.path}/256/{z}/{x}/{y}/2/1_1.png`,
-            {
-                opacity: 0.65,
-                zIndex: 500,
-                attribution: "Radar de precipitación: RainViewer.com"
-            }
-        );
-
-        if (controlCapasMapa) {
-            controlCapasMapa.addOverlay(capaLluvia, "Precipitación (tiempo real)");
-        }
-
-    } catch (error) {
-
-        console.error("Error cargando capa meteorológica:", error);
 
     }
 
