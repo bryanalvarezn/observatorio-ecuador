@@ -6,6 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Observatorio Ecuatoriano de Accidentes en Montaña</title>
 
+<meta name="description" content="Observatorio de accidentes e incidentes en montaña y actividades al aire libre en Ecuador: mapa interactivo, análisis estadístico y datos abiertos a partir de registros del Cuerpo de Bomberos de Quito.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Observatorio Ecuatoriano de Accidentes en Montaña">
+<meta property="og:description" content="Mapa interactivo, análisis estadístico y datos abiertos sobre accidentes e incidentes en montaña en Ecuador.">
+<meta property="og:url" content="https://bryanalvarezn.github.io/observatorio-ecuador/">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Observatorio Ecuatoriano de Accidentes en Montaña">
+<meta name="twitter:description" content="Mapa interactivo, análisis estadístico y datos abiertos sobre accidentes e incidentes en montaña en Ecuador.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -2138,7 +2149,6 @@ select:focus {
 
                     <div class="panel-lateral-header">
                         <h3>Capas</h3>
-                        <button class="panel-lateral-cerrar" onclick="cerrarPanelesLaterales()">✕</button>
                     </div>
 
                     <div class="panel-lateral-contenido">
@@ -2190,7 +2200,6 @@ select:focus {
 
                     <div class="panel-lateral-header">
                         <h3>Filtros</h3>
-                        <button class="panel-lateral-cerrar" onclick="cerrarPanelesLaterales()">✕</button>
                     </div>
 
                     <div class="panel-lateral-contenido">
@@ -2357,6 +2366,7 @@ select:focus {
 
             <div class="vista-header">
                 <h2>Metodología</h2>
+                <span class="estado" id="estadoUltimaActualizacion"></span>
             </div>
 
             <div class="bloque-metodologia bloque-alerta">
@@ -2466,11 +2476,49 @@ select:focus {
                 <h4>Procedencia de los datos</h4>
 
                 <p class="texto-vista" style="margin:0;">
-                    La base histórica fue obtenida de fuentes existentes y
-                    posteriormente depurada y estructurada para su análisis.
-                    En una etapa posterior se incorporará una ficha
-                    estandarizada para nuevos registros provenientes de
-                    instituciones de respuesta y de reportes voluntarios.
+                    El Cuerpo de Bomberos del Distrito Metropolitano de
+                    Quito reporta cada siniestro con información
+                    estructurada y una descripción narrativa del evento.
+                    El Observatorio procesó esa información para generar
+                    variables estandarizadas que facilitan su análisis
+                    estadístico y visualización, extrayendo de forma
+                    literal los valores explícitamente mencionados en los
+                    reportes. Cuando un valor no estaba mencionado
+                    explícitamente, el campo correspondiente se dejó
+                    vacío, sin asumir ni inferir un valor.
+                    <br><br>
+                    Esta base se encuentra actualmente en un proceso de
+                    reestructuración hacia un modelo de base de datos
+                    relacional, con el objetivo de aumentar el rigor y la
+                    trazabilidad del procesamiento. La documentación
+                    detallada de cada variable (diccionario de datos) se
+                    publicará una vez completado ese proceso.
+                </p>
+
+            </div>
+
+            <div class="bloque-metodologia bloque-alerta">
+
+                <h4>⚠️ Sobre las comparaciones entre zonas</h4>
+
+                <p class="texto-vista" style="margin:0;">
+                    Los conteos de siniestros por montaña o zona
+                    reflejan el <strong>número de registros
+                    disponibles</strong>, no una tasa de riesgo. El
+                    Observatorio no cuenta todavía con datos de
+                    afluencia (número de visitantes) para la mayoría de
+                    las zonas, por lo que una montaña muy visitada
+                    naturalmente acumulará más registros sin que eso
+                    implique mayor peligrosidad relativa.
+                    <br><br>
+                    Actualmente se gestiona el acceso a datos de ingreso
+                    para el <strong>Guagua Pichincha</strong> como primer
+                    caso piloto, con el objetivo de calcular una tasa de
+                    incidencia (siniestros por visitante) en lugar de un
+                    conteo absoluto. Mientras ese trabajo no se extienda
+                    al resto de las zonas, todas las comparaciones entre
+                    montañas deben interpretarse como retrospectivas y
+                    no ajustadas por afluencia.
                 </p>
 
             </div>
@@ -2721,7 +2769,7 @@ select:focus {
                 </div>
 
             </div>
-            
+
         </section>
 
 
@@ -2783,6 +2831,89 @@ select:focus {
                 Observatorio no se hace responsable por accidentes,
                 lesiones, pérdidas o daños de cualquier naturaleza que
                 puedan derivarse del uso de esta información.
+            </div>
+
+            <div class="bloque-metodologia" style="margin-top:16px;">
+
+                <h4>Privacidad de los datos</h4>
+
+                <p class="texto-vista" style="margin:0 0 10px;">
+                    El documento fuente del Cuerpo de Bomberos incluye
+                    información personal de las personas involucradas en
+                    cada siniestro. El Observatorio <strong>excluye
+                    deliberadamente</strong> esa información de la vista
+                    pública: solo se publican variables agregadas y no
+                    identificables (causa, consecuencia, ubicación
+                    general, rango de edad, entre otras).
+                </p>
+
+                <p class="texto-vista" style="margin:0 0 10px;">
+                    Aunque el registro individual ya es de acceso público
+                    a través del Cuerpo de Bomberos, su presentación en
+                    este Observatorio —geolocalizada, estructurada y
+                    filtrable— facilita su análisis en conjunto con otras
+                    fuentes. El equipo del Observatorio reconoce esta
+                    particularidad y evalúa continuamente el nivel de
+                    detalle público de cada variable con ese criterio en
+                    mente.
+                </p>
+
+                <p class="texto-vista" style="margin:0;">
+                    Los familiares directos de una persona mencionada en
+                    un registro de este Observatorio pueden solicitar su
+                    corrección o eliminación escribiendo a
+                    <a href="mailto:alvarezbran@outlook.com" style="color:var(--acento);">alvarezbran@outlook.com</a>,
+                    indicando el código de siniestro (formato H-NNNNNN,
+                    visible en el mapa) y su relación con la persona
+                    involucrada. Se responderá en un plazo máximo de
+                    15 días hábiles.
+                </p>
+
+            </div>
+
+            <div class="bloque-metodologia" style="margin-top:16px;">
+
+                <h4>Fuentes y licencia</h4>
+
+                <p class="texto-vista" style="margin:0 0 12px;">
+                    <strong>Licencia de los datos y capas generados por
+                    el Observatorio:</strong> Creative Commons
+                    Atribución-NoComercial 4.0 Internacional
+                    (<a href="https://creativecommons.org/licenses/by-nc/4.0/deed.es"
+                        target="_blank" rel="noopener noreferrer"
+                        style="color:var(--acento);">CC-BY-NC 4.0</a>).
+                    Se permite el uso, la copia y la redistribución con
+                    fines no comerciales, siempre citando al Observatorio
+                    Ecuatoriano de Accidentes en Montaña como fuente.
+                </p>
+
+                <p class="texto-vista" style="margin:0 0 6px;">
+                    <strong>Cómo citar este Observatorio:</strong><br>
+                    Alvarez, B. <em>Observatorio Ecuatoriano de Accidentes
+                    en Montaña</em>. Ecuador, 2026.
+                    https://bryanalvarezn.github.io/observatorio-ecuador/
+                </p>
+
+                <p class="texto-vista" style="margin:14px 0 6px;">
+                    <strong>Capa "Áreas naturales":</strong><br>
+                    Ministerio de Ambiente, Agua y Transición Ecológica
+                    (MAATE). Sistema Nacional de Áreas Protegidas del
+                    Ecuador (SNAP). Infraestructura de Datos Espaciales:
+                    http://ide.ambiente.gob.ec/mapainteractivo/
+                </p>
+
+                <p class="texto-vista" style="margin:0;">
+                    <strong>Capas de exposición por pendiente (modelo de
+                    elevación digital):</strong><br>
+                    Derivado del producto ALOS PALSAR RTC
+                    (Radiometrically Terrain Corrected), procesado y
+                    distribuido por la Alaska Satellite Facility
+                    (ASF DAAC), University of Alaska Fairbanks:
+                    https://search.asf.alaska.edu/. © JAXA/METI.
+                    Modelo de elevación fuente: NASA Shuttle Radar
+                    Topography Mission (SRTM).
+                </p>
+
             </div>
 
         </section>
@@ -3446,8 +3577,37 @@ async function cargarDatos() {
     llenarFiltros(todosLosSiniestros);
     actualizarEstadisticas(todosLosSiniestros);
     mostrarSiniestrosEnMapa(todosLosSiniestros);
+    mostrarUltimaActualizacion(todosLosSiniestros);
 
     ajustarAlturaMapa();
+
+}
+
+// Muestra la fecha del registro mas reciente disponible, para que el
+// usuario sepa que tan al dia esta la informacion (no un texto fijo
+// que se desactualice con el tiempo).
+function mostrarUltimaActualizacion(siniestros) {
+
+    const elemento = document.getElementById("estadoUltimaActualizacion");
+
+    if (!elemento) return;
+
+    const fechasValidas = siniestros
+        .map(s => s.fecha ? new Date(s.fecha) : null)
+        .filter(f => f && !isNaN(f));
+
+    if (fechasValidas.length === 0) {
+        elemento.textContent = "";
+        return;
+    }
+
+    const fechaMasReciente = new Date(Math.max(...fechasValidas));
+
+    const texto = fechaMasReciente.toLocaleDateString("es-EC", {
+        month: "long", year: "numeric"
+    });
+
+    elemento.textContent = `Registros disponibles hasta: ${texto}`;
 
 }
 
@@ -3708,8 +3868,10 @@ function crearPopup(r) {
 
     const clase = tipo === "A" ? "popup-accidente" : "popup-incidente";
 
+    // Por privacidad, en el detalle publico de un siniestro solo se
+    // muestra mes y anio -- nunca el dia exacto del evento.
     const fecha = r.fecha
-        ? new Date(r.fecha).toLocaleDateString("es-EC")
+        ? new Date(r.fecha).toLocaleDateString("es-EC", { month: "long", year: "numeric" })
         : "No registrada";
 
     return `
