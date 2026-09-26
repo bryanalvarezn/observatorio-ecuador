@@ -1985,6 +1985,7 @@ select:focus {
 
                 <div class="nav-dropdown-panel">
                     <button class="nav-item" data-vista="analisis">📊 Análisis</button>
+                    <button class="nav-item" data-vista="pruebas">🧪 Pruebas estadísticas</button>
                     <button class="nav-item" data-vista="metodologia">🔬 Metodología</button>
                     <button class="nav-item" data-vista="descargas">⬇️ Descargas</button>
                 </div>
@@ -1996,6 +1997,7 @@ select:focus {
             <button class="nav-tab nav-item" data-vista="agradecimientos">Comunidad</button>
             <button class="nav-tab nav-item" data-vista="apoyar">Tienda</button>
             <button class="nav-tab nav-item" data-vista="principios">Nosotros</button>
+            <button class="nav-tab nav-item" data-vista="contacto">Contacto</button>
 
         </nav>
 
@@ -2026,6 +2028,10 @@ select:focus {
 
             <button class="nav-item" data-vista="analisis">
                 📊 Análisis
+            </button>
+
+            <button class="nav-item" data-vista="pruebas">
+                🧪 Pruebas estadísticas
             </button>
 
             <button class="nav-item" data-vista="metodologia">
@@ -2088,9 +2094,15 @@ select:focus {
 
         </nav>
 
-        <div class="marca-contacto-movil">
-            Fundador: Bryan Alvarez · alvarezbran@outlook.com
-        </div>
+        <nav class="nav-grupo">
+
+            <div class="nav-grupo-titulo">Contacto</div>
+
+            <button class="nav-item" data-vista="contacto">
+                ✉️ Contacto
+            </button>
+
+        </nav>
 
     </div>
 
@@ -2357,6 +2369,132 @@ select:focus {
                     Observatorio (siniestros, capas geográficas y reportes)
                     en formatos reutilizables. Está en construcción.
                 </p>
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             VISTA: PRUEBAS ESTADISTICAS
+        ================================================== -->
+
+        <section class="vista" data-vista="pruebas">
+
+            <div class="vista-header">
+                <h2>Pruebas estadísticas</h2>
+            </div>
+
+            <div class="bloque-metodologia bloque-alerta">
+
+                <h4>⚠️ Cómo leer estos resultados</h4>
+
+                <p class="texto-vista" style="margin:0;">
+                    Estas pruebas buscan evidencia de asociación entre
+                    variables, no la prueban de forma definitiva. Las
+                    categorías con pocos casos se agrupan automáticamente
+                    en "Otra" antes de cada cálculo, para que el resultado
+                    sea más confiable. Cuando el tamaño de muestra es
+                    insuficiente incluso después de agrupar, se muestra
+                    una advertencia junto al resultado. "Hay evidencia
+                    suficiente" no equivale a "causa comprobada": estos
+                    datos son retrospectivos y no controlan otros factores
+                    que puedan influir.
+                </p>
+
+            </div>
+
+            <div class="analisis-seccion-titulo">Asociación entre variables</div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card">
+                    <h4>Causa primaria según altitud (ABM)</h4>
+                    <p class="analisis-desc">
+                        ¿El tipo de causa varía según la clasificación
+                        por altitud del siniestro?
+                    </p>
+                    <button class="btn-analisis" onclick="calcularPrueba1()">Calcular</button>
+                    <div class="resultado-analisis" id="resultadoPrueba1"></div>
+                </div>
+
+                <div class="analisis-card">
+                    <h4>Tiempo de respuesta según altitud</h4>
+                    <p class="analisis-desc">
+                        ¿El tiempo de respuesta de emergencia difiere
+                        entre Baja, Media y Alta montaña?
+                    </p>
+                    <button class="btn-analisis" onclick="calcularPrueba2()">Calcular</button>
+                    <div class="resultado-analisis" id="resultadoPrueba2"></div>
+                </div>
+
+            </div>
+
+            <div class="analisis-seccion-titulo">Tendencia en el tiempo</div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card">
+                    <h4>Tendencia anual de siniestros</h4>
+                    <p class="analisis-desc">
+                        ¿Hay un aumento o disminución real año a año,
+                        o el patrón que se ve en el gráfico es ruido?
+                    </p>
+                    <button class="btn-analisis" onclick="calcularPrueba3()">Calcular</button>
+                    <div class="resultado-analisis" id="resultadoPrueba3"></div>
+                </div>
+
+                <div class="analisis-card">
+                    <h4>Estacionalidad: ¿real o al azar?</h4>
+                    <p class="analisis-desc">
+                        ¿La distribución de siniestros por mes es
+                        distinta de una distribución pareja en el año?
+                    </p>
+                    <button class="btn-analisis" onclick="calcularPrueba4()">Calcular</button>
+                    <div class="resultado-analisis" id="resultadoPrueba4"></div>
+                </div>
+
+            </div>
+
+            <div class="analisis-seccion-titulo">Consecuencia según perfil de la persona</div>
+
+            <div class="analisis-grid">
+
+                <div class="analisis-card">
+                    <h4>Consecuencia según sexo</h4>
+                    <p class="analisis-desc">
+                        Dentro de los siniestros registrados, ¿la
+                        gravedad de la consecuencia se distribuye de
+                        forma pareja entre sexos?
+                    </p>
+                    <button class="btn-analisis" onclick="calcularPrueba5a()">Calcular</button>
+                    <div class="resultado-analisis" id="resultadoPrueba5a"></div>
+                    <div class="nota-metodologica">
+                        Este resultado describe patrones dentro de los
+                        casos registrados por el Cuerpo de Bomberos, no
+                        implica mayor riesgo real de un grupo — no se
+                        cuenta con datos de cuántas personas de cada
+                        grupo practican montañismo.
+                    </div>
+                </div>
+
+                <div class="analisis-card">
+                    <h4>Consecuencia según rango de edad</h4>
+                    <p class="analisis-desc">
+                        Dentro de los siniestros registrados, ¿la
+                        gravedad de la consecuencia se distribuye de
+                        forma pareja entre rangos de edad?
+                    </p>
+                    <button class="btn-analisis" onclick="calcularPrueba5b()">Calcular</button>
+                    <div class="resultado-analisis" id="resultadoPrueba5b"></div>
+                    <div class="nota-metodologica">
+                        Este resultado describe patrones dentro de los
+                        casos registrados por el Cuerpo de Bomberos, no
+                        implica mayor riesgo real de un grupo — no se
+                        cuenta con datos de cuántas personas de cada
+                        grupo practican montañismo.
+                    </div>
+                </div>
+
             </div>
 
         </section>
@@ -2756,6 +2894,19 @@ select:focus {
 
             </div>
 
+        </section>
+
+
+        <!-- =================================================
+             VISTA: CONTACTO
+        ================================================== -->
+
+        <section class="vista" data-vista="contacto">
+
+            <div class="vista-header">
+                <h2>Contacto</h2>
+            </div>
+
             <div class="fundador-card">
 
                 <div class="fundador-avatar">🏔️</div>
@@ -2971,6 +3122,7 @@ select:focus {
 // para saber cuando resaltar esa pestana padre.
 const GRUPO_PADRE_POR_VISTA = {
     analisis: "datos",
+    pruebas: "datos",
     metodologia: "datos",
     descargas: "datos"
 };
@@ -4891,6 +5043,424 @@ function renderTamanoGrupo() {
             scales: OPCIONES_EJES_OSCURO
         }
     });
+
+}
+
+
+/* =========================================================
+   MOTOR DE PRUEBAS ESTADISTICAS (jStat)
+   Ver nota metodologica en la vista "Pruebas estadisticas":
+   categorias poco frecuentes se agrupan en "Otra"; el umbral
+   de alerta es cuando mas del 20% de las celdas esperadas de
+   una tabla de contingencia quedan por debajo de 5 (regla de
+   uso comun para la validez del chi-cuadrado).
+========================================================= */
+
+const UMBRAL_SIGNIFICANCIA = 0.05;
+
+// Agrupa un array de valores categoricos, dejando las N mas
+// frecuentes tal cual y el resto como "Otra". Los valores vacios
+// se devuelven como null (para excluirlos del analisis, nunca
+// para inventarles un valor).
+function agruparTopCategorias(valores, top = 5) {
+
+    const conteo = new Map();
+
+    valores.forEach(v => {
+        const val = (v ?? "").toString().trim();
+        if (!val) return;
+        conteo.set(val, (conteo.get(val) || 0) + 1);
+    });
+
+    const principales = new Set(
+        [...conteo.entries()]
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, top)
+            .map(e => e[0])
+    );
+
+    return valores.map(v => {
+        const val = (v ?? "").toString().trim();
+        if (!val) return null;
+        return principales.has(val) ? val : "Otra";
+    });
+
+}
+
+// Chi-cuadrado de independencia entre dos variables categoricas.
+// Recibe pares [x, y] ya limpios (sin valores vacios).
+function pruebaChiCuadradoIndependencia(pares) {
+
+    const categoriasX = [...new Set(pares.map(p => p[0]))];
+    const categoriasY = [...new Set(pares.map(p => p[1]))];
+
+    const tabla = {};
+    categoriasX.forEach(x => {
+        tabla[x] = {};
+        categoriasY.forEach(y => { tabla[x][y] = 0; });
+    });
+
+    pares.forEach(([x, y]) => { tabla[x][y]++; });
+
+    const totalPorX = {}, totalPorY = {};
+    categoriasX.forEach(x => {
+        totalPorX[x] = categoriasY.reduce((s, y) => s + tabla[x][y], 0);
+    });
+    categoriasY.forEach(y => {
+        totalPorY[y] = categoriasX.reduce((s, x) => s + tabla[x][y], 0);
+    });
+
+    const n = pares.length;
+    let chi2 = 0;
+    let celdasBajoCinco = 0;
+    const celdasTotales = categoriasX.length * categoriasY.length;
+
+    categoriasX.forEach(x => {
+        categoriasY.forEach(y => {
+            const esperado = (totalPorX[x] * totalPorY[y]) / n;
+            const observado = tabla[x][y];
+            if (esperado < 5) celdasBajoCinco++;
+            if (esperado > 0) chi2 += Math.pow(observado - esperado, 2) / esperado;
+        });
+    });
+
+    const df = (categoriasX.length - 1) * (categoriasY.length - 1);
+    const p = df > 0 ? 1 - jStat.chisquare.cdf(chi2, df) : NaN;
+    const advertencia = celdasTotales > 0 && (celdasBajoCinco / celdasTotales) > 0.2;
+
+    return {
+        chi2, df, p, n, tabla, categoriasX, categoriasY,
+        advertencia, celdasBajoCinco, celdasTotales
+    };
+
+}
+
+// Arma el HTML de una tabla de contingencia (observados) para
+// mostrar junto al resultado de una prueba de independencia.
+function tablaContingenciaHTML(resultado) {
+
+    let filas = "<tr><th></th>" +
+        resultado.categoriasY.map(y => `<th>${y}</th>`).join("") +
+        "</tr>";
+
+    resultado.categoriasX.forEach(x => {
+        filas += `<tr><th>${x}</th>` +
+            resultado.categoriasY.map(y => `<td>${resultado.tabla[x][y]}</td>`).join("") +
+            "</tr>";
+    });
+
+    return `<table class="tabla-contingencia">${filas}</table>`;
+
+}
+
+// Renderiza el resultado de una prueba de independencia (chi-cuadrado)
+// dentro del div indicado, con interpretacion en lenguaje simple primero
+// y el detalle estadistico como secundario.
+function mostrarResultadoIndependencia(idDiv, resultado, varA, varB) {
+
+    const div = document.getElementById(idDiv);
+    if (!div) return;
+
+    if (isNaN(resultado.p) || resultado.n < 10) {
+        div.innerHTML = `
+            <div class="interpretacion no-significativo">
+                No hay suficientes datos para calcular esta prueba
+                de forma confiable (n = ${resultado.n}).
+            </div>
+        `;
+        div.classList.add("visible");
+        return;
+    }
+
+    const esSignificativo = resultado.p < UMBRAL_SIGNIFICANCIA;
+
+    const fraseSimple = esSignificativo
+        ? `Hay evidencia suficiente para afirmar que ${varA} y ${varB} están asociados (no parece deberse al azar).`
+        : `No hay evidencia suficiente para afirmar que ${varA} y ${varB} estén asociados con estos datos.`;
+
+    div.innerHTML = `
+        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
+            ${fraseSimple}
+        </div>
+        <div style="margin-top:10px;">
+            <span class="valor-clave">χ² = ${resultado.chi2.toFixed(2)}</span>,
+            gl = ${resultado.df},
+            <span class="valor-clave">p = ${resultado.p.toFixed(4)}</span>
+            &nbsp;·&nbsp; n = ${resultado.n}
+        </div>
+        ${resultado.advertencia
+            ? `<div class="nota-metodologica" style="margin-top:8px;">
+                 ⚠️ Más del 20% de las celdas esperadas tienen menos
+                 de 5 casos. Interpretar este resultado con cautela.
+               </div>`
+            : ""
+        }
+        ${tablaContingenciaHTML(resultado)}
+    `;
+
+    div.classList.add("visible");
+
+}
+
+
+/* --------- Prueba 1: causa primaria segun ABM --------- */
+
+function calcularPrueba1() {
+
+    const pares = [];
+
+    obtenerSiniestrosAnalisis().forEach(s => {
+        const abm = String(s.abm_montana ?? "").trim();
+        const causa = String(s.causa_primaria ?? "").trim();
+        if (!abm || !causa) return;
+        pares.push([causa, abm]);
+    });
+
+    const causasAgrupadas = agruparTopCategorias(pares.map(p => p[0]), 5);
+    const paresFinal = pares
+        .map((p, i) => [causasAgrupadas[i], p[1]])
+        .filter(p => p[0]);
+
+    const resultado = pruebaChiCuadradoIndependencia(paresFinal);
+    mostrarResultadoIndependencia(
+        "resultadoPrueba1", resultado,
+        "la causa primaria", "la clasificación por altitud"
+    );
+
+}
+
+
+/* --------- Prueba 2: tiempo de respuesta segun ABM (ANOVA) --------- */
+
+function calcularPrueba2() {
+
+    const div = document.getElementById("resultadoPrueba2");
+    if (!div) return;
+
+    const LIMITE_MINUTOS = 9 * 60;
+    const gruposPorABM = { "Baja Montaña": [], "Media Montaña": [], "Alta Montaña": [] };
+
+    obtenerRegistrosAnalisis().forEach(r => {
+
+        const despacho = horaASegundos(r.hora_despacho);
+        const arribo = horaASegundos(r.hora_arribo);
+        const abm = String(r.abm_montana ?? "").trim();
+
+        if (despacho === null || arribo === null) return;
+        if (!gruposPorABM.hasOwnProperty(abm)) return;
+
+        const diferenciaMin = (arribo - despacho) / 60;
+        if (diferenciaMin <= 0 || diferenciaMin >= LIMITE_MINUTOS) return;
+
+        gruposPorABM[abm].push(diferenciaMin);
+
+    });
+
+    const grupos = Object.values(gruposPorABM).filter(g => g.length >= 3);
+    const n = grupos.reduce((s, g) => s + g.length, 0);
+
+    if (grupos.length < 2 || n < 10) {
+        div.innerHTML = `
+            <div class="interpretacion no-significativo">
+                No hay suficientes datos de tiempo de respuesta por
+                grupo para calcular esta prueba (n = ${n}).
+            </div>
+        `;
+        div.classList.add("visible");
+        return;
+    }
+
+    const f = jStat.anovafscore(grupos);
+    const df1 = grupos.length - 1;
+    const df2 = n - grupos.length;
+    const p = 1 - jStat.centralF.cdf(f, df1, df2);
+    const esSignificativo = p < UMBRAL_SIGNIFICANCIA;
+
+    const fraseSimple = esSignificativo
+        ? "Hay evidencia suficiente para afirmar que el tiempo de respuesta difiere según la clasificación por altitud."
+        : "No hay evidencia suficiente para afirmar que el tiempo de respuesta difiera según la clasificación por altitud.";
+
+    div.innerHTML = `
+        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
+            ${fraseSimple}
+        </div>
+        <div style="margin-top:10px;">
+            <span class="valor-clave">F(${df1}, ${df2}) = ${f.toFixed(2)}</span>,
+            <span class="valor-clave">p = ${p.toFixed(4)}</span>
+            &nbsp;·&nbsp; n = ${n}
+        </div>
+    `;
+    div.classList.add("visible");
+
+}
+
+
+/* --------- Prueba 3: tendencia anual (regresion lineal) --------- */
+
+function calcularPrueba3() {
+
+    const div = document.getElementById("resultadoPrueba3");
+    if (!div) return;
+
+    const porAnio = new Map();
+
+    obtenerSiniestrosAnalisis().forEach(s => {
+        if (!s.fecha) return;
+        const anio = new Date(s.fecha).getUTCFullYear();
+        porAnio.set(anio, (porAnio.get(anio) || 0) + 1);
+    });
+
+    const anios = [...porAnio.keys()].sort();
+    const conteos = anios.map(a => porAnio.get(a));
+    const n = anios.length;
+
+    if (n < 4) {
+        div.innerHTML = `
+            <div class="interpretacion no-significativo">
+                Se necesitan al menos 4 años con datos para calcular
+                una tendencia confiable (hay ${n}).
+            </div>
+        `;
+        div.classList.add("visible");
+        return;
+    }
+
+    const r = jStat.corrcoeff(anios, conteos);
+    const df = n - 2;
+    const t = r * Math.sqrt(df / (1 - r * r));
+    const p = 2 * (1 - jStat.studentt.cdf(Math.abs(t), df));
+    const esSignificativo = p < UMBRAL_SIGNIFICANCIA;
+
+    const direccion = r > 0 ? "un aumento" : "una disminución";
+
+    const fraseSimple = esSignificativo
+        ? `Hay evidencia suficiente de ${direccion} real en el número de siniestros a lo largo de los años.`
+        : "No hay evidencia suficiente de una tendencia real: el patrón visual podría deberse al azar o a variación en el registro.";
+
+    div.innerHTML = `
+        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
+            ${fraseSimple}
+        </div>
+        <div style="margin-top:10px;">
+            <span class="valor-clave">r = ${r.toFixed(3)}</span>,
+            gl = ${df},
+            <span class="valor-clave">p = ${p.toFixed(4)}</span>
+            &nbsp;·&nbsp; años analizados: ${n}
+        </div>
+    `;
+    div.classList.add("visible");
+
+}
+
+
+/* --------- Prueba 4: estacionalidad (bondad de ajuste) --------- */
+
+function calcularPrueba4() {
+
+    const div = document.getElementById("resultadoPrueba4");
+    if (!div) return;
+
+    const conteoPorMes = new Array(12).fill(0);
+
+    obtenerSiniestrosAnalisis().forEach(s => {
+        if (!s.fecha) return;
+        const mes = new Date(s.fecha).getUTCMonth();
+        conteoPorMes[mes]++;
+    });
+
+    const n = conteoPorMes.reduce((a, b) => a + b, 0);
+
+    if (n < 24) {
+        div.innerHTML = `
+            <div class="interpretacion no-significativo">
+                Se necesitan al menos 24 siniestros con fecha para
+                calcular esta prueba de forma confiable (hay ${n}).
+            </div>
+        `;
+        div.classList.add("visible");
+        return;
+    }
+
+    const esperadoPorMes = n / 12;
+    const chi2 = conteoPorMes.reduce(
+        (s, obs) => s + Math.pow(obs - esperadoPorMes, 2) / esperadoPorMes, 0
+    );
+    const df = 11;
+    const p = 1 - jStat.chisquare.cdf(chi2, df);
+    const esSignificativo = p < UMBRAL_SIGNIFICANCIA;
+
+    const fraseSimple = esSignificativo
+        ? "Hay evidencia suficiente de que los siniestros no se distribuyen parejo en el año: la estacionalidad visual parece real."
+        : "No hay evidencia suficiente de estacionalidad real: la distribución por mes es compatible con el azar.";
+
+    div.innerHTML = `
+        <div class="interpretacion ${esSignificativo ? "significativo" : "no-significativo"}">
+            ${fraseSimple}
+        </div>
+        <div style="margin-top:10px;">
+            <span class="valor-clave">χ² = ${chi2.toFixed(2)}</span>,
+            gl = ${df},
+            <span class="valor-clave">p = ${p.toFixed(4)}</span>
+            &nbsp;·&nbsp; n = ${n}
+        </div>
+    `;
+    div.classList.add("visible");
+
+}
+
+
+/* --------- Prueba 5a: consecuencia segun sexo --------- */
+
+function calcularPrueba5a() {
+
+    const pares = [];
+
+    obtenerRegistrosAnalisis().forEach(r => {
+        const sexo = String(r.sexo ?? "").trim().toUpperCase();
+        const consecuencia = String(r.consecuencia ?? "").trim();
+        if (!sexo || !consecuencia) return;
+        const etiquetaSexo = sexo === "M" ? "Masculino" : sexo === "F" ? "Femenino" : null;
+        if (!etiquetaSexo) return;
+        pares.push([consecuencia, etiquetaSexo]);
+    });
+
+    const consecuenciasAgrupadas = agruparTopCategorias(pares.map(p => p[0]), 5);
+    const paresFinal = pares
+        .map((p, i) => [consecuenciasAgrupadas[i], p[1]])
+        .filter(p => p[0]);
+
+    const resultado = pruebaChiCuadradoIndependencia(paresFinal);
+    mostrarResultadoIndependencia(
+        "resultadoPrueba5a", resultado,
+        "la consecuencia", "el sexo"
+    );
+
+}
+
+
+/* --------- Prueba 5b: consecuencia segun rango de edad --------- */
+
+function calcularPrueba5b() {
+
+    const pares = [];
+
+    obtenerRegistrosAnalisis().forEach(r => {
+        const rango = String(r.rango_edad ?? "").trim();
+        const consecuencia = String(r.consecuencia ?? "").trim();
+        if (!rango || !consecuencia) return;
+        pares.push([consecuencia, rango]);
+    });
+
+    const consecuenciasAgrupadas = agruparTopCategorias(pares.map(p => p[0]), 5);
+    const paresFinal = pares
+        .map((p, i) => [consecuenciasAgrupadas[i], p[1]])
+        .filter(p => p[0]);
+
+    const resultado = pruebaChiCuadradoIndependencia(paresFinal);
+    mostrarResultadoIndependencia(
+        "resultadoPrueba5b", resultado,
+        "la consecuencia", "el rango de edad"
+    );
 
 }
 
