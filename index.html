@@ -2289,9 +2289,6 @@ select:focus {
                         <label>Causa primaria</label>
                         <select id="filtroCausa"><option value="">Todas</option></select>
 
-                        <label>Consecuencia</label>
-                        <select id="filtroConsecuencia"><option value="">Todas</option></select>
-
                         <button class="btn btn-aplicar" onclick="aplicarFiltros()">Aplicar filtros</button>
                         <button class="btn btn-limpiar" onclick="limpiarFiltros()">Limpiar filtros</button>
 
@@ -3871,7 +3868,6 @@ function llenarFiltros(siniestros) {
     llenarSelect("filtroABM", obtenerValores(siniestros, "abm_montana"));
     llenarSelect("filtroVolcan", obtenerValores(siniestros, "nombre_volcan"));
     llenarSelect("filtroCausa", obtenerValores(siniestros, "causa_primaria"));
-    llenarSelect("filtroConsecuencia", obtenerValores(siniestros, "consecuencia"));
 
 }
 
@@ -3963,10 +3959,19 @@ function mostrarSiniestrosEnMapa(siniestros) {
 
     siniestros.forEach(siniestro => {
 
-        const lat = Number(siniestro.latitude);
-        const lng = Number(siniestro.longitude);
+        const latExacta = Number(siniestro.latitude);
+        const lngExacta = Number(siniestro.longitude);
 
-        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+        if (!Number.isFinite(latExacta) || !Number.isFinite(lngExacta)) return;
+
+        // Por privacidad, la coordenada publica se redondea a ~3
+        // decimales (~110 m de precision en el ecuador). No se
+        // muestra la coordenada exacta del evento, para evitar que
+        // se pueda identificar el punto puntual de un siniestro
+        // (efecto mosaico, ver LOPDP). La coordenada exacta sigue
+        // disponible internamente en Supabase para uso analitico.
+        const lat = Math.round(latExacta * 1000) / 1000;
+        const lng = Math.round(lngExacta * 1000) / 1000;
 
         coordenadas.push([lat, lng]);
 
@@ -4020,11 +4025,16 @@ function crearPopup(r) {
 
     const clase = tipo === "A" ? "popup-accidente" : "popup-incidente";
 
-    // Por privacidad, en el detalle publico de un siniestro solo se
-    // muestra mes y anio -- nunca el dia exacto del evento.
-    const fecha = r.fecha
-        ? new Date(r.fecha).toLocaleDateString("es-EC", { month: "long", year: "numeric" })
-        : "No registrada";
+    // Por privacidad (LOPDP Art. 4 y 26 -- datos sensibles de salud),
+    // el detalle publico de un siniestro individual solo muestra:
+    // ano, lugar, altitud, clasificacion y causa primaria. Nunca
+    // consecuencia (dato de salud) ni numero de integrantes, que
+    // combinados con una coordenada podrian volver identificable a
+    // una persona de forma indirecta. Esos campos siguen disponibles
+    // para las estadisticas agregadas y las pruebas estadisticas.
+    const anio = r.fecha
+        ? new Date(r.fecha).getUTCFullYear()
+        : "No registrado";
 
     return `
         <div style="min-width:270px">
@@ -4035,14 +4045,11 @@ function crearPopup(r) {
 
             <div class="popup-tipo ${clase}">${tipoTexto}</div>
 
-            <div class="popup-dato"><strong>Fecha:</strong> ${fecha}</div>
+            <div class="popup-dato"><strong>Año:</strong> ${anio}</div>
             <div class="popup-dato"><strong>Lugar:</strong> ${r.nombre_volcan || "No registrado"}</div>
-            <div class="popup-dato"><strong>Accidente geográfico:</strong> ${r.accidente_geografico || "No registrado"}</div>
             <div class="popup-dato"><strong>Altitud:</strong> ${r.altitud || "No registrada"} m</div>
             <div class="popup-dato"><strong>Clasificación:</strong> ${r.abm_montana || "No registrada"}</div>
-            <div class="popup-dato"><strong>Personas involucradas:</strong> ${r.personas}</div>
             <div class="popup-dato"><strong>Causa primaria:</strong> ${r.causa_primaria || "No registrada"}</div>
-            <div class="popup-dato"><strong>Consecuencia:</strong> ${r.consecuencia || "No registrada"}</div>
 
         </div>
     `;
@@ -4060,7 +4067,6 @@ function aplicarFiltros() {
     const tipo = document.getElementById("filtroTipo").value;
     const abm = document.getElementById("filtroABM").value;
     const volcan = document.getElementById("filtroVolcan").value;
-    const consecuencia = document.getElementById("filtroConsecuencia").value;
     const causa = document.getElementById("filtroCausa").value;
 
     const filtrados = todosLosSiniestros.filter(r => {
@@ -4073,7 +4079,6 @@ function aplicarFiltros() {
         if (tipo && normalizarTexto(r.tipo_siniestro) !== tipo) return false;
         if (abm && String(r.abm_montana ?? "").trim() !== abm) return false;
         if (volcan && String(r.nombre_volcan ?? "").trim() !== volcan) return false;
-        if (consecuencia && String(r.consecuencia ?? "").trim() !== consecuencia) return false;
         if (causa && String(r.causa_primaria ?? "").trim() !== causa) return false;
 
         return true;
@@ -4100,8 +4105,7 @@ function limpiarFiltros() {
     actualizarTextoFiltroAnio();
 
     [
-        "filtroTipo", "filtroABM", "filtroVolcan",
-        "filtroCausa", "filtroConsecuencia"
+        "filtroTipo", "filtroABM", "filtroVolcan", "filtroCausa"
     ].forEach(id => document.getElementById(id).value = "");
 
     mostrarSiniestrosEnMapa(todosLosSiniestros);
