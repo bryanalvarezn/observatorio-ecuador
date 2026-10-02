@@ -2368,6 +2368,21 @@ select:focus {
                 </p>
             </div>
 
+            <div class="bloque-metodologia bloque-alerta">
+                <h4>🔒 Cumplimiento legal de los datos expuestos</h4>
+                <p class="texto-vista" style="margin:0;">
+                    Los datos que se publiquen en esta sección respetan la
+                    Ley Orgánica de Transparencia y Acceso a la Información
+                    Pública (LOTAIP) y la Ley Orgánica de Protección de
+                    Datos Personales (LOPDP). No se exponen coordenadas
+                    exactas, consecuencias de salud ni otros datos
+                    sensibles a nivel individual: la descarga incluirá
+                    únicamente el mismo nivel de detalle agregado y
+                    anonimizado que ya se muestra en el mapa y los
+                    análisis públicos del sitio.
+                </p>
+            </div>
+
         </section>
 
 
@@ -4270,6 +4285,55 @@ function mostrarNotaMetodologica(idElemento, disponibles, total) {
 
 }
 
+// Piso minimo de muestra para graficos que cruzan datos personales
+// (sexo, edad, consecuencia) con el filtro global de Lugar. Sin esto,
+// filtrar a una zona con muy pocos registros podria convertir un
+// grafico "agregado" en, en la practica, el dato de 1 o 2 personas
+// identificables -- el mismo efecto mosaico ya corregido en el mapa.
+// Si no se alcanza el piso, se oculta el grafico y se muestra un
+// aviso en su lugar, en vez de forzar el dato igual.
+const UMBRAL_MUESTRA_MINIMA = 5;
+
+function verificarMuestraMinima(idCanvas, idNota, conDato) {
+
+    const canvas = document.getElementById(idCanvas);
+    const nota = document.getElementById(idNota);
+    if (!canvas) return true;
+
+    const idAviso = "aviso_" + idCanvas;
+    let aviso = document.getElementById(idAviso);
+
+    if (conDato < UMBRAL_MUESTRA_MINIMA) {
+
+        canvas.style.display = "none";
+
+        if (!aviso) {
+            aviso = document.createElement("div");
+            aviso.id = idAviso;
+            aviso.className = "nota-metodologica";
+            aviso.style.padding = "16px 0";
+            canvas.parentNode.insertBefore(aviso, canvas);
+        }
+
+        aviso.textContent =
+            `Muestra insuficiente (${conDato} casos) para mostrar este ` +
+            `dato de forma agregada sin riesgo de identificar a una ` +
+            `persona. Se necesitan al menos ${UMBRAL_MUESTRA_MINIMA} casos.`;
+        aviso.style.display = "block";
+
+        if (nota) nota.textContent = "";
+
+        return false;
+
+    }
+
+    canvas.style.display = "";
+    if (aviso) aviso.style.display = "none";
+
+    return true;
+
+}
+
 
 /* =========================================================
    TENDENCIA TEMPORAL
@@ -4554,6 +4618,11 @@ function renderGravedad() {
     });
 
     mostrarNotaMetodologica("notaGravedad", conDato, conjunto.length);
+
+    if (!verificarMuestraMinima("chartGravedad", "notaGravedad", conDato)) {
+        if (chartGravedadInstancia) chartGravedadInstancia.destroy();
+        return;
+    }
 
     const ordenado = [...conteo.entries()]
         .sort((a, b) => b[1] - a[1])
@@ -4905,6 +4974,11 @@ function renderPorSexo() {
 
     mostrarNotaMetodologica("notaPorSexo", conDato, conjunto.length);
 
+    if (!verificarMuestraMinima("chartPorSexo", "notaPorSexo", conDato)) {
+        if (chartPorSexoInstancia) chartPorSexoInstancia.destroy();
+        return;
+    }
+
     if (chartPorSexoInstancia) chartPorSexoInstancia.destroy();
 
     const ctx = document.getElementById("chartPorSexo");
@@ -4962,6 +5036,11 @@ function renderPorEdad() {
     });
 
     mostrarNotaMetodologica("notaPorEdad", conDato, conjunto.length);
+
+    if (!verificarMuestraMinima("chartPorEdad", "notaPorEdad", conDato)) {
+        if (chartPorEdadInstancia) chartPorEdadInstancia.destroy();
+        return;
+    }
 
     if (chartPorEdadInstancia) chartPorEdadInstancia.destroy();
 
@@ -5141,7 +5220,16 @@ function pruebaChiCuadradoIndependencia(pares) {
 
 // Arma el HTML de una tabla de contingencia (observados) para
 // mostrar junto al resultado de una prueba de independencia.
-function tablaContingenciaHTML(resultado) {
+// suprimirCeldasChicas: tecnica estandar de estadistica oficial para
+// evitar exponer un caso individual dentro de una tabla "agregada".
+// Celdas con 1 a 4 casos se muestran como "≤4" en vez del numero
+// exacto, cuando la variable cruzada es un dato sensible (ej. salud).
+function tablaContingenciaHTML(resultado, suprimirCeldasChicas = false) {
+
+    const formatear = (valor) => {
+        if (suprimirCeldasChicas && valor > 0 && valor < 5) return "≤4";
+        return valor;
+    };
 
     let filas = "<tr><th></th>" +
         resultado.categoriasY.map(y => `<th>${y}</th>`).join("") +
@@ -5149,7 +5237,7 @@ function tablaContingenciaHTML(resultado) {
 
     resultado.categoriasX.forEach(x => {
         filas += `<tr><th>${x}</th>` +
-            resultado.categoriasY.map(y => `<td>${resultado.tabla[x][y]}</td>`).join("") +
+            resultado.categoriasY.map(y => `<td>${formatear(resultado.tabla[x][y])}</td>`).join("") +
             "</tr>";
     });
 
@@ -5159,8 +5247,9 @@ function tablaContingenciaHTML(resultado) {
 
 // Renderiza el resultado de una prueba de independencia (chi-cuadrado)
 // dentro del div indicado, con interpretacion en lenguaje simple primero
-// y el detalle estadistico como secundario.
-function mostrarResultadoIndependencia(idDiv, resultado, varA, varB) {
+// y el detalle estadistico como secundario. datoSensible activa la
+// supresion de celdas chicas en la tabla (ver tablaContingenciaHTML).
+function mostrarResultadoIndependencia(idDiv, resultado, varA, varB, datoSensible = false) {
 
     const div = document.getElementById(idDiv);
     if (!div) return;
@@ -5199,7 +5288,14 @@ function mostrarResultadoIndependencia(idDiv, resultado, varA, varB) {
                </div>`
             : ""
         }
-        ${tablaContingenciaHTML(resultado)}
+        ${datoSensible
+            ? `<div class="nota-metodologica" style="margin-top:8px;">
+                 Las celdas con menos de 5 casos se muestran como "≤4"
+                 para no exponer datos individuales de salud.
+               </div>`
+            : ""
+        }
+        ${tablaContingenciaHTML(resultado, datoSensible)}
     `;
 
     div.classList.add("visible");
@@ -5436,7 +5532,8 @@ function calcularPrueba5a() {
     const resultado = pruebaChiCuadradoIndependencia(paresFinal);
     mostrarResultadoIndependencia(
         "resultadoPrueba5a", resultado,
-        "la consecuencia", "el sexo"
+        "la consecuencia", "el sexo",
+        true
     );
 
 }
@@ -5463,7 +5560,8 @@ function calcularPrueba5b() {
     const resultado = pruebaChiCuadradoIndependencia(paresFinal);
     mostrarResultadoIndependencia(
         "resultadoPrueba5b", resultado,
-        "la consecuencia", "el rango de edad"
+        "la consecuencia", "el rango de edad",
+        true
     );
 
 }
